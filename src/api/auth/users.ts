@@ -14,9 +14,13 @@ const useMutate = (requestData: {
   message?: string;
 }) => {
   const queryClient = useQueryClient();
-  const { showSuccess, showError } = useChakraToast();
+  const { showError } = useChakraToast();
   const sendData = (data: any): Promise<AxiosResponse<any>> => {
-    return HttpClient.post(requestData.apiEndPoint, data);
+    return HttpClient.post(requestData.apiEndPoint, data, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
+      },
+    });
   };
 
   return useMutation({
@@ -29,14 +33,10 @@ const useMutate = (requestData: {
             requestData.inValidateEndpoint! as InvalidateQueryFilters
           );
       }
-      console.log(response.data);
-
       {
         response.data?.access_token &&
           sessionStorage.setItem("access_token", response.data?.access_token);
       }
-
-      showSuccess(requestData.message!);
     },
     onError: (error: AxiosError) => {
       const statusCode = error?.response?.status;
@@ -48,18 +48,8 @@ const useMutate = (requestData: {
       if (dataError && statusCode !== 422) {
         showError((dataError as any)?.message);
       }
-      const fieldErrors = (error?.response?.data as any).error;
-      if (fieldErrors && typeof fieldErrors === "object") {
-        Object.keys(fieldErrors).forEach((key) => {
-          const errorMessage = fieldErrors[key];
-          // Assuming you want to log each error message:
-          showError(`${errorMessage}`);
-          console.log(`${key}: ${errorMessage}`);
-          // Or if you want to show each error message to the user, you might use a showError function:
-          // showError(`${key}: ${errorMessage}`);
-        });
-      }
     },
   });
 };
+
 export default useMutate;

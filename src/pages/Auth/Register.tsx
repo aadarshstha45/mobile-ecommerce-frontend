@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { useRegister } from "@/api/Auth/AuthApi";
-import { useRegister } from "@/api/functions/users";
+import { useRegister } from "@/api/auth";
 import FacebookIcon from "@/assets/icons/FacebookIcon";
 import GoogleIcon from "@/assets/icons/GoogleIcon";
 import RegisterBanner from "@/assets/images/Auth/RegisterImage.png";
 import { TextInput } from "@/components/Form";
+import { RegisterSchema } from "@/utils/validation";
 import {
   AbsoluteCenter,
   Box,
@@ -23,6 +24,7 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,7 +34,10 @@ function RegisterPage() {
   const [checked, setChecked] = useState(false);
   const [isLessThan340] = useMediaQuery("(max-width: 340px)");
   const navigate = useNavigate();
-  const { mutateAsync, isPending } = useRegister();
+  const { mutateAsync, isPending, error } = useRegister();
+
+  const errorMessage = (error?.response?.data as any)?.errors;
+  console.log(errorMessage);
 
   const {
     control,
@@ -46,10 +51,10 @@ function RegisterPage() {
       password: "",
       confirm_password: "",
     },
+    resolver: zodResolver(RegisterSchema),
   });
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     await mutateAsync(data);
     navigate("/");
   };
@@ -112,6 +117,8 @@ function RegisterPage() {
                       label={input.label}
                       name={input.name}
                       control={control}
+                      type={input.type}
+                      backErrors={errorMessage}
                       isRequired
                     />
                   ))}

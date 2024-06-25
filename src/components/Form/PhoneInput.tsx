@@ -13,6 +13,7 @@ type SelectProps = {
   name: string;
   control?: Control<any>;
   isRequired?: boolean;
+  isReadOnly?: boolean;
 };
 
 const options = CountryCodes.map((country) => ({
@@ -38,9 +39,10 @@ const PhoneInput = ({
   name,
   control,
   isRequired,
+  isReadOnly,
 }: SelectProps) => {
   return (
-    <FormControl mb={4} isRequired={isRequired}>
+    <FormControl isReadOnly={isReadOnly} mb={4} isRequired={isRequired}>
       <FormLabel fontSize={{ sm: "14px", md: "16px" }} fontWeight={450}>
         {label}
       </FormLabel>

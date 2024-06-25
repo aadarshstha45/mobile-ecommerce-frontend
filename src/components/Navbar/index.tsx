@@ -1,3 +1,4 @@
+import { useLogout } from "@/api/auth";
 import NavCart from "@/assets/icons/NavCart";
 import SearchIcon from "@/assets/icons/SearchIcon";
 import ShoppingCart from "@/assets/icons/ShoppingCart";
@@ -17,13 +18,20 @@ import {
   PopoverTrigger,
 } from "@chakra-ui/react";
 import { Menu as MenuIcon } from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { collectionLink } from "./navItems";
 
 function NavBar() {
   const path = useLocation().pathname.split("/")[1];
-  console.log(path);
+  const navigate = useNavigate();
   const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
+  const { mutateAsync } = useLogout();
+
+  const handleSignOut = async () => {
+    console.log("signing out");
+    await mutateAsync();
+    navigate("/");
+  };
 
   return (
     <Flex
@@ -42,6 +50,7 @@ function NavBar() {
                 as={NavLink}
                 to={`/collection/${collection.to}`}
                 key={i}
+                _activeLink={{ color: "primary.500", fontWeight: 600 }}
                 fontSize={{
                   base: "14px",
                   sm: "16px",
@@ -101,7 +110,7 @@ function NavBar() {
                   <Link
                     as={NavLink}
                     _hover={{ textDecor: "none" }}
-                    to="/profile"
+                    to="/profile/"
                   >
                     <PopoverHeader
                       _hover={{ bg: "primary.500", color: "white" }}
@@ -112,7 +121,7 @@ function NavBar() {
                   <PopoverHeader
                     _hover={{ bg: "primary.500", color: "white" }}
                     cursor={"pointer"}
-                    // onClick={handleSignOut}
+                    onClick={handleSignOut}
                   >
                     Logout
                   </PopoverHeader>

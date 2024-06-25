@@ -1,8 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import LayoutWrapper from "@/layouts";
+import { SavedAddress } from "@/pages/Profile/pages";
 import { lazy } from "react";
-
-import ProductDetail from "../pages/ProductDetail";
 
 const Home = lazy(() => import("@/pages/Home"));
 // const About = lazy(() => import("@/pages/About"));
@@ -10,6 +9,10 @@ const Collection = lazy(() => import("@/pages/Collection"));
 const SpecialOffer = lazy(() => import("@/pages/SpecialOffer"));
 const Checkout = lazy(() => import("@/pages/Checkout"));
 const Profile = lazy(() => import("@/pages/Profile"));
+const ProfileDetails = lazy(
+  () => import("@/pages/Profile/pages/ProfileDetails")
+);
+const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 
 export const appRoutes = [
   {
@@ -43,6 +46,20 @@ export const appRoutes = [
       {
         path: "profile",
         element: <Profile />,
+        children: [
+          {
+            index: true,
+            element: <ProfileDetails />,
+          },
+          {
+            path: "saved-address",
+            element: <SavedAddress />,
+          },
+          {
+            path: "purchases",
+            element: <div>My Purchases</div>,
+          },
+        ],
       },
     ],
   },

@@ -4,6 +4,19 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { appRoutes } from "./router/appRoutes";
 import { authRoutes } from "./router/authRoutes";
 
+const renderRoutes = (routes) => {
+  return routes.map((route, index) => (
+    <Route
+      key={index}
+      path={route.path}
+      element={route.element}
+      index={route.index}
+    >
+      {route.children && renderRoutes(route.children)}
+    </Route>
+  ));
+};
+
 const App = () => {
   const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
   return (
@@ -28,21 +41,8 @@ const App = () => {
           ))}
 
           {/* App Routes */}
-
           <Route path="/" element={<Outlet />}>
-            {appRoutes.map((route, index) => (
-              <Route key={index} path={route.path} element={route.element}>
-                {route.children &&
-                  route.children.map((childRoute, childIndex) => (
-                    <Route
-                      key={childIndex}
-                      index={childRoute.index} // Use `index` prop for index route
-                      path={childRoute.path}
-                      element={childRoute.element}
-                    />
-                  ))}
-              </Route>
-            ))}
+            {renderRoutes(appRoutes)}
           </Route>
         </Routes>
       </BrowserRouter>

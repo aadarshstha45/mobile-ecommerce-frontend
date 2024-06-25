@@ -10,12 +10,16 @@ import {
   InputLeftElement,
   InputRightElement,
   ResponsiveValue,
+  Spinner,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Control, Controller, FieldErrors } from "react-hook-form";
 import IconButton from "./IconButton";
 
+import { baseURL } from "@/api/axiosSetup";
+import axios from "axios";
 import { Property } from "csstype";
+import { CircleCheckBig, CircleX } from "lucide-react";
 
 type InputProps = {
   label: string;
@@ -27,9 +31,20 @@ type InputProps = {
   leftIcon?: any;
   leftAddon?: any;
   rightIcon?: any;
+  message?: string;
   placeholder?: string;
+  isReadOnly?: boolean;
   pointerEvents?: ResponsiveValue<Property.PointerEvents>;
+  backErrors?: any;
   [key: string]: any;
+};
+
+const debounce = (func: (...args: any[]) => void, wait: number) => {
+  let timeout: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
 };
 
 export const TextInput = ({
@@ -43,16 +58,68 @@ export const TextInput = ({
   rightIcon,
   placeholder,
   leftAddon,
+  message,
   pointerEvents,
+  backErrors,
+  isReadOnly,
   ...rest
 }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [backError, setBackError] = useState<any>(null);
+  useEffect(() => {
+    setBackError(backErrors);
+  }, [backErrors]);
+
+  const handleInputChange = (value: string) => {
+    setBackError(null);
+    return value;
+  };
+
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [emailExists, setEmailExists] = useState<boolean | null>(null);
+  const [isDebouncing, setIsDebouncing] = useState(false);
+
+  const validateEmail = async (email: string) => {
+    setIsDebouncing(true);
+    try {
+      const response = await axios.get(
+        `${baseURL}/check-unique-email?email=${email}`
+      );
+      if (response?.data === true) {
+        setEmailExists(true);
+        setEmailError("Email already exists");
+      } else {
+        setEmailExists(false);
+        setEmailError(null);
+      }
+    } catch (e) {
+      setEmailError("Something went wrong");
+      console.log(e);
+    } finally {
+      setIsDebouncing(false);
+    }
+  };
+
+  // Create a debounced version of the validateEmail function
+  const debouncedValidateEmail = useCallback(debounce(validateEmail, 2000), []);
+
+  const handleEmailChange = (value: string) => {
+    setEmailExists(null);
+    debouncedValidateEmail(value);
+    return value;
+  };
+
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   return (
-    <FormControl mb={4} isRequired={isRequired} {...rest}>
+    <FormControl
+      isReadOnly={isReadOnly}
+      mb={4}
+      isRequired={isRequired}
+      {...rest}
+    >
       <FormLabel fontSize={{ sm: "14px", md: "16px" }} fontWeight={450}>
         {label}
       </FormLabel>
@@ -74,7 +141,8 @@ export const TextInput = ({
                 _hover={{ borderColor: "#000" }}
                 borderRadius={"2px"}
                 errorBorderColor="red.500"
-                border={"1px solid #000"}
+                border={"1px solid"}
+                borderColor={!isReadOnly ? "gray.300" : "#000"}
                 placeholder={placeholder}
                 onChange={onChange}
                 value={value}
@@ -91,6 +159,66 @@ export const TextInput = ({
                 />
               </InputRightElement>
             </InputGroup>
+          ) : type === "email" ? (
+            <>
+              <InputGroup>
+                {leftIcon && (
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={leftIcon}
+                    color={"#000"}
+                  />
+                )}
+                <Input
+                  focusBorderColor="primary.500"
+                  _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
+                  borderRadius={"2px"}
+                  errorBorderColor="red.500"
+                  border={"1px solid #000"}
+                  value={value}
+                  placeholder={placeholder}
+                  type={"email"}
+                  onChange={(e) => onChange(handleEmailChange(e.target.value))}
+                />
+                {rightIcon && (
+                  <InputRightElement
+                    pointerEvents="none"
+                    children={rightIcon}
+                    color={"#000"}
+                  />
+                )}
+                {isDebouncing && (
+                  <InputRightElement
+                    pointerEvents="none"
+                    children={<Spinner />}
+                    color={"#000"}
+                  />
+                )}
+                {emailExists ? (
+                  <InputRightElement
+                    pointerEvents="none"
+                    children={<CircleX size={24} color="red" />}
+                    color={"#000"}
+                  />
+                ) : (
+                  <InputRightElement
+                    pointerEvents="none"
+                    children={<CircleCheckBig size={24} color="green" />}
+                    color={"#000"}
+                  />
+                )}
+              </InputGroup>
+              {emailError && (
+                <FormHelperText
+                  color="red.400"
+                  fontSize={{ base: "14px", md: "16px" }}
+                  fontStyle={"italic"}
+                  fontWeight={400}
+                >
+                  {emailError}
+                </FormHelperText>
+              )}
+            </>
           ) : (
             <InputGroup>
               {leftIcon && (
@@ -101,15 +229,17 @@ export const TextInput = ({
                 />
               )}
               <Input
-                focusBorderColor="primary.500"
-                _hover={{ borderColor: "#000" }}
+                focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
+                _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
                 borderRadius={"2px"}
                 errorBorderColor="red.500"
                 border={"1px solid #000"}
                 value={value}
+                cursor={isReadOnly ? "default" : "auto"}
+                borderColor={isReadOnly ? "gray.300" : "#000"}
                 placeholder={placeholder}
-                onChange={onChange}
                 type={type}
+                onChange={(e) => onChange(handleInputChange(e.target.value))}
               />
               {rightIcon && (
                 <InputLeftElement
@@ -122,14 +252,29 @@ export const TextInput = ({
           )
         }
       />
+      {message && (
+        <FormHelperText color={"gray.800"} fontSize="xs" fontStyle={"italic"}>
+          {message}
+        </FormHelperText>
+      )}
       {errors && errors[name] && (
         <FormHelperText
-          color="red"
-          fontSize="14px"
+          color="red.400"
+          fontSize={{ base: "14px", md: "16px" }}
           fontStyle={"italic"}
-          fontWeight={450}
+          fontWeight={400}
         >
           {(errors[name] as any).message}
+        </FormHelperText>
+      )}
+      {backError && (
+        <FormHelperText
+          color="red.400"
+          fontSize={{ base: "14px", md: "16px" }}
+          fontStyle={"italic"}
+          fontWeight={400}
+        >
+          {backError[name]}
         </FormHelperText>
       )}
     </FormControl>

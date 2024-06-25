@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useLogin } from "@/api/functions/users";
+import { useLogin } from "@/api/auth";
 import FacebookIcon from "@/assets/icons/FacebookIcon";
 import GoogleIcon from "@/assets/icons/GoogleIcon";
 import LoginBanner from "@/assets/images/Auth/LoginImage.png";
 import { TextInput } from "@/components/Form";
+import { LoginSchema } from "@/utils/validation";
 import { AtSignIcon, LockIcon } from "@chakra-ui/icons";
 import {
   AbsoluteCenter,
@@ -23,6 +24,7 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -39,6 +41,7 @@ function LoginPage() {
       email: "",
       password: "",
     },
+    resolver: zodResolver(LoginSchema),
   });
 
   const onSubmit = async (data: any) => {
@@ -97,7 +100,6 @@ function LoginPage() {
                   >
                     Already have an account? Login
                   </Heading>
-
                   <TextInput
                     errors={errors}
                     label="Email"
