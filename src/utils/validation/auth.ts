@@ -7,10 +7,7 @@ const RegisterSchema = z
       .string()
       .email({ message: "Enter a valid email address" })
       .min(1, { message: "Email is required" }),
-    phone_number: z
-      .string()
-      .min(1, { message: "Phone number is required" })
-      .min(6, { message: "Phone number must be at least 6 characters" }),
+
     password: z
       .string()
       .min(1, { message: "Password is required" })

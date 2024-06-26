@@ -4,6 +4,7 @@ export const user = {
   logout: "/logout",
   me: "/user-details",
   update: "/profile-update",
+  updateImage: "/change-profile-picture",
   emailCheck: (email: string) => `/check-unique-email?email=${email}`,
   updatePassword: "/update-password",
 };

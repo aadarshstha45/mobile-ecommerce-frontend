@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useChakraToast } from "@/utils/ChakraToast";
 import {
   InvalidateQueryFilters,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
+import toast from "react-hot-toast";
 import { HttpClient } from "../axiosSetup";
 
 const useMutate = (requestData: {
@@ -14,7 +14,7 @@ const useMutate = (requestData: {
   message?: string;
 }) => {
   const queryClient = useQueryClient();
-  const { showError } = useChakraToast();
+  // const { showSuccess, showError } = useChakraToast();
   const sendData = (data: any): Promise<AxiosResponse<any>> => {
     return HttpClient.post(requestData.apiEndPoint, data, {
       headers: {
@@ -33,6 +33,12 @@ const useMutate = (requestData: {
             requestData.inValidateEndpoint! as InvalidateQueryFilters
           );
       }
+      if (requestData.message) {
+        toast.success(requestData.message!, {
+          duration: 2000,
+        });
+        // showSuccess(requestData.message);
+      }
       {
         response.data?.access_token &&
           sessionStorage.setItem("access_token", response.data?.access_token);
@@ -43,10 +49,16 @@ const useMutate = (requestData: {
       const errorMessage = error?.message;
       const dataError = error?.response?.data;
       if (errorMessage && statusCode !== 422 && statusCode !== 500) {
-        showError(errorMessage);
+        // showError(errorMessage);
+        toast.error(errorMessage, {
+          duration: 2000,
+        });
       }
       if (dataError && statusCode !== 422) {
-        showError((dataError as any)?.message);
+        // showError((dataError as any)?.message);
+        toast.error((dataError as any)?.message, {
+          duration: 2000,
+        });
       }
     },
   });

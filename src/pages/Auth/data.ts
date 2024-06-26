@@ -13,21 +13,15 @@ export const RegisterInput = [
     type: "email",
     isRequired: true,
   },
+
   {
     id: 3,
-    label: "Phone Number",
-    name: "phone_number",
-    type: "text",
-    isRequired: true,
-  },
-  {
-    id: 4,
     label: "Password",
     name: "password",
     type: "password",
   },
   {
-    id: 5,
+    id: 4,
     label: "Confirm Password",
     name: "confirm_password",
     type: "password",

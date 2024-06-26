@@ -1,6 +1,6 @@
 import { useUpdateUser } from "@/api/auth";
-import { TextInput } from "@/components/Form";
-import PhoneInput from "@/components/Form/PhoneInput";
+import { DatePicker, PhoneInput, TextInput } from "@/components/Form";
+import { ProfileSchema } from "@/utils/validation/profile";
 import {
   Button,
   Flex,
@@ -9,6 +9,7 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useOutletContext } from "react-router-dom";
@@ -16,8 +17,15 @@ import { useOutletContext } from "react-router-dom";
 const ProfileDetails = () => {
   const data: any = useOutletContext();
   const [readOnly, setReadOnly] = useState(true);
-  const { mutateAsync, isPending } = useUpdateUser();
-  const { control, reset, handleSubmit } = useForm({
+  const { mutateAsync, isPending, error, isError } = useUpdateUser();
+
+  const {
+    control,
+    reset,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       name: "",
       email: "",
@@ -27,16 +35,33 @@ const ProfileDetails = () => {
       city: "",
       street: "",
       landmark: "",
+      country_code: "",
+      dob: "",
     },
+    resolver: zodResolver(ProfileSchema),
   });
-
+  const [countryCode, setCountryCode] = useState(
+    data?.shipping_details?.[0]?.country_code
+  );
   useEffect(() => {
+    const country_code = data?.shipping_details?.[0]?.country_code;
+    if (country_code) {
+      setCountryCode(country_code);
+    }
+  }, [data]);
+  if (isError) {
+    const errorMessage = (error?.response?.data as any)?.errors;
+    console.log(errorMessage);
+  }
+  useEffect(() => {
+    // Update the state for future renders
+
     if (data) {
       reset({
         name: data.name ?? "",
         email: data.email ?? "",
-        phone_number: data.phone_number ?? "",
-        birthday: data.birthday ?? "",
+        phone_number: data.shipping_details?.[0]?.phone_number ?? "",
+        dob: data.dob ?? "",
         country: data.shipping_details?.[0]?.country ?? "",
         city: data.shipping_details?.[0]?.city ?? "",
         street: data.shipping_details?.[0]?.street ?? "",
@@ -46,7 +71,7 @@ const ProfileDetails = () => {
   }, [data, reset]);
 
   const onSubmit = async (data: any) => {
-    await mutateAsync(data);
+    await mutateAsync({ ...data, country_code: countryCode });
     setReadOnly(true);
   };
 
@@ -57,6 +82,7 @@ const ProfileDetails = () => {
       w={"full"}
       flexDir={"column"}
       gap={8}
+      noValidate
     >
       <Flex flexDir={"column"} gap={4}>
         <Text fontSize={"xl"}>Profile Details</Text>
@@ -73,6 +99,7 @@ const ProfileDetails = () => {
               name={"name"}
               label={"Full Name"}
               control={control}
+              errors={errors}
             />
           </GridItem>
           <GridItem colSpan={1}>
@@ -82,23 +109,31 @@ const ProfileDetails = () => {
               label={"Email"}
               message=" * Email cannot be changed."
               control={control}
+              errors={errors}
             />
           </GridItem>
           <GridItem colSpan={1}>
             <PhoneInput
-              isReadOnly={readOnly}
-              isRequired={!readOnly}
-              name={"phone_number"}
-              label={"Phone"}
+              defaultValue={countryCode}
+              handleChange={(selectedOption: any) => {
+                setCountryCode(selectedOption.value);
+              }}
+              name="phone_number"
+              label="Phone Number"
               control={control}
+              errors={errors}
+              isRequired={!readOnly}
+              isReadOnly={readOnly}
             />
           </GridItem>
           <GridItem colSpan={1}>
-            <TextInput
+            <DatePicker
               isReadOnly={readOnly}
-              name={"birthday"}
-              label={"Birthday (Optional)"}
+              isRequired={!readOnly}
+              name="dob"
+              label="Birthday (Optional)"
               control={control}
+              errors={errors}
             />
           </GridItem>
         </SimpleGrid>
@@ -118,6 +153,7 @@ const ProfileDetails = () => {
               name={"country"}
               label={"Country"}
               control={control}
+              errors={errors}
             />
           </GridItem>
           <GridItem colSpan={1}>
@@ -127,6 +163,7 @@ const ProfileDetails = () => {
               name={"city"}
               label={"City"}
               control={control}
+              errors={errors}
             />
           </GridItem>
           <GridItem colSpan={1}>
@@ -135,6 +172,7 @@ const ProfileDetails = () => {
               name={"street"}
               label={"Street"}
               control={control}
+              errors={errors}
             />
           </GridItem>
           <GridItem colSpan={1}>
@@ -143,6 +181,7 @@ const ProfileDetails = () => {
               name={"landmark"}
               label={"Nearest Landmark"}
               control={control}
+              errors={errors}
             />
           </GridItem>
         </SimpleGrid>

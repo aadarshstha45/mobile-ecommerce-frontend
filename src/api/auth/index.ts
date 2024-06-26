@@ -7,14 +7,12 @@ import useMutate from "./users";
 const useRegister = () => {
   return useMutate({
     apiEndPoint: user.register,
-    message: "User saved successfully",
   });
 };
 
 const useLogin = () => {
   return useMutate({
     apiEndPoint: user.login,
-    message: "User logged in successfully",
   });
 };
 
@@ -27,6 +25,14 @@ const useUpdateUser = () => {
     apiEndPoint: user.update,
     inValidateEndpoint: user.me,
     message: "User updated successfully",
+  });
+};
+
+const useUpdateImage = () => {
+  return useMutate({
+    apiEndPoint: user.updateImage,
+    inValidateEndpoint: user.me,
+    message: "Profile image updated successfully",
   });
 };
 
@@ -64,5 +70,6 @@ export {
   useLogin,
   useLogout,
   useRegister,
+  useUpdateImage,
   useUpdateUser,
 };

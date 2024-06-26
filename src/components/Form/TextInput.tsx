@@ -22,7 +22,7 @@ import { Property } from "csstype";
 import { CircleCheckBig, CircleX } from "lucide-react";
 
 type InputProps = {
-  label: string;
+  label?: string;
   control: Control<any>;
   name: string;
   type?: string;
@@ -137,12 +137,12 @@ export const TextInput = ({
               {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
               <Input
                 type={showPassword ? "text" : "password"}
-                focusBorderColor="primary.500"
-                _hover={{ borderColor: "#000" }}
+                focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
+                _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
                 borderRadius={"2px"}
                 errorBorderColor="red.500"
                 border={"1px solid"}
-                borderColor={!isReadOnly ? "gray.300" : "#000"}
+                borderColor={isReadOnly ? "gray.300" : "#000"}
                 placeholder={placeholder}
                 onChange={onChange}
                 value={value}
@@ -170,7 +170,7 @@ export const TextInput = ({
                   />
                 )}
                 <Input
-                  focusBorderColor="primary.500"
+                  focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
                   _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
                   borderRadius={"2px"}
                   errorBorderColor="red.500"
@@ -239,6 +239,7 @@ export const TextInput = ({
                 borderColor={isReadOnly ? "gray.300" : "#000"}
                 placeholder={placeholder}
                 type={type}
+                mt={label ? 0 : 5}
                 onChange={(e) => onChange(handleInputChange(e.target.value))}
               />
               {rightIcon && (

@@ -1,12 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // CountrySelect.js
-import { FormControl, FormLabel, HStack, Input } from "@chakra-ui/react";
-import { Select } from "chakra-react-select";
+import {
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  HStack,
+  Input,
+} from "@chakra-ui/react";
+import { ChakraStylesConfig, Select } from "chakra-react-select";
 import ReactCountryFlag from "react-country-flag";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldErrors } from "react-hook-form";
 import { CountryCodes } from "../data";
 
 type SelectProps = {
+  defaultValue?: any;
   placeholder?: string;
   handleChange?: any;
   label?: string;
@@ -14,6 +21,7 @@ type SelectProps = {
   control?: Control<any>;
   isRequired?: boolean;
   isReadOnly?: boolean;
+  errors: FieldErrors;
 };
 
 const options = CountryCodes.map((country) => ({
@@ -40,7 +48,46 @@ const PhoneInput = ({
   control,
   isRequired,
   isReadOnly,
+  defaultValue,
+  errors,
 }: SelectProps) => {
+  const chakraStyles: ChakraStylesConfig = {
+    control: (provided, state) => ({
+      ...provided,
+      border: "1px solid",
+      borderRadius: "2px",
+      borderColor: state.isFocused
+        ? "#4A57B3"
+        : isReadOnly
+        ? "gray.300"
+        : "#000",
+      "&:hover": {
+        borderColor: isReadOnly ? "gray.300" : "#000",
+      },
+      py: "10px",
+      width: { base: "full", sm: "120px" },
+      boxShadow: state.isFocused ? `0 0 0 1px #4A57B3` : "none",
+      paddingTop: "1px",
+      paddingBottom: "1px",
+    }),
+    option: (provided) => ({
+      ...provided,
+      fontSize: "14px",
+      overflow: "auto",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      padding: "2px",
+      fontSize: "14px",
+      overflow: "auto",
+      zIndex: 9999,
+    }),
+    valueContainer: (provided) => ({
+      ...provided,
+      padding: "2px",
+      fontSize: "14px",
+    }),
+  };
   return (
     <FormControl isReadOnly={isReadOnly} mb={4} isRequired={isRequired}>
       <FormLabel fontSize={{ sm: "14px", md: "16px" }} fontWeight={450}>
@@ -55,59 +102,42 @@ const PhoneInput = ({
             <Select
               defaultValue={options.find((option) => option.value === "+977")}
               options={options}
-              value={options.find((option) => option.value === value)}
+              value={
+                defaultValue
+                  ? options.find((option) => option.value === defaultValue)
+                  : options.find((option) => option.value === value)
+              }
               onChange={handleChange}
-              focusBorderColor="primary.500"
-              chakraStyles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  border: "1px solid",
-                  borderRadius: "2px",
-                  borderColor: state.isFocused ? "#4A57B3" : "#000",
-                  "&:hover": {
-                    borderColor: "#000",
-                  },
-                  py: "10px",
-                  width: { base: "full", sm: "120px" },
-                  boxShadow: state.isFocused ? `0 0 0 1px #4A57B3` : "none",
-                  paddingTop: "1px",
-                  paddingBottom: "1px",
-                }),
-                option: (provided) => ({
-                  ...provided,
-                  fontSize: "14px",
-                  overflow: "auto",
-                }),
-                menu: (provided) => ({
-                  ...provided,
-                  padding: "2px",
-                  fontSize: "14px",
-                  overflow: "auto",
-                  zIndex: 9999,
-                }),
-                valueContainer: (provided) => ({
-                  ...provided,
-                  padding: "2px",
-                  fontSize: "14px",
-                }),
-              }}
+              focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
+              chakraStyles={chakraStyles}
               menuPlacement={"top"}
               selectedOptionColorScheme="primary"
               useBasicStyles
             />
             <Input
               w={"full"}
-              focusBorderColor="primary.500"
-              _hover={{ borderColor: "#000" }}
+              focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
+              _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
               borderRadius={"2px"}
               errorBorderColor="red.500"
-              border={"1px solid #000"}
+              border={"1px solid"}
+              borderColor={isReadOnly ? "gray.300" : "#000"}
               value={value}
               onChange={onChange}
             />
           </HStack>
         )}
       />
+      {errors && errors[name] && (
+        <FormHelperText
+          color="red.400"
+          fontSize={{ base: "14px", md: "16px" }}
+          fontStyle={"italic"}
+          fontWeight={400}
+        >
+          {(errors[name] as any).message}
+        </FormHelperText>
+      )}
     </FormControl>
   );
 };

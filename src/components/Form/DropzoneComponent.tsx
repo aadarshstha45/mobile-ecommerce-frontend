@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BaseURL } from "@/api/axiosSetup";
 import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Card,
@@ -101,7 +102,7 @@ export default function DropzoneComponent({
                         src={
                           image
                             ? typeof image === "string"
-                              ? `http://127.0.0.1:8000/storage/${image}`
+                              ? `${BaseURL}/${image}`
                               : URL.createObjectURL(image)
                             : ""
                         }

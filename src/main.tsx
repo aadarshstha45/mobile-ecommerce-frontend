@@ -4,6 +4,8 @@ import React from "react";
 import AuthProvider from "react-auth-kit";
 import createStore from "react-auth-kit/createStore";
 import ReactDOM from "react-dom/client";
+import { Toaster } from "react-hot-toast";
+import { CustomProvider } from "rsuite";
 import App from "./App.tsx";
 import "./index.css";
 import { theme } from "./theme/index.tsx";
@@ -21,7 +23,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider store={store}>
-          <App />
+          <CustomProvider>
+            <Toaster position="top-right" />
+            <App />
+          </CustomProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ChakraProvider>

@@ -47,7 +47,6 @@ function RegisterPage() {
     defaultValues: {
       name: "",
       email: "",
-      phone_number: "",
       password: "",
       confirm_password: "",
     },
