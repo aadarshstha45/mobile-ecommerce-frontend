@@ -1,8 +1,9 @@
 import { useUpdateImage } from "@/api/auth";
 import { BaseURL } from "@/api/axiosSetup";
 import { CameraIcon } from "@/assets/icons/CameraIcon";
-import { ChangeImageModal } from "@/components/Form/ChangeImageModal";
+import AvatarIcon from "@/assets/icons/UserIcon/user.png";
 import { SingleDropzone } from "@/components/Form/Dropzone";
+import { ModalForm } from "@/components/Form/ModalForm";
 import {
   Avatar,
   Box,
@@ -13,7 +14,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -51,15 +52,17 @@ const Sidebar = ({ data }: SidebarProps) => {
   const { mutateAsync, isPending } = useUpdateImage();
   const [imageError, setImageError] = useState<string>("");
   const [isImageUpdated, setIsImageUpdated] = useState<boolean>(false);
-  const [isImageDeleted, setIsImageDeleted] = useState<boolean>(false);
 
   const openImageModal = () => {
     onOpen();
+    setImage(data?.image ?? null);
+
+    setIsImageUpdated(false);
   };
 
   const handleClose = () => {
     onClose();
-    setImage(data?.image ?? null);
+    setIsImageUpdated(false);
   };
 
   const { control, handleSubmit } = useForm({
@@ -68,34 +71,41 @@ const Sidebar = ({ data }: SidebarProps) => {
     },
   });
 
+  useEffect(() => {
+    if (data) {
+      setImage(data.image);
+    }
+  }, [data]);
+
   const handleSingleDrop = (acceptedFiles: File[]) => {
-    setIsImageUpdated(true);
     const validFile = acceptedFiles[0].type.startsWith("image/");
     const size = acceptedFiles[0].size;
     if (size > 2 * 1048576) {
       setImageError("Image size should be less than 2MB");
+      setIsImageUpdated(false);
       return;
     } else if (!validFile) {
+      setIsImageUpdated(false);
       setImageError("Invalid file type. Please upload an image file.");
       return;
     } else {
       setImageError("");
       setImage(acceptedFiles[0]);
+      setIsImageUpdated(true);
     }
   };
 
   const onSubmit = async () => {
     const formData = new FormData();
-    if (image && isImageUpdated && !isImageDeleted) {
-      formData.append("image", image);
-    } else {
-      formData.append("image", "");
+    if (image) {
+      if (image instanceof File) {
+        formData.append("image", image);
+      } else {
+        formData.append("image", "");
+      }
     }
-
     await mutateAsync(formData);
-
-    await mutateAsync(null);
-
+    setImage(null);
     onClose();
   };
 
@@ -104,9 +114,8 @@ const Sidebar = ({ data }: SidebarProps) => {
       <Stack spacing={4}>
         <Box pos={"relative"} w={"fit-content"} borderRadius={50}>
           <Avatar
-            src={`${BaseURL}/${data?.image}`}
+            src={data?.image ? `${BaseURL}/${data?.image}` : AvatarIcon}
             size={"xl"}
-            name={data?.name}
           />
           <IconButton
             colorScheme="primary"
@@ -123,14 +132,14 @@ const Sidebar = ({ data }: SidebarProps) => {
           Hi, {data?.name?.split(" ")[0]}
         </Text>
       </Stack>
-      <ChangeImageModal
+      <ModalForm
         onSubmit={handleSubmit(onSubmit)}
         heading="Change Profile Picture"
         isOpen={isOpen}
         onClose={handleClose}
         onOpen={onOpen}
         isLoading={isPending}
-        isDisabled={!isImageUpdated && !isImageDeleted}
+        isDisabled={!isImageUpdated}
       >
         <SingleDropzone
           control={control}
@@ -139,11 +148,11 @@ const Sidebar = ({ data }: SidebarProps) => {
           onDrop={handleSingleDrop}
           message={imageError}
           onDelete={() => {
-            setIsImageDeleted(true);
             setImage(null);
+            setIsImageUpdated(true);
           }}
         />
-      </ChangeImageModal>
+      </ModalForm>
       <Stack spacing={4}>
         {sidebarLinks.map((link) => (
           <Link

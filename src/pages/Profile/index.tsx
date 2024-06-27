@@ -1,10 +1,9 @@
-import { useFetchUser } from "@/api/auth";
 import { Container, Flex } from "@chakra-ui/react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 const Profile = () => {
-  const { data } = useFetchUser();
+  const data = useOutletContext();
   return (
     <Flex
       py={10}

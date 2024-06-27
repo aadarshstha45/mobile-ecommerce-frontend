@@ -7,4 +7,8 @@ export const user = {
   updateImage: "/change-profile-picture",
   emailCheck: (email: string) => `/check-unique-email?email=${email}`,
   updatePassword: "/update-password",
+  getShippingAddress: "/shipping-address",
+  addShippingAddress: "/shipping-address",
+  editShippingAddress: "/shipping-address/:id",
+  deleteShippingAddress: "/shipping-address/:id",
 };

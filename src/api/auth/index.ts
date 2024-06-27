@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { HttpClient } from "../axiosSetup";
 import { user } from "../endpoints";
-import { useFetch } from "../methods";
+import { useDelete, useFetch } from "../methods";
 import useMutate from "./users";
 
 const useRegister = () => {
@@ -64,8 +64,40 @@ const useEmailCheck = (email: string) => {
   return useFetch(user.emailCheck(email));
 };
 
+const useFetchAddresses = () => {
+  return useFetch(user.getShippingAddress);
+};
+
+const useAddAddress = () => {
+  return useMutate({
+    apiEndPoint: user.addShippingAddress,
+    inValidateEndpoint: user.getShippingAddress,
+    message: "Address added successfully",
+  });
+};
+
+const useEditAddress = (id: string) => {
+  return useMutate({
+    apiEndPoint: user.editShippingAddress.replace(":id", id),
+    inValidateEndpoint: user.getShippingAddress,
+    message: "Address updated successfully",
+  });
+};
+
+const useDeleteAddress = () => {
+  return useDelete({
+    apiEndPoint: user.deleteShippingAddress,
+    inValidateEndpoint: user.getShippingAddress,
+    message: "Address deleted successfully",
+  });
+};
+
 export {
+  useAddAddress,
+  useDeleteAddress,
+  useEditAddress,
   useEmailCheck,
+  useFetchAddresses,
   useFetchUser,
   useLogin,
   useLogout,

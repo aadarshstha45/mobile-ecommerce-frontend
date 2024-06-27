@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
 import LayoutWrapper from "@/layouts";
-import { SavedAddress } from "@/pages/Profile/pages";
 import { lazy } from "react";
 
 const Home = lazy(() => import("@/pages/Home"));
@@ -13,6 +12,7 @@ const ProfileDetails = lazy(
   () => import("@/pages/Profile/pages/ProfileDetails")
 );
 const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
+const SavedAddress = lazy(() => import("@/pages/Profile/pages/SavedAddress"));
 
 export const appRoutes = [
   {

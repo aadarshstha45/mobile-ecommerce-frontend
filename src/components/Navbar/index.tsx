@@ -1,4 +1,5 @@
 import { useLogout } from "@/api/auth";
+import { BaseURL } from "@/api/axiosSetup";
 import NavCart from "@/assets/icons/NavCart";
 import SearchIcon from "@/assets/icons/SearchIcon";
 import ShoppingCart from "@/assets/icons/ShoppingCart";
@@ -13,6 +14,7 @@ import {
   HStack,
   Link,
   Popover,
+  PopoverArrow,
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
@@ -21,7 +23,7 @@ import { Menu as MenuIcon } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { collectionLink } from "./navItems";
 
-function NavBar() {
+function NavBar({ data }: any) {
   const path = useLocation().pathname.split("/")[1];
   const navigate = useNavigate();
   const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
@@ -98,15 +100,20 @@ function NavBar() {
                 </Button>
               </ButtonGroup>
             ) : (
-              <Popover>
+              <Popover isLazy closeOnBlur closeOnEsc placement="bottom-end">
                 <PopoverTrigger>
                   <Avatar
                     cursor={"pointer"}
-                    src={Profile}
+                    src={data?.image ? `${BaseURL}/${data?.image}` : Profile}
                     size={{ base: "sm", md: "md" }}
                   />
                 </PopoverTrigger>
-                <PopoverContent w={"100px"} overflow={"hidden"}>
+                <PopoverContent
+                  borderColor={"primary.500"}
+                  w={"fit-content"}
+                  overflow={"hidden"}
+                >
+                  <PopoverArrow />
                   <Link
                     as={NavLink}
                     _hover={{ textDecor: "none" }}
@@ -115,7 +122,7 @@ function NavBar() {
                     <PopoverHeader
                       _hover={{ bg: "primary.500", color: "white" }}
                     >
-                      Profile
+                      {data?.name}
                     </PopoverHeader>
                   </Link>
                   <PopoverHeader

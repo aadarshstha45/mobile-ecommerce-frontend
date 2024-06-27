@@ -9,34 +9,45 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 
-interface ChangeImageModalProps {
+interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onOpen: () => void;
   heading?: string;
   onSubmit: () => void;
   children: React.ReactNode;
   isDisabled?: boolean;
   isLoading?: boolean;
+  buttonText?: string;
 }
 
-export const ChangeImageModal = ({
+export const ModalForm = ({
   isOpen,
   onClose,
-  onOpen,
   heading,
   onSubmit,
   children,
   isDisabled,
   isLoading,
-}: ChangeImageModalProps) => {
+  buttonText,
+}: ModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent onSubmit={onSubmit} as={"form"} noValidate>
-        <ModalHeader fontWeight={500}>{heading}</ModalHeader>
+      <ModalContent
+        pos={"fixed"}
+        maxW={["90%", "80%", "60%", "40%"]}
+        maxH={window.innerHeight - 100}
+        onSubmit={onSubmit}
+        as={"form"}
+        noValidate
+      >
+        <ModalHeader borderBottom={"1px solid"} fontWeight={500}>
+          {heading}
+        </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>{children}</ModalBody>
+        <ModalBody minH={window.innerHeight - 250} overflow={"auto"} pt={4}>
+          {children}
+        </ModalBody>
         <ModalFooter>
           <Button
             type="submit"
@@ -48,7 +59,7 @@ export const ChangeImageModal = ({
             isDisabled={isDisabled}
             isLoading={isLoading}
           >
-            Upload
+            {buttonText || "Save"}
           </Button>
           <Button
             colorScheme="primary"

@@ -1,3 +1,4 @@
+import { useFetchUser } from "@/api/auth";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/Navbar";
 import { Flex, Spinner } from "@chakra-ui/react";
@@ -5,9 +6,10 @@ import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
 function LayoutWrapper() {
+  const { data: user } = useFetchUser();
   return (
     <Flex flexDir={"column"} overflow={"hidden"}>
-      <NavBar />
+      <NavBar data={user && user} />
       <Suspense
         fallback={
           <Flex justifyContent={"center"} alignItems="center" height={"100vh"}>
@@ -21,7 +23,7 @@ function LayoutWrapper() {
           </Flex>
         }
       >
-        <Outlet />
+        <Outlet context={(user && user) || []} />
       </Suspense>
       <Footer />
     </Flex>
