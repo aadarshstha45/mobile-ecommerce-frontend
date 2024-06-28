@@ -1,3 +1,4 @@
+import { useFetchProductsByCategory } from "@/api/functions/Category";
 import SelectInput from "@/components/Form/SelectInput";
 import ItemDisplay from "@/components/ItemDisplay";
 import { CloseIcon } from "@chakra-ui/icons";
@@ -11,10 +12,9 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { useParams } from "react-router-dom";
-import { handPickedData } from "../Home/data/data";
+import { useLocation, useParams } from "react-router-dom";
 import ColorSize from "./ColorSize";
 import FilterSection from "./FilterSection";
 import PriceRange from "./PriceRange";
@@ -30,8 +30,8 @@ type OptionType = {
   value: string;
 };
 
-function Collection() {
-  const { slug } = useParams<{ slug: string }>();
+function Category() {
+  const { id } = useParams<{ id: string }>();
   const [isLessThan540] = useMediaQuery("(max-width: 540px)");
   const [priceRange, setPriceRange] = useState<number | null>(null);
   const [size, setSize] = useState<string[]>([]);
@@ -39,18 +39,24 @@ function Collection() {
   const [category, setCategory] = useState<string[]>([]);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const pageFromUrl = Number(urlParams.get("page")) || 1;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  const { data } = useFetchProductsByCategory(
+    pageFromUrl,
+    pageSize,
+    Number(id)
+  );
+
+  useEffect(() => {
+    setCurrentPage(pageFromUrl);
+  }, [pageFromUrl]);
+
   const handleSelectChange = (selectedOption: OptionType) => {
     console.log(selectedOption.value);
-    //     if (selectedOption) {
-    //       console.log(selectedOption);
-    //       const filtered = data.filter(
-    //         (item) => item.value === selectedOption.value
-    //       );
-    //       console.log(filtered);
-    //       setFilteredData(filtered);
-    //     } else {
-    //       setFilteredData(data);
-    //     }
   };
 
   const handleRemove = (item: string) => {
@@ -82,9 +88,7 @@ function Collection() {
         justify={isLessThan540 ? "center" : "space-between"}
         align={isLessThan540 ? "center" : "space-between"}
       >
-        <Heading textAlign={"center"}>
-          {slug === "men" ? "Men's Collection" : "Women's Collection"}
-        </Heading>
+        <Heading textAlign={"center"}>{id}</Heading>
         <SelectInput
           isControlled={false}
           placeholder="Sort by"
@@ -254,24 +258,28 @@ function Collection() {
               </Stack>
             ))}
 
-          <ResponsiveMasonry
-            columnsCountBreakPoints={{ 350: 1, 600: 2, 900: 3 }}
-          >
-            <Masonry gutter="30px">
-              {handPickedData?.map((data) => (
-                <ItemDisplay
-                  key={data.id}
-                  data={data}
-                  hoveredId={hoveredId}
-                  setHoveredId={setHoveredId}
-                />
-              ))}
-            </Masonry>
-          </ResponsiveMasonry>
+          {data ? (
+            <ResponsiveMasonry
+              columnsCountBreakPoints={{ 350: 1, 600: 2, 900: 3 }}
+            >
+              <Masonry gutter="30px">
+                {data.map((item: any) => (
+                  <ItemDisplay
+                    key={item.id}
+                    data={item}
+                    hoveredId={hoveredId}
+                    setHoveredId={setHoveredId}
+                  />
+                ))}
+              </Masonry>
+            </ResponsiveMasonry>
+          ) : (
+            <Text>No data</Text>
+          )}
         </Flex>
       </Flex>
     </Container>
   );
 }
 
-export default Collection;
+export default Category;

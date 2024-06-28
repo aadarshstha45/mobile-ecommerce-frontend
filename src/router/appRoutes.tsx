@@ -4,7 +4,7 @@ import { lazy } from "react";
 
 const Home = lazy(() => import("@/pages/Home"));
 // const About = lazy(() => import("@/pages/About"));
-const Collection = lazy(() => import("@/pages/Collection"));
+const Category = lazy(() => import("@/pages/Category"));
 const SpecialOffer = lazy(() => import("@/pages/SpecialOffer"));
 const Checkout = lazy(() => import("@/pages/Checkout"));
 const Profile = lazy(() => import("@/pages/Profile"));
@@ -13,6 +13,10 @@ const ProfileDetails = lazy(
 );
 const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 const SavedAddress = lazy(() => import("@/pages/Profile/pages/SavedAddress"));
+const AccountSettings = lazy(
+  () => import("@/pages/Profile/pages/AccountSettings")
+);
+const MyPurchase = lazy(() => import("@/pages/Profile/pages/MyPurchase"));
 
 export const appRoutes = [
   {
@@ -28,11 +32,11 @@ export const appRoutes = [
         element: <div>About</div>,
       },
       {
-        path: "collection/:slug",
-        element: <Collection />,
+        path: "category/:id",
+        element: <Category />,
       },
       {
-        path: "product",
+        path: "product/:id",
         element: <ProductDetail />,
       },
       {
@@ -57,7 +61,11 @@ export const appRoutes = [
           },
           {
             path: "purchases",
-            element: <div>My Purchases</div>,
+            element: <MyPurchase />,
+          },
+          {
+            path: "account-settings",
+            element: <AccountSettings />,
           },
         ],
       },

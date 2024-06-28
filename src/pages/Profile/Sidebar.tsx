@@ -39,6 +39,11 @@ const sidebarLinks = [
     label: "My Orders",
     to: "orders",
   },
+  {
+    id: 5,
+    label: "Account Settings",
+    to: "account-settings",
+  },
 ];
 
 interface SidebarProps {
@@ -137,7 +142,6 @@ const Sidebar = ({ data }: SidebarProps) => {
         heading="Change Profile Picture"
         isOpen={isOpen}
         onClose={handleClose}
-        onOpen={onOpen}
         isLoading={isPending}
         isDisabled={!isImageUpdated}
       >

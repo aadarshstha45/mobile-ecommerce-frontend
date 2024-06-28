@@ -14,7 +14,6 @@ import {
   Box,
   Flex,
   HStack,
-  Heading,
   Icon,
   Stack,
   Text,
@@ -152,10 +151,8 @@ const SavedAddress = () => {
   };
 
   return (
-    <Flex w={"full"} flexDir={"column"} p={4}>
-      <Heading size={"lg"} fontWeight={500}>
-        Saved Address
-      </Heading>
+    <Flex w={"full"} flexDir={"column"} gap={4}>
+      <Text fontSize={"xl"}>Saved Address</Text>
       {data ? (
         data.map((address: any, index: number) => (
           <Box

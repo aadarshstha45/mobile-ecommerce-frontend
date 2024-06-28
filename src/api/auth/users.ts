@@ -55,10 +55,16 @@ const useMutate = (requestData: {
         });
       }
       if (dataError && statusCode !== 422) {
-        // showError((dataError as any)?.message);
-        toast.error((dataError as any)?.message, {
-          duration: 2000,
-        });
+        if (statusCode === 500) {
+          toast.error(error?.response?.statusText as string, {
+            duration: 2000,
+          });
+        } else {
+          // showError((dataError as any)?.message);
+          toast.error((dataError as any)?.errors, {
+            duration: 2000,
+          });
+        }
       }
     },
   });

@@ -35,7 +35,7 @@ const ActionMenu = ({ onView, onEdit, onDelete }: ActionMenuProps) => {
       onClick: onEdit,
     },
     {
-      id: 1,
+      id: 3,
       icon: Trash2Icon,
       color: "red.500",
       label: "Delete",
@@ -56,12 +56,11 @@ const ActionMenu = ({ onView, onEdit, onDelete }: ActionMenuProps) => {
         minW={"100px"}
       >
         {menuItems.map((item, index) => (
-          <React.Fragment key={item.id}>
+          <React.Fragment key={index}>
             <MenuItem onClick={item.onClick} py={1}>
               <Flex align={"center"} gap={3}>
                 <Icon as={item.icon} color={item.color} boxSize={3} />
                 <Text fontSize={{ base: "14px", md: "16px" }}>
-                  {" "}
                   {item.label}
                 </Text>
               </Flex>

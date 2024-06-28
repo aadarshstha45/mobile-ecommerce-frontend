@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BaseURL } from "@/api/axiosSetup";
+import { useFetchProductById } from "@/api/functions/Product";
 import IconButton from "@/components/Form/IconButton";
 import RadioBox from "@/components/Form/RadioBox";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
@@ -12,8 +14,9 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import DetailTab from "./DetailTab";
 import ProductFAQ from "./ProductFAQ";
 import Queries from "./Queries";
@@ -22,8 +25,11 @@ import RelatedProducts from "./RelatedProducts/indext";
 import { colorOptions, sizeOptions } from "./data/options";
 
 function ProductDetail() {
-  const [count, setCount] = useState<number>(1);
+  const { id } = useParams<{ id: string }>();
 
+  const { data } = useFetchProductById(id!);
+  console.log(data);
+  const [count, setCount] = useState<number>(1);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       size: "m",
@@ -32,6 +38,8 @@ function ProductDetail() {
     },
   });
 
+  const [displayImage, setDisplayImage] = useState<string>();
+
   const onSubmit = (data: any) => {
     console.log({
       ...data,
@@ -39,6 +47,11 @@ function ProductDetail() {
     });
   };
 
+  useEffect(() => {
+    if (data?.image) {
+      setDisplayImage(data?.image);
+    }
+  }, [data?.image]);
   return (
     <Flex flexDir={"column"}>
       <Container
@@ -52,25 +65,61 @@ function ProductDetail() {
               <Image
                 w={"full"}
                 aspectRatio={4 / 3}
-                src="https://via.placeholder.com/400"
+                src={`${BaseURL}/${displayImage}`}
               />
 
-              <Flex gap={2} overflowX={"scroll"}>
-                <Image src="https://via.placeholder.com/100" />
-                <Image src="https://via.placeholder.com/100" />
-                <Image src="https://via.placeholder.com/100" />
-                <Image src="https://via.placeholder.com/100" />
-                <Image src="https://via.placeholder.com/100" />
-                <Image src="https://via.placeholder.com/100" />
-              </Flex>
+              {data?.product_images && (
+                <Flex
+                  sx={{
+                    "&::-webkit-scrollbar": {
+                      height: "5px", // Height of the scrollbar
+                      backgroundColor: "transparent", // Background color of the scrollbar track
+                      py: 100,
+                    },
+                    "&::-webkit-scrollbar-thumb": {
+                      backgroundColor: "#4A57B3", // Color of the scrollbar thumb
+                      borderRadius: "10px", // Rounded corners for the thumb
+                      border: "3px solid #4A57B3", // Border to make it visible
+                      scrollBehavior: "smooth",
+                    },
+                    "&::-webkit-scrollbar-thumb:hover": {
+                      backgroundColor: "#404E9E", // Color of the thumb on hover
+                    },
+                    "&::-webkit-scrollbar-track": {
+                      borderRadius: "10px", // Rounded corners for the track
+                    },
+                  }}
+                  gap={2}
+                  overflowX={"scroll"}
+                >
+                  <Image
+                    w={40}
+                    aspectRatio={4 / 3}
+                    onClick={() => setDisplayImage(data?.image)}
+                    src={`${BaseURL}/${data?.image}`}
+                  />
+                  {data?.product_images.map((image: any) => (
+                    <Image
+                      w={40}
+                      aspectRatio={4 / 3}
+                      key={image.id}
+                      onClick={() => setDisplayImage(image.image)}
+                      src={`${BaseURL}/${image.image}`}
+                    />
+                  ))}
+                </Flex>
+              )}
             </Flex>
             <Flex gap={10}>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Flex flexDir={"column"}>
-                  <Text fontSize={"xl"}>Product Name</Text>
-                  <Text fontSize={"sm"}>
-                    Product Category Product Category Product Category
-                  </Text>
+                  <Text fontSize={"xl"}>{data?.name}</Text>
+                  <Text fontSize={"sm"}>{data?.category?.name}</Text>
+
+                  <Flex fontSize={"lg"} mt={4} gap={2}>
+                    <Text>Available Quantity: </Text>
+                    <Text>{data?.available_qty}</Text>
+                  </Flex>
 
                   <Flex flexDir={"column"} mt={4} gap={2}>
                     <Text fontSize={"lg"}>Available Colors: </Text>
@@ -109,7 +158,6 @@ function ProductDetail() {
 
                   <Flex flexDir={"column"} mt={4} gap={2}>
                     <Text fontSize={"lg"}>Quantity </Text>
-
                     <HStack gap={2}>
                       <IconButton
                         colorScheme="primary"
@@ -128,7 +176,6 @@ function ProductDetail() {
                       />
                     </HStack>
                   </Flex>
-
                   <Divider
                     opacity={1}
                     borderColor={"primary.500"}
@@ -140,7 +187,7 @@ function ProductDetail() {
               </form>
             </Flex>
           </Grid>
-          <DetailTab />
+          <DetailTab description={data?.description} />
           <Divider opacity={1} borderColor={"gray.300"} />
           <Ratings />
           <Divider

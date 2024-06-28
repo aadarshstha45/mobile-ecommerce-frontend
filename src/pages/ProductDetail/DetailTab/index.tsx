@@ -7,7 +7,11 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 
-const DetailTab = () => {
+interface DetailTabProps {
+  description?: string;
+}
+
+const DetailTab = ({ description }: DetailTabProps) => {
   return (
     <Tabs
       colorScheme="primary"
@@ -22,22 +26,13 @@ const DetailTab = () => {
       </TabList>
       <TabIndicator
         mt="-1.5px"
-        height="3px"
+        height="5px"
         bg="primary.500"
         borderRadius="1px"
       />
       <TabPanels textAlign={"center"}>
         <TabPanel>
-          <p>
-            Introducing our Breshka Regular Fit Jeans, the epitome of comfort,
-            style, and versatility. Crafted with meticulous attention to detail,
-            these jeans offer a perfect balance between classic design and
-            contemporary flair. Designed to flatter every body type, our regular
-            fit jeans feature a timeless silhouette that effortlessly
-            complements any look. Whether you're dressing up for a night out or
-            keeping it casual for a weekend adventure, these jeans provide the
-            ideal foundation for your outfit.
-          </p>
+          <p>{description}</p>
         </TabPanel>
         <TabPanel>
           <p>two!</p>

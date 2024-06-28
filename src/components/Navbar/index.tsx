@@ -1,5 +1,6 @@
 import { useLogout } from "@/api/auth";
 import { BaseURL } from "@/api/axiosSetup";
+import { useFetchCategoryMenu } from "@/api/functions/Category";
 import NavCart from "@/assets/icons/NavCart";
 import SearchIcon from "@/assets/icons/SearchIcon";
 import ShoppingCart from "@/assets/icons/ShoppingCart";
@@ -21,10 +22,10 @@ import {
 } from "@chakra-ui/react";
 import { Menu as MenuIcon } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { collectionLink } from "./navItems";
 
 function NavBar({ data }: any) {
   const path = useLocation().pathname.split("/")[1];
+  const { data: categoryMenu } = useFetchCategoryMenu();
   const navigate = useNavigate();
   const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
   const { mutateAsync } = useLogout();
@@ -46,12 +47,12 @@ function NavBar({ data }: any) {
       <Container maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}>
         <Flex align={"center"} justify={"space-between"}>
           <HStack display={{ base: "none", md: "flex" }} gap={"30px"}>
-            {collectionLink.map((collection, i) => (
+            {categoryMenu?.map((category: any) => (
               <Link
                 _hover={{ textDecor: "none" }}
                 as={NavLink}
-                to={`/collection/${collection.to}`}
-                key={i}
+                to={`/category/${category.id}`}
+                key={category.id}
                 _activeLink={{ color: "primary.500", fontWeight: 600 }}
                 fontSize={{
                   base: "14px",
@@ -60,7 +61,7 @@ function NavBar({ data }: any) {
                   lg: "20px",
                 }}
               >
-                {collection.label}
+                {category.name}
               </Link>
             ))}
           </HStack>
