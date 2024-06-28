@@ -6,7 +6,6 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { HttpClient } from "../axiosSetup";
 
 const useMutate = (requestData: {
@@ -20,7 +19,6 @@ const useMutate = (requestData: {
     return HttpClient.post(requestData.apiEndPoint, data);
   };
 
-  const signIn = useSignIn();
   return useMutation({
     mutationKey: [requestData.apiEndPoint],
     mutationFn: sendData,

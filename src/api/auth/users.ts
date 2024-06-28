@@ -48,7 +48,12 @@ const useMutate = (requestData: {
       const statusCode = error?.response?.status;
       const errorMessage = error?.message;
       const dataError = error?.response?.data;
-      if (errorMessage && statusCode !== 422 && statusCode !== 500) {
+      if (
+        errorMessage &&
+        statusCode !== 401 &&
+        statusCode !== 422 &&
+        statusCode !== 500
+      ) {
         // showError(errorMessage);
         toast.error(errorMessage, {
           duration: 2000,
