@@ -3,6 +3,7 @@ export const user = {
   register: "/register",
   logout: "/logout",
   me: "/user-details",
+  changePassword: "/change-password",
   update: "/profile-update",
   updateImage: "/change-profile-picture",
   emailCheck: (email: string) => `/check-unique-email?email=${email}`,

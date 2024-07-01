@@ -1,5 +1,11 @@
 import { useUpdateUser } from "@/api/auth";
-import { DatePicker, PhoneInput, TextInput } from "@/components/Form";
+import {
+  DatePicker,
+  PhoneInput,
+  SelectInput,
+  TextInput,
+} from "@/components/Form";
+import { countryOptions } from "@/components/Form/SelectInput";
 import { ProfileSchema } from "@/utils/validation/profile";
 import {
   Button,
@@ -147,13 +153,16 @@ const ProfileDetails = () => {
           spacingY={4}
         >
           <GridItem colSpan={1}>
-            <TextInput
-              isReadOnly={readOnly}
+            <SelectInput
+              width="full"
+              label="Country"
+              options={countryOptions}
+              name="country"
+              isControlled
               isRequired={!readOnly}
-              name={"country"}
-              label={"Country"}
+              placeholder="Select Country"
               control={control}
-              errors={errors}
+              isReadOnly={readOnly}
             />
           </GridItem>
           <GridItem colSpan={1}>

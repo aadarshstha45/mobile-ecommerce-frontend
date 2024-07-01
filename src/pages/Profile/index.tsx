@@ -7,15 +7,15 @@ const Profile = () => {
   return (
     <Flex
       py={10}
-      as={Container}
       id={"profile"}
-      maxW={{ base: "99vw", sm: "95vw", md: "90vw" }}
       minH={window.innerHeight}
       overflow={"auto"}
-      gap={4}
+      gap={6}
     >
       <Sidebar data={data} />
-      <Outlet context={(data && data) || []} />
+      <Container maxW={{ base: "97vw", md: "90vw", lg: "80vw" }} id={"profile"}>
+        <Outlet context={(data && data) || []} />
+      </Container>
     </Flex>
   );
 };

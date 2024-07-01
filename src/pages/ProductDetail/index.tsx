@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseURL } from "@/api/axiosSetup";
 import { useFetchProductById } from "@/api/functions/Product";
+import NoImage from "@/assets/images/NoImage.png";
 import IconButton from "@/components/Form/IconButton";
 import RadioBox from "@/components/Form/RadioBox";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
@@ -21,12 +22,11 @@ import DetailTab from "./DetailTab";
 import ProductFAQ from "./ProductFAQ";
 import Queries from "./Queries";
 import Ratings from "./Ratings";
-import RelatedProducts from "./RelatedProducts/indext";
+import RelatedProducts from "./RelatedProducts";
 import { colorOptions, sizeOptions } from "./data/options";
 
 function ProductDetail() {
   const { id } = useParams<{ id: string }>();
-
   const { data } = useFetchProductById(id!);
   console.log(data);
   const [count, setCount] = useState<number>(1);
@@ -62,11 +62,22 @@ function ProductDetail() {
         <Flex flexDir={"column"} gap={10}>
           <Grid templateColumns={{ base: "1fr", md: "repeat(2,1fr)" }} gap={10}>
             <Flex alignContent={"center"} flexDir={"column"} gap={10}>
-              <Image
-                w={"full"}
-                aspectRatio={4 / 3}
-                src={`${BaseURL}/${displayImage}`}
-              />
+              {displayImage ? (
+                <Image
+                  w={"full"}
+                  aspectRatio={4 / 3}
+                  src={`${BaseURL}/${displayImage}`}
+                />
+              ) : (
+                <Flex
+                  w={"full"}
+                  aspectRatio={4 / 3}
+                  align={"center"}
+                  justify={"center"}
+                >
+                  <Image w={"200px"} h={"200px"} src={NoImage} />
+                </Flex>
+              )}
 
               {data?.product_images && (
                 <Flex
@@ -92,12 +103,14 @@ function ProductDetail() {
                   gap={2}
                   overflowX={"scroll"}
                 >
-                  <Image
-                    w={40}
-                    aspectRatio={4 / 3}
-                    onClick={() => setDisplayImage(data?.image)}
-                    src={`${BaseURL}/${data?.image}`}
-                  />
+                  {displayImage && (
+                    <Image
+                      w={40}
+                      aspectRatio={4 / 3}
+                      onClick={() => setDisplayImage(data?.image)}
+                      src={`${BaseURL}/${data?.image}`}
+                    />
+                  )}
                   {data?.product_images.map((image: any) => (
                     <Image
                       w={40}

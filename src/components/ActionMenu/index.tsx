@@ -1,6 +1,5 @@
 import { EditIcon } from "@chakra-ui/icons";
 import {
-  Flex,
   Icon,
   Menu,
   MenuButton,
@@ -48,7 +47,7 @@ const ActionMenu = ({ onView, onEdit, onDelete }: ActionMenuProps) => {
         <Icon as={EllipsisVerticalIcon} color="primary.500" boxSize={4} />
       </MenuButton>
       <MenuList
-        border={"1px solid"}
+        border={"thin solid"}
         textColor={"primary.500"}
         mt={-2}
         py={0}
@@ -57,15 +56,15 @@ const ActionMenu = ({ onView, onEdit, onDelete }: ActionMenuProps) => {
       >
         {menuItems.map((item, index) => (
           <React.Fragment key={index}>
-            <MenuItem onClick={item.onClick} py={1}>
-              <Flex align={"center"} gap={3}>
-                <Icon as={item.icon} color={item.color} boxSize={3} />
-                <Text fontSize={{ base: "14px", md: "16px" }}>
-                  {item.label}
-                </Text>
-              </Flex>
+            <MenuItem
+              icon={<Icon as={item.icon} color={item.color} boxSize={4} />}
+              onClick={item.onClick}
+              py={1}
+            >
+              <Text fontSize={{ base: "14px", md: "16px" }}>{item.label}</Text>
             </MenuItem>
             <MenuDivider
+              borderWidth={"thin"}
               opacity={index !== menuItems.length - 1 ? 1 : 0}
               my={0}
             />

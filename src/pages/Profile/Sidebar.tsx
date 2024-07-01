@@ -115,7 +115,14 @@ const Sidebar = ({ data }: SidebarProps) => {
   };
 
   return (
-    <Flex flexDir={"column"} minH={window.innerHeight} w={"200px"} gap={10}>
+    <Flex
+      flexDir={"column"}
+      minH={window.innerHeight}
+      w={"250px"}
+      gap={10}
+      px={8}
+      display={{ base: "none", md: "flex" }}
+    >
       <Stack spacing={4}>
         <Box pos={"relative"} w={"fit-content"} borderRadius={50}>
           <Avatar

@@ -19,9 +19,11 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { Menu as MenuIcon } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import CartDrawer from "../CartDrawer";
 
 function NavBar({ data }: any) {
   const path = useLocation().pathname.split("/")[1];
@@ -29,7 +31,7 @@ function NavBar({ data }: any) {
   const navigate = useNavigate();
   const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
   const { mutateAsync } = useLogout();
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const handleSignOut = async () => {
     console.log("signing out");
     await mutateAsync();
@@ -137,9 +139,14 @@ function NavBar({ data }: any) {
               </Popover>
             )}
 
-            <ShoppingCart boxSize={{ base: 5, sm: 6 }} />
+            <ShoppingCart
+              onClick={onOpen}
+              cursor={"pointer"}
+              boxSize={{ base: 5, sm: 6 }}
+            />
           </HStack>
         </Flex>
+        <CartDrawer isOpen={isOpen} onClose={onClose} />
       </Container>
     </Flex>
   );

@@ -27,7 +27,7 @@ import { useOutletContext } from "react-router-dom";
 const SavedAddress = () => {
   const user: any = useOutletContext();
   const { data } = useFetchAddresses();
-  const [countryCode, setCountryCode] = useState("");
+  const [countryCode, setCountryCode] = useState("+977");
   const [id, setId] = useState<string | null>(null);
   const addAddress = useAddAddress();
   const editAddress = useEditAddress(id!);
@@ -47,7 +47,7 @@ const SavedAddress = () => {
       landmark: "",
       recipient_name: "",
       phone_number: "",
-      is_billing_address: true,
+      is_billing_address: false,
     },
   });
   useEffect(() => {

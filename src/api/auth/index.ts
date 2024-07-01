@@ -92,8 +92,16 @@ const useDeleteAddress = () => {
   });
 };
 
+const useChangePassword = () => {
+  return useMutate({
+    apiEndPoint: user.changePassword,
+    message: "Password changed successfully",
+  });
+};
+
 export {
   useAddAddress,
+  useChangePassword,
   useDeleteAddress,
   useEditAddress,
   useEmailCheck,

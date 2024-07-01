@@ -1,5 +1,6 @@
+import { useChangePassword } from "@/api/auth";
 import { TextInput } from "@/components/Form";
-import { Button, Card, CardBody, Divider, Flex, Text } from "@chakra-ui/react";
+import { Button, Divider, Flex, Text } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
 const AccountSettings = () => {
@@ -7,53 +8,73 @@ const AccountSettings = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      current_password: "",
+      new_password: "",
+      c_new_password: "",
+    },
+  });
+
+  const {
+    mutateAsync: changePassword,
+    isPending,
+    isError,
+    error,
+  } = useChangePassword();
+
+  const errorMessage = (error?.response?.data as any)?.errors;
+  console.log(errorMessage);
+
+  const onSubmit = async (data: any) => {
+    await changePassword(data);
+  };
 
   return (
-    <Flex flexDir={"column"} gap={4}>
+    <Flex w={"fit-content"} flexDir={"column"} gap={4}>
       <Text fontSize={"xl"}>Account Settings</Text>
-      <Card border={"none"} shadow={"none"} h={"fit-content"} w={"fit-content"}>
-        <CardBody>
-          <Text fontSize={"xl"} fontWeight={"semibold"}>
-            Change Password
-          </Text>
-          <Text>Fill the below form to update your password.</Text>
-          <Divider my={2} />
-          <form>
-            <TextInput
-              name={"current_password"}
-              label={"Old Password"}
-              type={"password"}
-              isRequired
-              control={control}
-            />
-            <TextInput
-              name={"new_password"}
-              label={"New Password"}
-              type={"password"}
-              isRequired
-              control={control}
-            />
-            <TextInput
-              name={"c_new_password"}
-              label={"Confirm Password"}
-              type={"password"}
-              isRequired
-              control={control}
-            />
-            <Button
-              // isLoading={isLoading}
-              size={"sm"}
-              type="submit"
-              colorScheme="primary"
-              borderRadius={3}
-              mt={4}
-            >
-              Change Password
-            </Button>
-          </form>
-        </CardBody>
-      </Card>
+      <Text fontSize={"xl"} fontWeight={"semibold"}>
+        Change Password
+      </Text>
+      <Text>Fill the below form to update your password.</Text>
+      <Divider my={2} />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <TextInput
+          name={"current_password"}
+          label={"Old Password"}
+          type={"password"}
+          isRequired
+          errors={errors}
+          backErrors={errorMessage}
+          control={control}
+        />
+        <TextInput
+          name={"new_password"}
+          label={"New Password"}
+          type={"password"}
+          backErrors={errorMessage}
+          isRequired
+          control={control}
+        />
+        <TextInput
+          name={"c_new_password"}
+          label={"Confirm Password"}
+          type={"password"}
+          backErrors={errorMessage}
+          isRequired
+          control={control}
+        />
+        <Button
+          isLoading={isPending}
+          size={"sm"}
+          type="submit"
+          colorScheme="primary"
+          borderRadius={3}
+          mt={4}
+        >
+          Change Password
+        </Button>
+      </form>
     </Flex>
   );
 };
