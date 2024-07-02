@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import LayoutWrapper from "@/layouts";
 import { lazy } from "react";
+import { Navigate } from "react-router-dom";
 
 const Home = lazy(() => import("@/pages/Home"));
 // const About = lazy(() => import("@/pages/About"));
@@ -17,6 +18,8 @@ const AccountSettings = lazy(
   () => import("@/pages/Profile/pages/AccountSettings")
 );
 const MyPurchase = lazy(() => import("@/pages/Profile/pages/MyPurchase"));
+
+const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
 
 export const appRoutes = [
   {
@@ -45,11 +48,11 @@ export const appRoutes = [
       },
       {
         path: "checkout",
-        element: <Checkout />,
+        element: isAuthenticated ? <Checkout /> : <Navigate to={"/login"} />,
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: isAuthenticated ? <Profile /> : <Navigate to={"/login"} />,
         children: [
           {
             index: true,

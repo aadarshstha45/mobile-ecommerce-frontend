@@ -26,8 +26,9 @@ import {
 } from "@/api/functions/Cart";
 import NoImage from "@/assets/images/NoImage.png";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import DeleteAlert from "../Form/DeleteAlert";
 
 interface CartDrawerProps {
@@ -36,8 +37,9 @@ interface CartDrawerProps {
 }
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
+  const navigate = useNavigate();
   const { data, isPending } = useFetchCart();
-
+  const [items, setItems] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
   const { handleSubmit } = useForm();
   const [itemIds, setItemIds] = useState("");
@@ -49,17 +51,33 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     onClose: closeDeleteModal,
   } = useDisclosure();
 
+  useEffect(() => {
+    const cartItems = sessionStorage.getItem("cartItems");
+    if (cartItems) {
+      setItems(JSON.parse(cartItems));
+    }
+  }, []);
+
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
-  const handleCheckboxChange = (item, isChecked) => {
+  const handleCheckboxChange = (item: any, isChecked: any) => {
+    console.log(items);
+    console.log(item);
     if (isChecked) {
       // Add to deletedImages if not already included
+      setItems((prev) => [...prev, item]);
+      sessionStorage.setItem("cartItems", JSON.stringify([...items, item]));
       setDeletedItems((prev) => [...new Set([...prev, item.id])]);
     } else {
       // Remove from deletedImages
+      setItems((prev) => prev.filter((i) => i.id !== item.id));
+      sessionStorage.setItem(
+        "cartItems",
+        JSON.stringify(items.filter((i) => i.id !== item.id))
+      );
       setDeletedItems((prev) => prev.filter((id) => id !== item.id));
     }
   };
-  console.log(deletedItems);
+
   const handleDeleteModalOpen = (id: string) => {
     if (id) {
       setItemIds(id);
@@ -75,10 +93,26 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
       formData.append("ids", JSON.stringify(deletedItems));
       await deleteCartItems.mutateAsync(formData);
       setDeletedItems([]);
+    } else {
+      await deleteCartItem.mutateAsync(itemIds);
     }
-    await deleteCartItem.mutateAsync(itemIds);
     setItemIds("");
     closeDeleteModal();
+  };
+
+  const handleCheckout = () => {
+    sessionStorage.setItem("cartItems", JSON.stringify(items));
+    navigate("/checkout");
+    setDeletedItems([]);
+    setItems([]);
+    onClose();
+  };
+
+  const handleCartClose = () => {
+    onClose();
+    setDeletedItems([]);
+    setItems([]);
+    setItemIds("");
   };
 
   return (
@@ -87,7 +121,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
       closeOnEsc
       colorScheme="primary"
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleCartClose}
       size="lg"
     >
       <DrawerOverlay />
@@ -95,8 +129,6 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth={"1px"}>My Cart</DrawerHeader>
         <DrawerBody
-          as={"form"}
-          id="cart-form"
           onSubmit={handleSubmit(() => {
             console.log("submitting");
           })}
@@ -126,6 +158,10 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                   gap={2}
                 >
                   <Checkbox
+                    defaultChecked={
+                      sessionStorage.getItem("cartItems")?.includes(item.id) ??
+                      false
+                    }
                     name="checked_item"
                     colorScheme="primary"
                     value={item.id}
@@ -244,17 +280,16 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
             colorScheme="primary"
             aria-label="Checkout"
             icon={<Text>Checkout</Text>}
-            type="submit"
-            form="cart-form"
+            onClick={handleCheckout}
           />
         </DrawerFooter>
         <DeleteAlert
           isOpen={isDeleteModalOpen}
           onClose={closeDeleteModal}
-          heading="Remove Cart Item"
+          heading="Remove Cart Item(s)"
           message="Are you sure you want to remove item(s) from cart?"
           onDelete={handleDeleteItem}
-          isDeleting={deleteCartItem.isPending}
+          isDeleting={deleteCartItem.isPending || deleteCartItems.isPending}
         />
       </DrawerContent>
     </Drawer>

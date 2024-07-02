@@ -59,6 +59,16 @@ function ProductDetail() {
       setDisplayImage(data?.image);
     }
   }, [data?.image]);
+
+  useEffect(() => {
+    if (data?.product_properties) {
+      const sizes = data?.product_properties?.map((property: any) => {
+        return property.sizes;
+      });
+      console.log("Sizes", sizes);
+    }
+  }, [data?.product_properties]);
+
   return (
     <Flex flexDir={"column"}>
       <Container
@@ -147,7 +157,6 @@ function ProductDetail() {
                     <RadioBox
                       options={colorOptions}
                       name="color_id"
-                      bg={"primary.500"}
                       control={control}
                     />
                   </Flex>

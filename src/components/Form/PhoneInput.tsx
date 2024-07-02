@@ -21,7 +21,7 @@ type SelectProps = {
   control?: Control<any>;
   isRequired?: boolean;
   isReadOnly?: boolean;
-  errors: FieldErrors;
+  errors?: FieldErrors;
 };
 
 const options = CountryCodes.map((country) => ({

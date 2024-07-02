@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FormLabel, HStack, Radio, RadioGroup } from "@chakra-ui/react";
-import React from "react";
+import {
+  FormControl,
+  FormLabel,
+  HStack,
+  Radio,
+  RadioGroup,
+} from "@chakra-ui/react";
 import { Control, Controller } from "react-hook-form";
 
 type RadioBoxProps = {
@@ -19,16 +24,10 @@ function RadioBox({ name, control, options, bg }: RadioBoxProps) {
         <RadioGroup overflow={"hidden"} value={value} onChange={onChange}>
           <HStack gap={1}>
             {options.map((option: any, index: number) => (
-              <React.Fragment key={index}>
+              <FormControl key={index}>
                 <FormLabel
                   cursor={"pointer"}
-                  bg={
-                    bg && option.value === value
-                      ? option.value + ".300"
-                      : option.value === value
-                      ? "primary.500"
-                      : "#DFDFDF"
-                  }
+                  bg={option.value === value ? "primary.500" : "#DFDFDF"}
                   border={"1px solid transparent"}
                   _hover={{
                     border: "1px solid ",
@@ -41,7 +40,7 @@ function RadioBox({ name, control, options, bg }: RadioBoxProps) {
                   htmlFor={option.value}
                   fontSize={"sm"}
                   onClick={() => {
-                    console.log("option", option.value);
+                    console.log("option", value);
                   }}
                 >
                   {option.label}
@@ -51,7 +50,7 @@ function RadioBox({ name, control, options, bg }: RadioBoxProps) {
                   id={option.value}
                   value={option.value}
                 />
-              </React.Fragment>
+              </FormControl>
             ))}
           </HStack>
         </RadioGroup>

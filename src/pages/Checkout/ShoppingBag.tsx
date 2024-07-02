@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Jean from "@/assets/images/NewArrivals/jean1.png";
-import TShirt from "@/assets/images/SalesImage/shirt 1.png";
+import NoImage from "@/assets/images/NoImage.png";
 import { TextInput } from "@/components/Form/TextInput";
 import { IStepProps } from "@/utils/IStepProps";
+import { useOrderStore } from "@/utils/store";
 import {
   Box,
   Button,
@@ -16,28 +16,14 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-const data = [
-  {
-    id: 1,
-    name: "Jean ",
-    price: 100,
-    size: "M",
-    color: "Blue",
-    image: Jean,
-    quantity: 1,
-  },
-  {
-    id: 2,
-    name: "T-Shirt",
-    price: 50,
-    size: "M",
-    color: "Black",
-    image: TShirt,
-    quantity: 2,
-  },
-];
+import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+
 const ShoppingBag = ({ stepProps }: IStepProps) => {
+  const location = useLocation();
+  const [items, setItems] = useState<any[]>([]);
   const [isLessThan469] = useMediaQuery("(max-width: 469px)");
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -45,11 +31,37 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
     },
   });
 
+  const { setStepData } = useOrderStore();
+
+  useEffect(() => {
+    const cartItems = sessionStorage.getItem("cartItems");
+    if (cartItems) {
+      setItems(JSON.parse(cartItems));
+    }
+    console.log(cartItems);
+  }, [location.pathname]);
+
   const promoSubmit = (data: any) => {
     console.log(data);
   };
 
   const handleNextPage = () => {
+    const cartItems = sessionStorage.getItem("cartItems");
+    {
+      cartItems && cartItems?.length > 0
+        ? items.map((items: any) =>
+            setStepData({
+              cart_id: items?.id,
+              product_id: items?.product.id,
+              quantity: items?.quantity,
+              price: items?.product.price,
+              size: items?.size.id,
+              color: items?.color.id,
+            })
+          )
+        : toast.error("No items in the cart");
+    }
+
     stepProps.nextStep();
   };
 
@@ -61,51 +73,56 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           w={isLessThan469 ? "full" : { base: "100%", sm: "80%", lg: "70%" }}
         >
           <Flex flexDir={"column"} gap={4}>
-            {data?.map((item) => (
-              <Box key={item.id} borderBottom={"1px solid #939292"} py={6}>
-                <Flex
-                  key={item.id}
-                  gap={8}
-                  // justify={"space-between"}
-                  flexDir={isLessThan469 ? "column" : "row"}
-                  align={isLessThan469 ? "start" : "center"}
-                >
-                  <Box
-                    borderRadius={"10px"}
-                    overflow={"hidden"}
-                    minW={isLessThan469 ? "100%" : "30%"}
-                    w={isLessThan469 ? "100%" : "30%"}
-                    h={"150px"}
-                    border={"1px solid #939292"}
-                  >
-                    <Img
-                      src={item.image}
-                      alt={item.name}
-                      objectFit={"cover"}
-                      objectPosition={"center"}
-                      w={"100%"}
-                      h={"100%"}
-                    />
-                  </Box>
-                  <Flex
-                    flexDir={"column"}
-                    gap={3}
-                    minW={isLessThan469 ? "100%" : "50%"}
-                    w={isLessThan469 ? "100%" : "50%"}
-                  >
-                    <Heading noOfLines={2} fontSize={"lg"}>
-                      {item.name}
-                    </Heading>
-                    <Text fontSize={"md"}>Size: {item.size}</Text>
-                    <Text fontSize={"md"}>Color: {item.color}</Text>
-                  </Flex>
+            {items &&
+              items.map((item: any) => {
+                return (
+                  <Box key={item.id} borderBottom={"1px solid #939292"} py={6}>
+                    <Flex
+                      key={item.id}
+                      gap={8}
+                      // justify={"space-between"}
+                      flexDir={isLessThan469 ? "column" : "row"}
+                      align={isLessThan469 ? "start" : "center"}
+                    >
+                      <Box
+                        borderRadius={"10px"}
+                        overflow={"hidden"}
+                        minW={isLessThan469 ? "100%" : "30%"}
+                        w={isLessThan469 ? "100%" : "30%"}
+                        h={"150px"}
+                        border={"1px solid #939292"}
+                      >
+                        <Img
+                          src={item.product.image ?? NoImage}
+                          alt={item.product.name}
+                          objectFit={item.product.image ? "cover" : "contain"}
+                          objectPosition={"center"}
+                          w={"100%"}
+                          h={"100%"}
+                        />
+                      </Box>
+                      <Flex
+                        flexDir={"column"}
+                        gap={3}
+                        minW={isLessThan469 ? "100%" : "50%"}
+                        w={isLessThan469 ? "100%" : "50%"}
+                      >
+                        <Heading noOfLines={2} fontSize={"lg"}>
+                          {item.name}
+                        </Heading>
+                        <Text fontSize={"md"}>Size: {item.size.name}</Text>
+                        <Text fontSize={"md"}>Color: {item.color.name}</Text>
+                      </Flex>
 
-                  <Box>
-                    <Heading fontSize={"lg"}>Rs. {item.price}</Heading>
+                      <Box>
+                        <Heading fontSize={"lg"}>
+                          Rs. {item.product.price}
+                        </Heading>
+                      </Box>
+                    </Flex>
                   </Box>
-                </Flex>
-              </Box>
-            ))}
+                );
+              })}
           </Flex>
         </GridItem>
         <GridItem
@@ -134,14 +151,15 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
               </Button>
             </HStack>
           </form>
-          {data?.map((item) => (
-            <HStack key={item.id} justify={"space-between"} py={2}>
-              <Heading fontSize={"lg"}>{item.name}</Heading>
-              <Heading textColor={"primary.500"} fontSize={"lg"}>
-                Rs. {item.price}
-              </Heading>
-            </HStack>
-          ))}
+          {items &&
+            items?.map((item: any) => (
+              <HStack key={item.id} justify={"space-between"} py={2}>
+                <Heading fontSize={"lg"}>{item.product.name}</Heading>
+                <Heading textColor={"primary.500"} fontSize={"lg"}>
+                  Rs. {item.product.price}
+                </Heading>
+              </HStack>
+            ))}
           <HStack justify={"space-between"} py={2}>
             <Heading fontSize={"lg"}>Discount</Heading>
             <Heading textColor={"primary.500"} fontSize={"lg"}>

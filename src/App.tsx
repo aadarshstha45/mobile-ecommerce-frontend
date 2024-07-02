@@ -4,8 +4,8 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { appRoutes } from "./router/appRoutes";
 import { authRoutes } from "./router/authRoutes";
 
-const renderRoutes = (routes) => {
-  return routes.map((route, index) => (
+const renderRoutes = (routes: any) => {
+  return routes.map((route: any, index: number) => (
     <Route
       key={index}
       path={route.path}
@@ -18,7 +18,6 @@ const renderRoutes = (routes) => {
 };
 
 const App = () => {
-  const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
   return (
     <Suspense
       fallback={

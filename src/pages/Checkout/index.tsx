@@ -1,12 +1,11 @@
 import { Box, Container, Flex } from "@chakra-ui/react";
 import { Step, Steps, useSteps } from "chakra-ui-steps";
 import { lazy } from "react";
-import { BiDollar, BiLogoShopify, BiShoppingBag, BiUser } from "react-icons/bi";
+import { BiDollar, BiLogoShopify, BiShoppingBag } from "react-icons/bi";
 
 const ShippingDetails = lazy(() => import("./ShippingDetails"));
 const PaymentOption = lazy(() => import("./PaymentOption"));
 const ShoppingBag = lazy(() => import("./ShoppingBag"));
-const CustomerDetails = lazy(() => import("./CustomerDetails"));
 
 const ChakraStepper = () => {
   const { nextStep, prevStep, activeStep, setStep } = useSteps({
@@ -19,11 +18,7 @@ const ChakraStepper = () => {
       component: <ShoppingBag stepProps={{ nextStep, prevStep }} />,
       icon: BiShoppingBag,
     },
-    {
-      label: "Customer Details",
-      component: <CustomerDetails stepProps={{ nextStep, prevStep }} />,
-      icon: BiUser,
-    },
+
     {
       label: "Shipping Details",
       component: <ShippingDetails stepProps={{ nextStep, prevStep }} />,

@@ -3,6 +3,7 @@ import Jean from "@/assets/images/NewArrivals/jean1.png";
 import TShirt from "@/assets/images/SalesImage/shirt 1.png";
 import PaymentRadio from "@/components/Form/PaymentRadio";
 import { IStepProps } from "@/utils/IStepProps";
+import { useOrderStore } from "@/utils/store";
 import {
   Box,
   Button,
@@ -54,13 +55,24 @@ const paymentOptions = [
 ];
 
 const PaymentOption = ({ stepProps }: IStepProps) => {
-  const { control } = useForm({
+  const { stepData, setStepData } = useOrderStore();
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       payment: "",
     },
   });
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+    setStepData({
+      ...stepData,
+      payment: data.payment,
+    });
+    console.log(stepData);
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Flex justify={"space-between"} py={2}>
         <Flex flexDir={"column"} gap={4}>
           <Heading fontSize={"lg"}>Payment Option</Heading>
