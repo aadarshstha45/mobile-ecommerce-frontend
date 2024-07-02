@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseURL } from "@/api/axiosSetup";
+import { useAddToCart } from "@/api/functions/Cart";
 import { useFetchProductById } from "@/api/functions/Product";
 import NoImage from "@/assets/images/NoImage.png";
 import IconButton from "@/components/Form/IconButton";
@@ -30,18 +31,24 @@ function ProductDetail() {
   const { data } = useFetchProductById(id!);
   console.log(data);
   const [count, setCount] = useState<number>(1);
+  const addToCart = useAddToCart();
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      size: "m",
-      color: "",
+      product_id: id,
+      size_id: null,
+      color_id: null,
       quantity: count,
     },
   });
 
   const [displayImage, setDisplayImage] = useState<string>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     console.log({
+      ...data,
+      quantity: count,
+    });
+    await addToCart.mutateAsync({
       ...data,
       quantity: count,
     });
@@ -131,7 +138,7 @@ function ProductDetail() {
 
                   <Flex fontSize={"lg"} mt={4} gap={2}>
                     <Text>Available Quantity: </Text>
-                    <Text>{data?.available_qty}</Text>
+                    <Text>{data?.available_quantity}</Text>
                   </Flex>
 
                   <Flex flexDir={"column"} mt={4} gap={2}>
@@ -139,8 +146,8 @@ function ProductDetail() {
 
                     <RadioBox
                       options={colorOptions}
-                      name="color"
-                      bg={colorOptions[0].value + ".300"}
+                      name="color_id"
+                      bg={"primary.500"}
                       control={control}
                     />
                   </Flex>
@@ -157,7 +164,7 @@ function ProductDetail() {
 
                     <RadioBox
                       options={sizeOptions}
-                      name="size"
+                      name="size_id"
                       control={control}
                     />
                   </Flex>

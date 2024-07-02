@@ -1,33 +1,33 @@
 export const sizeOptions = [
   {
     label: "S",
-    value: "s",
+    value: 3,
   },
   {
     label: "M",
-    value: "m",
+    value: 3,
   },
   {
     label: "L",
-    value: "l",
+    value: 3,
   },
 ];
 
 export const colorOptions = [
   {
     label: "Red",
-    value: "red",
+    value: 1,
   },
   {
     label: "Blue",
-    value: "blue",
+    value: 1,
   },
   {
     label: "Green",
-    value: "green",
+    value: 2,
   },
   {
     label: "Yellow",
-    value: "yellow",
+    value: 2,
   },
 ];

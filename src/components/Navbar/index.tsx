@@ -38,6 +38,10 @@ function NavBar({ data }: any) {
     navigate("/");
   };
 
+  const handleCartOpen = () => {
+    isAuthenticated ? onOpen() : navigate("/login");
+  };
+
   return (
     <Flex
       bg={path ? "white" : "#BEBDBD"}
@@ -140,7 +144,7 @@ function NavBar({ data }: any) {
             )}
 
             <ShoppingCart
-              onClick={onOpen}
+              onClick={handleCartOpen}
               cursor={"pointer"}
               boxSize={{ base: 5, sm: 6 }}
             />

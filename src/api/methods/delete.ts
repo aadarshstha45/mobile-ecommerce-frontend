@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useChakraToast } from "@/utils/ChakraToast";
 import {
   InvalidateQueryFilters,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
+import toast from "react-hot-toast";
 import { HttpClient } from "../axiosSetup";
 
 const useDelete = (requestData: {
@@ -14,7 +14,6 @@ const useDelete = (requestData: {
   message?: string;
 }) => {
   const queryClient = useQueryClient();
-  const { showSuccess, showError } = useChakraToast();
   const deleteData = (id: string): Promise<AxiosResponse<any>> => {
     return HttpClient.delete(requestData.apiEndPoint.replace(":id", id), {
       headers: {
@@ -30,10 +29,10 @@ const useDelete = (requestData: {
       queryClient.invalidateQueries(
         requestData.inValidateEndpoint! as InvalidateQueryFilters
       );
-      showSuccess(requestData.message!);
+      toast.success(requestData.message!);
     },
     onError: (error: AxiosError) => {
-      showError(error.message);
+      toast.error(error.message);
     },
   });
 };

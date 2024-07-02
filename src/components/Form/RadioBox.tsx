@@ -40,6 +40,9 @@ function RadioBox({ name, control, options, bg }: RadioBoxProps) {
                   py={2}
                   htmlFor={option.value}
                   fontSize={"sm"}
+                  onClick={() => {
+                    console.log("option", option.value);
+                  }}
                 >
                   {option.label}
                 </FormLabel>
