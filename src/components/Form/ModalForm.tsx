@@ -18,6 +18,7 @@ interface ModalProps {
   isDisabled?: boolean;
   isLoading?: boolean;
   buttonText?: string;
+  form?: string;
 }
 
 export const ModalForm = ({
@@ -29,6 +30,7 @@ export const ModalForm = ({
   isDisabled,
   isLoading,
   buttonText,
+  form,
 }: ModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -37,16 +39,15 @@ export const ModalForm = ({
         pos={"fixed"}
         maxW={["90%", "80%", "60%", "40%"]}
         maxH={window.innerHeight - 100}
-        onSubmit={onSubmit}
-        as={"form"}
-        noValidate
       >
         <ModalHeader borderBottom={"1px solid"} fontWeight={500}>
           {heading}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody minH={window.innerHeight - 250} overflow={"auto"} pt={4}>
-          {children}
+          <form id={form} onSubmit={onSubmit}>
+            {children}
+          </form>
         </ModalBody>
         <ModalFooter>
           <Button
@@ -58,6 +59,7 @@ export const ModalForm = ({
             mr={3}
             isDisabled={isDisabled}
             isLoading={isLoading}
+            form={form}
           >
             {buttonText || "Save"}
           </Button>

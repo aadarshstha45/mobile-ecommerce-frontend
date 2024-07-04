@@ -53,7 +53,7 @@ const SavedAddress = () => {
   useEffect(() => {
     if (id) {
       const foundData = data?.find((address: any) => address.id === id);
-      console.log("foundData", foundData);
+
       setPrevData(foundData);
       setCountryCode(foundData?.country_code);
       reset({
@@ -94,7 +94,7 @@ const SavedAddress = () => {
         country_code: countryCode,
       });
     }
-
+    console.log("data", data);
     onFormClose();
     reset();
   };
@@ -212,6 +212,7 @@ const SavedAddress = () => {
         <Text fontSize={{ base: "14px", md: "18px" }}>Add New Address</Text>
       </HStack>
       <ModalForm
+        form="shipping-address-form"
         isOpen={isFormOpen}
         onClose={handleFormClose}
         heading={"Add New Address"}

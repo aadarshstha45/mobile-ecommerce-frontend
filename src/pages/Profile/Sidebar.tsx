@@ -128,6 +128,7 @@ const Sidebar = ({ data }: SidebarProps) => {
           <Avatar
             src={data?.image ? `${BaseURL}/${data?.image}` : AvatarIcon}
             size={"xl"}
+            loading="lazy"
           />
           <IconButton
             colorScheme="primary"

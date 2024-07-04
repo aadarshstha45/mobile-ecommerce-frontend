@@ -1,6 +1,5 @@
+import { usePostOrder } from "@/api/functions/Order";
 import { Esewa } from "@/assets/icons/PaymentIcons/Esewa";
-import Jean from "@/assets/images/NewArrivals/jean1.png";
-import TShirt from "@/assets/images/SalesImage/shirt 1.png";
 import PaymentRadio from "@/components/Form/PaymentRadio";
 import { IStepProps } from "@/utils/IStepProps";
 import { useOrderStore } from "@/utils/store";
@@ -13,26 +12,6 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-const data = [
-  {
-    id: 1,
-    name: "Jean ",
-    price: 100,
-    size: "M",
-    color: "Blue",
-    image: Jean,
-    quantity: 1,
-  },
-  {
-    id: 2,
-    name: "T-Shirt",
-    price: 50,
-    size: "M",
-    color: "Black",
-    image: TShirt,
-    quantity: 2,
-  },
-];
 
 const paymentOptions = [
   {
@@ -55,6 +34,9 @@ const paymentOptions = [
 ];
 
 const PaymentOption = ({ stepProps }: IStepProps) => {
+  const data = JSON.parse(sessionStorage.getItem("cartItems")!);
+  console.log(data);
+  const addOrder = usePostOrder();
   const { stepData, setStepData } = useOrderStore();
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -62,13 +44,14 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    setStepData({
+  const onSubmit = async (data: any) => {
+    console.log(stepData);
+    await addOrder.mutateAsync({
       ...stepData,
       payment: data.payment,
     });
-    console.log(stepData);
+    setStepData({});
+    sessionStorage.removeItem("cartItems");
   };
 
   return (
@@ -84,14 +67,17 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
         </Flex>
         <Flex flexDir={"column"}>
           <FormControl
-            width={{ base: "full", sm: "200px" }}
+            width={{ base: "full", sm: "300px", md: "400px" }}
             mb={4}
           ></FormControl>
-          {data?.map((item) => (
+          {data?.map((item: any) => (
             <HStack key={item.id} justify={"space-between"} py={2}>
-              <Heading fontSize={"lg"}>{item.name}</Heading>
+              <Heading w={"70%"} fontSize={"lg"}>
+                {item.product?.name}
+              </Heading>
               <Heading textColor={"primary.500"} fontSize={"lg"}>
-                Rs. {item.price}
+                Rs.
+                {item.product?.price * item.quantity}
               </Heading>
             </HStack>
           ))}
@@ -114,7 +100,6 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
 
       <HStack justify={"space-between"}>
         <Button
-          type={"submit"}
           colorScheme={"primary"}
           w={"fit-content"}
           borderRadius={"2px"}

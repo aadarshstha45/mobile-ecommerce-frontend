@@ -1,8 +1,4 @@
-import { useAddAddress, useFetchAddresses } from "@/api/auth";
-import { PhoneInput, SelectInput, TextInput } from "@/components/Form";
-import Checkbox from "@/components/Form/Checkbox";
-import { ModalForm } from "@/components/Form/ModalForm";
-import { countryOptions } from "@/components/Form/SelectInput";
+import { useFetchAddresses } from "@/api/auth";
 import { IStepProps } from "@/utils/IStepProps";
 import { useOrderStore } from "@/utils/store";
 import {
@@ -20,63 +16,31 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { CheckIcon, CirclePlus, MapPinIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import AddressForm from "./AddressForm";
 
 const ShippingDetails = ({ stepProps }: IStepProps) => {
-  const { data } = useFetchAddresses();
+  const { data, isRefetching } = useFetchAddresses();
   console.log("data", data);
-  const [countryCode, setCountryCode] = useState("+977");
-  const [id, setId] = useState<string | null>(null);
-  const addAddress = useAddAddress();
   const { stepData, setStepData } = useOrderStore();
   const {
     isOpen: isFormOpen,
     onOpen: onFormOpen,
     onClose: onFormClose,
   } = useDisclosure();
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
-      country: "",
-      city: "",
-      street: "",
-      landmark: "",
-      recipient_name: "",
-      phone_number: "",
-      is_billing_address: false,
-      delivery_address: "1",
+      delivery_address_id: "1",
     },
   });
 
-  const handleAddForm = () => {
-    setId(null);
-    onFormOpen();
-  };
+  useEffect(() => {
+    console.log("data", stepData);
+  }, [stepData]);
 
-  const handleFormClose = () => {
-    setId(null);
-    onFormClose();
-  };
-
-  const addNewAddress = async (data: any) => {
-    await addAddress.mutateAsync({
-      ...data,
-      country_code: countryCode,
-    });
-    handleFormClose();
-  };
-
-  const onSubmit = async (data: any) => {
-    console.log("data", data.delivery_address);
-    setStepData({
-      ...stepData,
-      delivery_address: data.delivery_address,
-    });
-    handleFormClose();
+  const submit = (data: any) => {
+    setStepData({ ...stepData, delivery_address_id: data.delivery_address_id });
     stepProps.nextStep();
   };
 
@@ -86,15 +50,17 @@ const ShippingDetails = ({ stepProps }: IStepProps) => {
 
   return (
     <Flex flexDir="column" gap={4}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form id="shipping-details-form" onSubmit={handleSubmit(submit)}>
         <Controller
-          name="delivery_address"
+          name="delivery_address_id"
           control={control}
           render={({ field: { value, onChange } }) => (
             <RadioGroup value={value} onChange={onChange}>
               <Flex w={"full"} flexDir={"column"} gap={4}>
                 <Text fontSize={"xl"}>Select Delivery Address</Text>
-                {data ? (
+                {isRefetching ? (
+                  <div className="loader"></div>
+                ) : data && data.length > 0 ? (
                   data.map((address: any, index: number) => (
                     <FormControl key={index}>
                       <FormLabel
@@ -166,79 +132,24 @@ const ShippingDetails = ({ stepProps }: IStepProps) => {
                     </FormControl>
                   ))
                 ) : (
-                  <Text fontSize={{ base: "14px", md: "18px" }}>
+                  <Text pb={4} fontSize={{ base: "14px", md: "18px" }}>
                     No address saved yet
                   </Text>
                 )}
-
-                <HStack
-                  onClick={handleAddForm}
-                  cursor={"pointer"}
-                  color={"primary.500"}
-                  w={"fit-content"}
-                >
-                  <Icon as={CirclePlus} boxSize={6} />
-                  <Text fontSize={{ base: "14px", md: "18px" }}>
-                    Add New Address
-                  </Text>
-                </HStack>
-                <ModalForm
-                  isOpen={isFormOpen}
-                  onClose={handleFormClose}
-                  heading={"Add New Address"}
-                  buttonText={id ? "Update" : "Add"}
-                  onSubmit={handleSubmit(addNewAddress)}
-                  isLoading={addAddress.isPending}
-                >
-                  <SelectInput
-                    width="full"
-                    label="Country"
-                    options={countryOptions}
-                    name="country"
-                    isControlled
-                    isRequired
-                    placeholder="Select Country"
-                    control={control}
-                  />
-                  <TextInput
-                    label="City"
-                    control={control}
-                    name="city"
-                    isRequired
-                  />
-                  <TextInput label="Street" control={control} name="street" />
-                  <TextInput
-                    label="Landmark"
-                    control={control}
-                    name="landmark"
-                  />
-                  <TextInput
-                    label="Recipient Name"
-                    control={control}
-                    name="recipient_name"
-                    isRequired
-                  />
-                  <PhoneInput
-                    defaultValue={countryCode}
-                    handleChange={(selectedOption: any) => {
-                      setCountryCode(selectedOption.value);
-                    }}
-                    name="phone_number"
-                    label="Phone Number"
-                    control={control}
-                    errors={errors}
-                    isRequired
-                  />
-                  <Checkbox
-                    control={control}
-                    name="is_billing_address"
-                    label="Set as default billing address"
-                  />
-                </ModalForm>
               </Flex>
             </RadioGroup>
           )}
         />
+        <HStack
+          onClick={onFormOpen}
+          cursor={"pointer"}
+          color={"primary.500"}
+          w={"fit-content"}
+        >
+          <Icon as={CirclePlus} boxSize={6} />
+          <Text fontSize={{ base: "14px", md: "18px" }}>Add New Address</Text>
+        </HStack>
+
         <HStack mt={6} justify={"space-between"}>
           <Button
             colorScheme={"primary"}
@@ -251,15 +162,17 @@ const ShippingDetails = ({ stepProps }: IStepProps) => {
           </Button>
           <Button
             colorScheme={"primary"}
-            type="submit"
             w={"fit-content"}
             borderRadius={"2PX"}
             size={"sm"}
+            type="submit"
+            form="shipping-details-form"
           >
             Next
           </Button>
         </HStack>
       </form>
+      <AddressForm isOpen={isFormOpen} onClose={onFormClose} />
     </Flex>
   );
 };

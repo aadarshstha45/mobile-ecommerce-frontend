@@ -8,7 +8,7 @@ const PaymentOption = lazy(() => import("./PaymentOption"));
 const ShoppingBag = lazy(() => import("./ShoppingBag"));
 
 const ChakraStepper = () => {
-  const { nextStep, prevStep, activeStep, setStep } = useSteps({
+  const { nextStep, prevStep, activeStep } = useSteps({
     initialStep: 0,
   });
 
@@ -38,7 +38,6 @@ const ChakraStepper = () => {
     >
       <Flex flexDir="column" gap={"20"} width="100%" userSelect={"none"}>
         <Steps
-          onClickStep={(i: number) => setStep(i)}
           variant={"circles-alt"}
           colorScheme="primary"
           cursor="pointer"

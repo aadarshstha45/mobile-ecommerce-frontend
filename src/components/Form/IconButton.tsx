@@ -6,7 +6,7 @@ function IconButton(props: any) {
     <ButtonIcon
       aria-label={props.label}
       colorScheme={props.colorScheme}
-      size={"sm"}
+      size={"xs"}
       onClick={props.onClick}
       icon={props.icon}
       {...props}

@@ -47,21 +47,22 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
 
   const handleNextPage = () => {
     const cartItems = sessionStorage.getItem("cartItems");
-    {
-      cartItems && cartItems?.length > 0
-        ? items.map((items: any) =>
-            setStepData({
-              cart_id: items?.id,
-              product_id: items?.product.id,
-              quantity: items?.quantity,
-              price: items?.product.price,
-              size: items?.size.id,
-              color: items?.color.id,
-            })
-          )
-        : toast.error("No items in the cart");
-    }
 
+    if (cartItems && cartItems.length > 0) {
+      const items = JSON.parse(cartItems);
+      setStepData({
+        order_items: items.map((item: any) => ({
+          cart_id: item?.id,
+          product_id: item?.product?.id,
+          quantity: item?.quantity,
+          price: item?.product?.price,
+          size_id: item?.size?.id,
+          color_id: item?.color?.id,
+        })),
+      });
+    } else {
+      toast.error("No items in the cart");
+    }
     stepProps.nextStep();
   };
 
@@ -107,17 +108,24 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                         minW={isLessThan469 ? "100%" : "50%"}
                         w={isLessThan469 ? "100%" : "50%"}
                       >
-                        <Heading noOfLines={2} fontSize={"lg"}>
+                        <Text
+                          fontWeight={600}
+                          noOfLines={2}
+                          fontSize={{ base: "12px", md: "14px", xl: "16px" }}
+                        >
                           {item.name}
-                        </Heading>
+                        </Text>
                         <Text fontSize={"md"}>Size: {item.size.name}</Text>
                         <Text fontSize={"md"}>Color: {item.color.name}</Text>
                       </Flex>
 
                       <Box>
-                        <Heading fontSize={"lg"}>
+                        <Text
+                          fontWeight={600}
+                          fontSize={{ base: "12px", md: "14px", xl: "16px" }}
+                        >
                           Rs. {item.product.price}
-                        </Heading>
+                        </Text>
                       </Box>
                     </Flex>
                   </Box>
@@ -154,10 +162,19 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           {items &&
             items?.map((item: any) => (
               <HStack key={item.id} justify={"space-between"} py={2}>
-                <Heading fontSize={"lg"}>{item.product.name}</Heading>
-                <Heading textColor={"primary.500"} fontSize={"lg"}>
+                <Text
+                  fontWeight={600}
+                  fontSize={{ base: "14px", md: "16px", xl: "18px" }}
+                >
+                  Rs. {item.product.name}
+                </Text>
+                <Text
+                  fontWeight={600}
+                  textColor={"primary.500"}
+                  fontSize={{ base: "12px", md: "14px", xl: "16px" }}
+                >
                   Rs. {item.product.price}
-                </Heading>
+                </Text>
               </HStack>
             ))}
           <HStack justify={"space-between"} py={2}>

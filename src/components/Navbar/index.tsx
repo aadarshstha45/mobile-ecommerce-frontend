@@ -4,7 +4,7 @@ import { useFetchCategoryMenu } from "@/api/functions/Category";
 import NavCart from "@/assets/icons/NavCart";
 import SearchIcon from "@/assets/icons/SearchIcon";
 import ShoppingCart from "@/assets/icons/ShoppingCart";
-import Profile from "@/assets/images/man2.png";
+import NoImage from "@/assets/icons/UserIcon/user.png";
 import {
   Avatar,
   Box,
@@ -107,12 +107,19 @@ function NavBar({ data }: any) {
                 </Button>
               </ButtonGroup>
             ) : (
-              <Popover isLazy closeOnBlur closeOnEsc placement="bottom-end">
+              <Popover
+                isLazy
+                closeOnBlur
+                variant={"responsive"}
+                closeOnEsc
+                placement="bottom-end"
+              >
                 <PopoverTrigger>
                   <Avatar
                     cursor={"pointer"}
-                    src={data?.image ? `${BaseURL}/${data?.image}` : Profile}
+                    src={data?.image ? `${BaseURL}/${data?.image}` : NoImage}
                     size={{ base: "sm", md: "md" }}
+                    loading="lazy"
                   />
                 </PopoverTrigger>
                 <PopoverContent
