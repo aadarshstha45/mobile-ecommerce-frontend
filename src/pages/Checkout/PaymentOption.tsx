@@ -35,12 +35,11 @@ const paymentOptions = [
 
 const PaymentOption = ({ stepProps }: IStepProps) => {
   const data = JSON.parse(sessionStorage.getItem("cartItems")!);
-  console.log(data);
   const addOrder = usePostOrder();
   const { stepData, setStepData } = useOrderStore();
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      payment: "",
+      payment: "cod",
     },
   });
 

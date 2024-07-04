@@ -23,10 +23,12 @@ import {
   useDeleteCartItem,
   useDeleteCartItems,
   useFetchCart,
+  useUpdateCartQuantity,
 } from "@/api/functions/Cart";
 import NoImage from "@/assets/images/NoImage.png";
+import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import DeleteAlert from "../Form/DeleteAlert";
@@ -38,13 +40,18 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const navigate = useNavigate();
-  const { data, isPending } = useFetchCart();
+  const { data, isPending, isRefetching } = useFetchCart();
   const [items, setItems] = useState<any[]>([]);
-  const [quantity, setQuantity] = useState(1);
   const { handleSubmit } = useForm();
   const [itemIds, setItemIds] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
   const deleteCartItem = useDeleteCartItem();
   const deleteCartItems = useDeleteCartItems();
+  const [itemId, setItemId] = useState<string>("");
+  const [quantity, setQuantity] = useState(1);
+
+  const itemIdRef = useRef("");
+  const updateCartQuantity = useUpdateCartQuantity(itemId);
   const {
     isOpen: isDeleteModalOpen,
     onOpen: onDeleteModalOpen,
@@ -52,9 +59,22 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   } = useDisclosure();
 
   useEffect(() => {
-    const cartItems = sessionStorage.getItem("cartItems");
-    if (cartItems) {
-      setItems(JSON.parse(cartItems));
+    const items = sessionStorage.getItem("cartItems");
+    if (items) {
+      const cartItems = JSON.parse(items);
+      console.log("cartItems", cartItems);
+      const calculateTotalPrice = (items) => {
+        return items.reduce((total, item) => {
+          const sizePrice = item.size.price;
+          const quantity = item.quantity;
+          return total + sizePrice * quantity;
+        }, 0);
+      };
+
+      // Calculate the total price for all items in the cart
+      const totalCartPrice = calculateTotalPrice(cartItems);
+      setTotalPrice(totalCartPrice);
+      setItems(cartItems);
     }
   }, []);
 
@@ -106,6 +126,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     setDeletedItems([]);
     setItems([]);
     onClose();
+    window.location.reload();
   };
 
   const handleCartClose = () => {
@@ -113,6 +134,11 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     setDeletedItems([]);
     setItems([]);
     setItemIds("");
+  };
+
+  const handleUpdateQuantity = async (id: string, quantity: number) => {
+    setItemId(id);
+    await updateCartQuantity.mutateAsync({ quantity });
   };
 
   return (
@@ -125,7 +151,19 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
       size="lg"
     >
       <DrawerOverlay />
-      <DrawerContent>
+      <DrawerContent pos={"relative"}>
+        {isRefetching ||
+          (isPending && (
+            <Flex
+              pos={"absolute"}
+              w={"100%"}
+              justify={"center"}
+              bg={"rgba(0,0,0,0.1)"}
+              zIndex={10}
+            >
+              <LoadingSpinner />
+            </Flex>
+          ))}
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth={"1px"}>My Cart</DrawerHeader>
         <DrawerBody
@@ -146,6 +184,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
               Delete
             </Button>
           )}
+
           {data?.length > 0 ? (
             <Flex flexDir={"column"} gap={4}>
               {data?.map((item: any) => (
@@ -192,10 +231,13 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                     <HStack gap={2}>
                       <IconButton
                         onClick={() => {
-                          if (quantity > 1) {
-                            setQuantity(quantity - 1);
+                          if (item.quantity > 1) {
+                            handleUpdateQuantity(item.id, item.quantity - 1);
                           }
                         }}
+                        isDisabled={
+                          updateCartQuantity.isPending || item.quantity === 1
+                        }
                         colorScheme="primary"
                         borderRadius={0}
                         aria-label="Decrease quantity"
@@ -204,8 +246,10 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                       />
                       <Input
                         onChange={(e) => {
-                          setQuantity(Number(e.target.value));
+                          handleUpdateQuantity(item.id, Number(e.target.value));
                         }}
+                        isReadOnly={updateCartQuantity.isPending}
+                        type="number"
                         size={"xs"}
                         w={10}
                         border={"none"}
@@ -215,14 +259,16 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                         borderRadius={0}
                         textAlign={"center"}
                         px={0}
-                        name="quantity"
-                        value={item.quantity ?? quantity}
+                        id={`quantity-${item.id}`}
+                        name={`quantity-${item.id}`}
+                        value={item.quantity}
                       />
                       <IconButton
                         aria-label="Increase quantity"
                         onClick={() => {
-                          setQuantity(quantity + 1);
+                          handleUpdateQuantity(item.id, item.quantity + 1);
                         }}
+                        isDisabled={updateCartQuantity.isPending}
                         icon={<PlusIcon />}
                         colorScheme="primary"
                         borderRadius={0}
@@ -231,7 +277,10 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                     </HStack>
                   </Stack>
                   <Text textColor={"primary.500"}>
-                    Rs.{item.product?.price}
+                    Rs.
+                    {item.size?.price
+                      ? item.size.price * item.quantity
+                      : item.product.price * item.quantity}
                   </Text>
                   <IconButton
                     w={"fit-content"}
@@ -271,7 +320,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
               Total😒😒
             </Text>
             <Text textColor={"primary.500"} fontSize={"lg"} fontWeight={600}>
-              $100
+              Rs. {totalPrice}
             </Text>
           </Stack>
           <IconButton

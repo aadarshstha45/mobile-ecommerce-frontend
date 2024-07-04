@@ -29,4 +29,18 @@ const useDeleteCartItems = () => {
   });
 };
 
-export { useAddToCart, useDeleteCartItem, useDeleteCartItems, useFetchCart };
+const useUpdateCartQuantity = (id: string) => {
+  return useMutate({
+    apiEndPoint: CartAPI.updateQuantity.replace(":id", id),
+    inValidateEndpoint: CartAPI.get,
+    message: "Cart quantity updated",
+  });
+};
+
+export {
+  useAddToCart,
+  useDeleteCartItem,
+  useDeleteCartItems,
+  useFetchCart,
+  useUpdateCartQuantity,
+};

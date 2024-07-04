@@ -4,4 +4,5 @@ export const CartAPI = {
   put: "/cart",
   deleteSingle: "/cart/:id",
   deleteMultiple: "/delete-cart-items",
+  updateQuantity: "update-cart-quantity/:id",
 };

@@ -25,6 +25,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   const location = useLocation();
   const [items, setItems] = useState<any[]>([]);
   const [isLessThan469] = useMediaQuery("(max-width: 469px)");
+  const [totalPrice, setTotalPrice] = useState(0);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       promoCode: "",
@@ -36,9 +37,14 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   useEffect(() => {
     const cartItems = sessionStorage.getItem("cartItems");
     if (cartItems) {
+      console.log("cartItems", JSON.parse(cartItems));
       setItems(JSON.parse(cartItems));
+      const totalPrice = items.reduce(
+        (acc: number, item: any) => acc + item.size.price * item.quantity,
+        0
+      );
+      setTotalPrice(totalPrice);
     }
-    console.log(cartItems);
   }, [location.pathname]);
 
   const promoSubmit = (data: any) => {
@@ -47,18 +53,20 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
 
   const handleNextPage = () => {
     const cartItems = sessionStorage.getItem("cartItems");
-
     if (cartItems && cartItems.length > 0) {
       const items = JSON.parse(cartItems);
+
       setStepData({
         order_items: items.map((item: any) => ({
           cart_id: item?.id,
           product_id: item?.product?.id,
           quantity: item?.quantity,
-          price: item?.product?.price,
+          price: item?.size?.price,
           size_id: item?.size?.id,
           color_id: item?.color?.id,
+          total: item?.size?.price * item?.quantity,
         })),
+        total_amount: totalPrice,
       });
     } else {
       toast.error("No items in the cart");
@@ -124,7 +132,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                           fontWeight={600}
                           fontSize={{ base: "12px", md: "14px", xl: "16px" }}
                         >
-                          Rs. {item.product.price}
+                          Rs. {item.size.price * item.quantity}
                         </Text>
                       </Box>
                     </Flex>
@@ -173,7 +181,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                   textColor={"primary.500"}
                   fontSize={{ base: "12px", md: "14px", xl: "16px" }}
                 >
-                  Rs. {item.product.price}
+                  Rs. {item.size?.price * item.quantity}
                 </Text>
               </HStack>
             ))}
@@ -188,7 +196,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           <HStack justify={"space-between"} py={2}>
             <Heading fontSize={"lg"}>Subtotal</Heading>
             <Heading textColor={"primary.500"} fontSize={"lg"}>
-              Rs. 500
+              Rs. {totalPrice}
             </Heading>
           </HStack>
 
