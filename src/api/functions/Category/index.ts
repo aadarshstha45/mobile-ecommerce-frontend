@@ -1,7 +1,7 @@
 import { CategoryMenuApi } from "@/api/endpoints/Category";
 import { useFetch } from "@/api/methods";
 
-const useFetchCategoryMenu = () => {
+const useFetchMenuItems = () => {
   return useFetch(CategoryMenuApi.getMenu);
 };
 
@@ -13,4 +13,4 @@ const useFetchProductsByCategory = (
   return useFetch(CategoryMenuApi.getProductsByCategory(page, perPage, id));
 };
 
-export { useFetchCategoryMenu, useFetchProductsByCategory };
+export { useFetchMenuItems, useFetchProductsByCategory };

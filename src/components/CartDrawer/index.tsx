@@ -47,11 +47,9 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const deleteCartItem = useDeleteCartItem();
   const deleteCartItems = useDeleteCartItems();
-  const [itemId, setItemId] = useState<string>("");
-  const [quantity, setQuantity] = useState(1);
 
   const itemIdRef = useRef("");
-  const updateCartQuantity = useUpdateCartQuantity(itemId);
+  const updateCartQuantity = useUpdateCartQuantity();
   const {
     isOpen: isDeleteModalOpen,
     onOpen: onDeleteModalOpen,
@@ -137,8 +135,10 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   };
 
   const handleUpdateQuantity = async (id: string, quantity: number) => {
-    setItemId(id);
-    await updateCartQuantity.mutateAsync({ quantity });
+    await updateCartQuantity.mutateAsync({
+      id: id,
+      data: { quantity },
+    });
   };
 
   return (

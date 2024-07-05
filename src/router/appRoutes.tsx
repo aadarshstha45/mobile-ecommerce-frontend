@@ -35,7 +35,11 @@ export const appRoutes = [
         element: <div>About</div>,
       },
       {
-        path: "category/:id",
+        path: ":slug/:id",
+        element: <Category />,
+      },
+      {
+        path: ":category_slug/:slug/:id",
         element: <Category />,
       },
       {

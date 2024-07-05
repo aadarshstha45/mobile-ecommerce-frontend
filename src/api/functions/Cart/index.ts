@@ -1,5 +1,6 @@
 import { CartAPI } from "@/api/endpoints/Cart";
 import { useDelete, useFetch, useMutate } from "@/api/methods";
+import useUpdate from "@/api/methods/update";
 
 const useFetchCart = () => {
   return useFetch(CartAPI.get);
@@ -29,9 +30,9 @@ const useDeleteCartItems = () => {
   });
 };
 
-const useUpdateCartQuantity = (id: string) => {
-  return useMutate({
-    apiEndPoint: CartAPI.updateQuantity.replace(":id", id),
+const useUpdateCartQuantity = () => {
+  return useUpdate({
+    apiEndPoint: CartAPI.updateQuantity,
     inValidateEndpoint: CartAPI.get,
     message: "Cart quantity updated",
   });

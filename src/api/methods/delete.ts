@@ -15,11 +15,7 @@ const useDelete = (requestData: {
 }) => {
   const queryClient = useQueryClient();
   const deleteData = (id: string): Promise<AxiosResponse<any>> => {
-    return HttpClient.delete(requestData.apiEndPoint.replace(":id", id), {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
-      },
-    });
+    return HttpClient.delete(requestData.apiEndPoint.replace(":id", id));
   };
 
   return useMutation({

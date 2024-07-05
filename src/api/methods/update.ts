@@ -8,33 +8,32 @@ import { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import { HttpClient } from "../axiosSetup";
 
-const useMutate = (requestData: {
+const useUpdate = (requestData: {
   apiEndPoint: string;
   inValidateEndpoint?: string;
   message?: string;
 }) => {
   const queryClient = useQueryClient();
-  const sendData = (data: any): Promise<AxiosResponse<any>> => {
-    return HttpClient.post(requestData.apiEndPoint, data);
+  const updateData = ({
+    id,
+    data,
+  }: {
+    id: string;
+    data: any;
+  }): Promise<AxiosResponse<any>> => {
+    return HttpClient.post(requestData.apiEndPoint.replace(":id", id), data);
   };
 
   return useMutation({
     mutationKey: [requestData.apiEndPoint],
-    mutationFn: sendData,
-    onSuccess: (response) => {
+    mutationFn: updateData,
+    onSuccess: () => {
       {
         requestData.inValidateEndpoint &&
           queryClient.invalidateQueries(
             requestData.inValidateEndpoint! as InvalidateQueryFilters
           );
       }
-      console.log(response.data);
-
-      {
-        response.data?.access_token &&
-          sessionStorage.setItem("access_token", response.data?.access_token);
-      }
-
       toast.success(requestData.message!);
     },
     onError: (error: AxiosError) => {
@@ -61,4 +60,4 @@ const useMutate = (requestData: {
     },
   });
 };
-export default useMutate;
+export default useUpdate;

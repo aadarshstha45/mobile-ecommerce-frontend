@@ -5,9 +5,6 @@ import { HttpClient } from "../axiosSetup";
 const useFetch = (apiEndpoint: string, params?: any) => {
   const fetchData = (): Promise<AxiosResponse<any>> => {
     return HttpClient.get(apiEndpoint, {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("access_token")}` || "",
-      },
       params,
     });
   };

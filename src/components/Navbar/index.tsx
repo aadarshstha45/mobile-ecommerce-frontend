@@ -1,6 +1,6 @@
 import { useLogout } from "@/api/auth";
 import { BaseURL } from "@/api/axiosSetup";
-import { useFetchCategoryMenu } from "@/api/functions/Category";
+import { useFetchMenuItems } from "@/api/functions/Category";
 import NavCart from "@/assets/icons/NavCart";
 import SearchIcon from "@/assets/icons/SearchIcon";
 import ShoppingCart from "@/assets/icons/ShoppingCart";
@@ -27,7 +27,8 @@ import CartDrawer from "../CartDrawer";
 
 function NavBar({ data }: any) {
   const path = useLocation().pathname.split("/")[1];
-  const { data: categoryMenu } = useFetchCategoryMenu();
+  const { data: menus } = useFetchMenuItems();
+
   const navigate = useNavigate();
   const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
   const { mutateAsync } = useLogout();
@@ -53,23 +54,29 @@ function NavBar({ data }: any) {
       <Container maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}>
         <Flex align={"center"} justify={"space-between"}>
           <HStack display={{ base: "none", md: "flex" }} gap={"30px"}>
-            {categoryMenu?.map((category: any) => (
-              <Link
-                _hover={{ textDecor: "none" }}
-                as={NavLink}
-                to={`/category/${category.id}`}
-                key={category.id}
-                _activeLink={{ color: "primary.500", fontWeight: 600 }}
-                fontSize={{
-                  base: "14px",
-                  sm: "16px",
-                  md: "18px",
-                  lg: "20px",
-                }}
-              >
-                {category.name}
-              </Link>
-            ))}
+            {menus?.map((menu: any) => {
+              return (
+                <Link
+                  _hover={{ textDecor: "none" }}
+                  as={NavLink}
+                  to={
+                    menu.category_slug
+                      ? `/${menu.category_slug}/${menu.slug}/${menu.id}`
+                      : `${menu.slug}/${menu.id}`
+                  }
+                  key={menu.id}
+                  _activeLink={{ color: "primary.500", fontWeight: 600 }}
+                  fontSize={{
+                    base: "14px",
+                    sm: "16px",
+                    md: "18px",
+                    lg: "20px",
+                  }}
+                >
+                  {menu.title}
+                </Link>
+              );
+            })}
           </HStack>
           <Box display={{ base: "block", md: "none" }}>
             <MenuIcon size={24} />
