@@ -7,7 +7,6 @@ import {
 } from "@chakra-ui/react";
 import { Property } from "csstype";
 import { Control, Controller, FieldErrors } from "react-hook-form";
-import "rsuite/DatePicker/styles/index.css";
 type InputProps = {
   label?: string;
   control: Control<any>;
