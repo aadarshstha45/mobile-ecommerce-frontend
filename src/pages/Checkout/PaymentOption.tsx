@@ -12,6 +12,7 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const paymentOptions = [
   {
@@ -37,11 +38,13 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
   const data = JSON.parse(sessionStorage.getItem("cartItems")!);
   const addOrder = usePostOrder();
   const { stepData, setStepData } = useOrderStore();
+  console.log(stepData);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       payment: "cod",
     },
   });
+  const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
     console.log(stepData);
@@ -50,7 +53,9 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
       payment: data.payment,
     });
     setStepData({});
+    console.log("After clearing:", stepData);
     sessionStorage.removeItem("cartItems");
+    navigate("/");
   };
 
   return (
@@ -83,7 +88,7 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
           <HStack justify={"space-between"} py={2}>
             <Heading fontSize={"lg"}>Discount</Heading>
             <Heading textColor={"primary.500"} fontSize={"lg"}>
-              - Rs. 500
+              - Rs. {stepData?.discount_amount || 0}
             </Heading>
           </HStack>
 
@@ -91,7 +96,7 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
           <HStack justify={"space-between"} py={2}>
             <Heading fontSize={"lg"}>Subtotal</Heading>
             <Heading textColor={"primary.500"} fontSize={"lg"}>
-              Rs. 500
+              Rs. {stepData?.total_amount || 0}
             </Heading>
           </HStack>
         </Flex>

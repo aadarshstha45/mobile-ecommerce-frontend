@@ -8,4 +8,10 @@ const usePostOrder = () => {
   });
 };
 
-export { usePostOrder };
+const useIsPromoCodeValid = () => {
+  return useMutate({
+    apiEndPoint: OrderApi.promo_code,
+  });
+};
+
+export { useIsPromoCodeValid, usePostOrder };

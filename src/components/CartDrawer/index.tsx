@@ -26,9 +26,10 @@ import {
   useUpdateCartQuantity,
 } from "@/api/functions/Cart";
 import NoImage from "@/assets/images/NoImage.png";
+import { calculateTotalPrice } from "@/utils/calculateTotalPrice";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import DeleteAlert from "../Form/DeleteAlert";
@@ -48,7 +49,6 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const deleteCartItem = useDeleteCartItem();
   const deleteCartItems = useDeleteCartItems();
 
-  const itemIdRef = useRef("");
   const updateCartQuantity = useUpdateCartQuantity();
   const {
     isOpen: isDeleteModalOpen,
@@ -60,19 +60,11 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     const items = sessionStorage.getItem("cartItems");
     if (items) {
       const cartItems = JSON.parse(items);
-      console.log("cartItems", cartItems);
-      const calculateTotalPrice = (items: any) => {
-        return items.reduce((total: any, item: any) => {
-          const price = item.size ? item.size.price : item.product.price;
-          const quantity = item.quantity;
-          return total + price * quantity;
-        }, 0);
-      };
       const totalCartPrice = calculateTotalPrice(cartItems);
       setTotalPrice(totalCartPrice);
       setItems(cartItems);
     }
-  }, []);
+  }, [sessionStorage.getItem("cartItems")]);
 
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
   const handleCheckboxChange = (item: any, isChecked: any) => {

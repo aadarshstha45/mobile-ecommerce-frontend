@@ -34,8 +34,9 @@ const useMutate = (requestData: {
         response.data?.access_token &&
           sessionStorage.setItem("access_token", response.data?.access_token);
       }
-
-      toast.success(requestData.message!);
+      if (requestData.message) {
+        toast.success(requestData.message!);
+      }
     },
     onError: (error: AxiosError) => {
       const statusCode = error?.response?.status;

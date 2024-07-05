@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useIsPromoCodeValid } from "@/api/functions/Order";
 import NoImage from "@/assets/images/NoImage.png";
 import { TextInput } from "@/components/Form/TextInput";
+import { calculateTotalPrice } from "@/utils/calculateTotalPrice";
 import { IStepProps } from "@/utils/IStepProps";
 import { useOrderStore } from "@/utils/store";
 import {
@@ -26,29 +28,66 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   const [items, setItems] = useState<any[]>([]);
   const [isLessThan469] = useMediaQuery("(max-width: 469px)");
   const [totalPrice, setTotalPrice] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [promoCode, setPromoCode] = useState("");
+  const [promoErrorMessages, setPromoErrorMessages] = useState<string>("");
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      promoCode: "",
+      total_price: "",
+      promo_code: "",
     },
   });
 
+  const PromoCode = useIsPromoCodeValid();
   const { setStepData } = useOrderStore();
 
   useEffect(() => {
     const cartItems = sessionStorage.getItem("cartItems");
     if (cartItems) {
-      console.log("cartItems", JSON.parse(cartItems));
-      setItems(JSON.parse(cartItems));
-      const totalPrice = items.reduce(
-        (acc: number, item: any) => acc + item.size.price * item.quantity,
-        0
-      );
+      const items = JSON.parse(cartItems);
+      setItems(items);
+      const totalPrice = calculateTotalPrice(items);
       setTotalPrice(totalPrice);
     }
   }, [location.pathname]);
 
-  const promoSubmit = (data: any) => {
-    console.log(data);
+  const promoSubmit = async (data: any) => {
+    setPromoCode(data.promo_code);
+    try {
+      const response = await PromoCode.mutateAsync({
+        ...data,
+        total_price: totalPrice,
+      });
+      if (response.data.valid) {
+        const discount_type = response.data.type;
+        const discount_rate = parseFloat(response.data.rate);
+        const max_discount = parseFloat(response.data.max_discount);
+        if (discount_type === "percentage") {
+          const discount = (totalPrice * discount_rate) / 100;
+          if (discount >= max_discount) {
+            setDiscount(max_discount);
+            setTotalPrice(totalPrice - max_discount);
+            return;
+          } else {
+            setDiscount(discount);
+            setTotalPrice(totalPrice - discount);
+            return;
+          }
+        } else {
+          setDiscount(discount_rate);
+          setTotalPrice(totalPrice - discount_rate);
+          return;
+        }
+      } else {
+        setPromoErrorMessages(response.data.error);
+        // Handle invalid promo code if needed
+        setDiscount(0);
+      }
+    } catch (error) {
+      console.error("Error applying promo code:", error);
+      // Handle error if needed
+      setDiscount(0);
+    }
   };
 
   const handleNextPage = () => {
@@ -61,17 +100,21 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           cart_id: item?.id,
           product_id: item?.product?.id,
           quantity: item?.quantity,
-          price: item?.size?.price,
+          price: item.size ? item.size.price : item.product.price,
           size_id: item?.size?.id,
           color_id: item?.color?.id,
-          total: item?.size?.price * item?.quantity,
+          total: item.size
+            ? item.size.price * item?.quantity
+            : item.product.price * item?.quantity,
         })),
+        discount_amount: discount,
         total_amount: totalPrice,
+        promo_code: promoCode,
       });
+      stepProps.nextStep();
     } else {
       toast.error("No items in the cart");
     }
-    stepProps.nextStep();
   };
 
   return (
@@ -116,12 +159,8 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                         minW={isLessThan469 ? "100%" : "50%"}
                         w={isLessThan469 ? "100%" : "50%"}
                       >
-                        <Text
-                          fontWeight={600}
-                          noOfLines={2}
-                          fontSize={{ base: "12px", md: "14px", xl: "16px" }}
-                        >
-                          {item.name}
+                        <Text fontWeight={600} noOfLines={2} fontSize={"md"}>
+                          {item.product.name}
                         </Text>
                         {item.size && (
                           <Text fontSize={"md"}>Size: {item.size.name}</Text>
@@ -158,10 +197,11 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           <form onSubmit={handleSubmit(promoSubmit)}>
             <HStack py={2} align={"center"}>
               <TextInput
-                name="promoCode"
+                name="promo_code"
                 control={control}
                 label={"Promo Code"}
                 placeholder={"Enter Promo Code"}
+                errorMessage={promoErrorMessages}
               />
               <Button
                 type="submit"
@@ -188,14 +228,17 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                   textColor={"primary.500"}
                   fontSize={{ base: "12px", md: "14px", xl: "16px" }}
                 >
-                  Rs. {item.size?.price * item.quantity}
+                  Rs.
+                  {item.size
+                    ? item.size.price * item.quantity
+                    : item.product.price * item.quantity}
                 </Text>
               </HStack>
             ))}
           <HStack justify={"space-between"} py={2}>
             <Heading fontSize={"lg"}>Discount</Heading>
             <Heading textColor={"primary.500"} fontSize={"lg"}>
-              - Rs. 500
+              - Rs. {discount}
             </Heading>
           </HStack>
 

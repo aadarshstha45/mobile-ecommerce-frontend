@@ -36,8 +36,8 @@ function ProductDetail() {
 
   const [colorOptions, setColorOptions] = useState<any[]>([]);
   const [sizeOptions, setSizeOptions] = useState<any[]>([]);
-  const [colorId, setColorId] = useState<number>();
-  const [sizeId, setSizeId] = useState<number>();
+  const [colorId, setColorId] = useState<string>();
+  const [sizeId, setSizeId] = useState<string>();
   const [price, setPrice] = useState<number | null>(null);
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {

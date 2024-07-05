@@ -18,6 +18,7 @@ import {
 import { CheckIcon, CirclePlus, MapPinIcon } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import AddressForm from "./AddressForm";
 
 const ShippingDetails = ({ stepProps }: IStepProps) => {
@@ -31,7 +32,7 @@ const ShippingDetails = ({ stepProps }: IStepProps) => {
   } = useDisclosure();
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      delivery_address_id: "1",
+      delivery_address_id: "",
     },
   });
 
@@ -40,6 +41,11 @@ const ShippingDetails = ({ stepProps }: IStepProps) => {
   }, [stepData]);
 
   const submit = (data: any) => {
+    console.log("data", data);
+    if (!data.delivery_address_id) {
+      toast.error("Please select a delivery address");
+      return;
+    }
     setStepData({ ...stepData, delivery_address_id: data.delivery_address_id });
     stepProps.nextStep();
   };

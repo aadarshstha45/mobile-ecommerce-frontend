@@ -36,6 +36,7 @@ type InputProps = {
   isReadOnly?: boolean;
   pointerEvents?: ResponsiveValue<Property.PointerEvents>;
   backErrors?: any;
+  errorMessage?: string;
   [key: string]: any;
 };
 
@@ -59,6 +60,7 @@ export const TextInput = ({
   placeholder,
   leftAddon,
   message,
+  errorMessage,
   pointerEvents,
   backErrors,
   isReadOnly,
@@ -256,6 +258,11 @@ export const TextInput = ({
       {message && (
         <FormHelperText color={"gray.800"} fontSize="xs" fontStyle={"italic"}>
           {message}
+        </FormHelperText>
+      )}
+      {errorMessage && (
+        <FormHelperText color={"red.400"} fontSize="xs" fontStyle={"italic"}>
+          {errorMessage}
         </FormHelperText>
       )}
       {errors && errors[name] && (
