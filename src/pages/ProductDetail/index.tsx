@@ -36,9 +36,9 @@ function ProductDetail() {
 
   const [colorOptions, setColorOptions] = useState<any[]>([]);
   const [sizeOptions, setSizeOptions] = useState<any[]>([]);
-  const [colorId, setColorId] = useState<string>("");
-  const [sizeId, setSizeId] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
+  const [colorId, setColorId] = useState<number>();
+  const [sizeId, setSizeId] = useState<number>();
+  const [price, setPrice] = useState<number | null>(null);
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
       product_id: id,
@@ -61,6 +61,10 @@ function ProductDetail() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (data?.image) {
       setDisplayImage(data?.image);
     }
@@ -73,12 +77,19 @@ function ProductDetail() {
         value: property.color?.id,
         color: property.color?.hex_value,
       }));
-      setColorOptions(colors);
-
+      if (colors) {
+        setColorOptions(colors);
+        setSizeOptions(
+          data?.product_properties?.[0]?.sizes?.map((size: any) => ({
+            label: size.size?.name,
+            value: size.size?.id,
+            price: size?.price,
+          }))
+        );
+      }
       const selectedColor = data.product_properties.find(
-        (property: any) => property.color.id === parseInt(colorId)
+        (property: any) => property.color.id === colorId
       );
-      console.log("Selected Color", selectedColor);
       if (selectedColor) {
         const sizes = selectedColor.sizes.map((size: any) => ({
           label: size.size?.name,
@@ -97,9 +108,11 @@ function ProductDetail() {
         }
       }
     }
-  }, [data?.product_properties, colorId, sizeId]);
+  }, [data?.product_properties]);
 
   useEffect(() => {
+    console.log("Color Options", colorOptions);
+    console.log("Size Options", sizeOptions);
     // Ensure reset is called only when sizeOptions and colorOptions are available and not empty
     if (sizeOptions?.length > 0 && colorOptions?.length > 0) {
       reset({
@@ -108,8 +121,14 @@ function ProductDetail() {
         color_id: colorOptions[0].value,
         quantity: count,
       });
+      const selectedSize = sizeOptions?.find(
+        (property: any) => property.value === sizeId
+      );
+      if (selectedSize) {
+        setPrice(selectedSize.price);
+      }
     }
-  }, [reset]);
+  }, [reset, sizeId]);
 
   return (
     <Flex flexDir={"column"}>
@@ -138,7 +157,7 @@ function ProductDetail() {
                     <Image
                       w={"full"}
                       aspectRatio={4 / 3}
-                      src={`${BaseURL}/${displayImage}`}
+                      src={`${displayImage}`}
                     />
                   ) : (
                     <Flex
@@ -286,7 +305,9 @@ function ProductDetail() {
                       />
                     </Flex>
                     <Stack gap={4}>
-                      <Text fontSize={"lg"}>Price: {price}</Text>
+                      <Text fontSize={"lg"}>
+                        Price: Rs. {price ?? data?.price}
+                      </Text>
                       <Button type="submit">Add to Cart</Button>
                     </Stack>
                   </form>

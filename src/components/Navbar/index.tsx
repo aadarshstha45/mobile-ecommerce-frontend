@@ -61,8 +61,8 @@ function NavBar({ data }: any) {
                   as={NavLink}
                   to={
                     menu.category_slug
-                      ? `/${menu.category_slug}/${menu.slug}/${menu.id}`
-                      : `${menu.slug}/${menu.id}`
+                      ? `/${menu.category_slug}/${menu.slug}`
+                      : `${menu.slug}`
                   }
                   key={menu.id}
                   _activeLink={{ color: "primary.500", fontWeight: 600 }}

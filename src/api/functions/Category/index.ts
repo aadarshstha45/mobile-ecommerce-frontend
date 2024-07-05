@@ -1,5 +1,6 @@
 import { CategoryMenuApi } from "@/api/endpoints/Category";
 import { useFetch } from "@/api/methods";
+import { usePaginatedFetch } from "@/api/methods/get";
 
 const useFetchMenuItems = () => {
   return useFetch(CategoryMenuApi.getMenu);
@@ -7,10 +8,9 @@ const useFetchMenuItems = () => {
 
 const useFetchProductsByCategory = (
   page: number,
-  perPage: number,
-  id: number
+  param: { category_slug?: string; slug: string } | string
 ) => {
-  return useFetch(CategoryMenuApi.getProductsByCategory(page, perPage, id));
+  return usePaginatedFetch(CategoryMenuApi.getProductsByCategory(page, param));
 };
 
 export { useFetchMenuItems, useFetchProductsByCategory };

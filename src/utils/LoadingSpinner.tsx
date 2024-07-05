@@ -6,7 +6,7 @@ export const LoadingSpinner = () => {
       <Spinner
         thickness="5px"
         speed="0.65s"
-        emptyColor="gray.400"
+        emptyColor="gray.100"
         color="primary.500"
         size="xl"
       />

@@ -123,8 +123,12 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                         >
                           {item.name}
                         </Text>
-                        <Text fontSize={"md"}>Size: {item.size.name}</Text>
-                        <Text fontSize={"md"}>Color: {item.color.name}</Text>
+                        {item.size && (
+                          <Text fontSize={"md"}>Size: {item.size.name}</Text>
+                        )}
+                        {item.color && (
+                          <Text fontSize={"md"}>Color: {item.color.name}</Text>
+                        )}
                       </Flex>
 
                       <Box>
@@ -132,7 +136,10 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                           fontWeight={600}
                           fontSize={{ base: "12px", md: "14px", xl: "16px" }}
                         >
-                          Rs. {item.size.price * item.quantity}
+                          Rs.
+                          {item.size
+                            ? item.size.price * item.quantity
+                            : item.product.price * item.quantity}
                         </Text>
                       </Box>
                     </Flex>

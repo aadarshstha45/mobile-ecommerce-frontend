@@ -61,15 +61,13 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     if (items) {
       const cartItems = JSON.parse(items);
       console.log("cartItems", cartItems);
-      const calculateTotalPrice = (items) => {
-        return items.reduce((total, item) => {
-          const sizePrice = item.size.price;
+      const calculateTotalPrice = (items: any) => {
+        return items.reduce((total: any, item: any) => {
+          const price = item.size ? item.size.price : item.product.price;
           const quantity = item.quantity;
-          return total + sizePrice * quantity;
+          return total + price * quantity;
         }, 0);
       };
-
-      // Calculate the total price for all items in the cart
       const totalCartPrice = calculateTotalPrice(cartItems);
       setTotalPrice(totalCartPrice);
       setItems(cartItems);
@@ -224,9 +222,10 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                     <Text fontWeight={"bold"} fontSize={"lg"}>
                       {item.product?.name}
                     </Text>
+
                     <HStack flexWrap={"wrap"}>
-                      <Text>Size: {item.size?.name} </Text>
-                      <Text>Color: {item.color?.name} </Text>
+                      {item.size && <Text>Size: {item.size.name} </Text>}
+                      {item.color && <Text>Color: {item.color.name} </Text>}
                     </HStack>
                     <HStack gap={2}>
                       <IconButton

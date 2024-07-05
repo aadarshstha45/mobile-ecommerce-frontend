@@ -1,4 +1,3 @@
-import { BaseURL } from "@/api/axiosSetup";
 import { AddCartIcon, AddWishListIcon } from "@/assets/icons/CartIcon";
 import { StarIcon } from "@chakra-ui/icons";
 import {
@@ -16,13 +15,18 @@ import LazyLoadImage from "../Image";
 
 interface ItemDisplayProps {
   data: any;
-  hoveredId: number | null;
-  setHoveredId: (id: number | null) => void;
+  colorOptions?: any;
 }
 
-const ItemDisplay = ({ data, hoveredId, setHoveredId }: ItemDisplayProps) => {
+const ItemDisplay = ({ data, colorOptions }: ItemDisplayProps) => {
   return (
-    <Link to={`/product/${data.id}`}>
+    <Link
+      to={
+        data?.sub_category
+          ? `/product/${data?.category.slug}/${data?.sub_category.slug}/${data.id}`
+          : `/product/${data?.category.slug}/${data.id}`
+      }
+    >
       <Card
         overflow={"hidden"}
         h={"auto"}
@@ -65,10 +69,8 @@ const ItemDisplay = ({ data, hoveredId, setHoveredId }: ItemDisplayProps) => {
           {data.image ? (
             <Box>
               <LazyLoadImage
-                onMouseEnter={() => setHoveredId(data.id)}
-                onMouseLeave={() => setHoveredId(null)}
                 id={data.id}
-                src={`${BaseURL}/${data.image}`}
+                src={data.image}
                 alt={data.id.toString()}
                 h={"400px"}
                 w={"full"}
@@ -117,7 +119,7 @@ const ItemDisplay = ({ data, hoveredId, setHoveredId }: ItemDisplayProps) => {
           </Text>
           <HStack justify={"space-between"} align={"center"}>
             <Text fontSize={"16px"} fontWeight={500}>
-              {data.category}
+              {data.category.name}
             </Text>
             <HStack spacing={"2px"}>
               {...Array(5)
@@ -127,7 +129,9 @@ const ItemDisplay = ({ data, hoveredId, setHoveredId }: ItemDisplayProps) => {
                     key={index}
                     boxSize={3}
                     color={
-                      index < Math.floor(data.averageRating) ? "#FFC700" : ""
+                      index < Math.floor(data.averageRating)
+                        ? "#FFC700"
+                        : "#FFC700"
                     }
                   />
                 ))}
@@ -135,15 +139,16 @@ const ItemDisplay = ({ data, hoveredId, setHoveredId }: ItemDisplayProps) => {
           </HStack>
           <HStack justify={"space-between"} align={"center"}>
             <HStack spacing={"4px"}>
-              {data.colorOptions?.map((color: any, index: number) => (
-                <Box
-                  key={index}
-                  h={"14px"}
-                  w={"14px"}
-                  borderRadius={"50%"}
-                  bg={color.option}
-                />
-              ))}
+              {colorOptions &&
+                colorOptions?.map((color: any, index: number) => (
+                  <Box
+                    key={index}
+                    h={"14px"}
+                    w={"14px"}
+                    borderRadius={"50%"}
+                    bg={color.option}
+                  />
+                ))}
             </HStack>
             <HStack spacing={"2px"}>
               <Text

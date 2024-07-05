@@ -35,15 +35,19 @@ export const appRoutes = [
         element: <div>About</div>,
       },
       {
-        path: ":slug/:id",
+        path: ":slug",
         element: <Category />,
       },
       {
-        path: ":category_slug/:slug/:id",
+        path: ":category_slug/:slug",
         element: <Category />,
       },
       {
-        path: "product/:id",
+        path: "product/:category_slug/:sub_category_slug/:id",
+        element: <ProductDetail />,
+      },
+      {
+        path: "/product/:slug/:id",
         element: <ProductDetail />,
       },
       {
