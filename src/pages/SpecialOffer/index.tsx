@@ -1,11 +1,9 @@
 import ItemDisplay from "@/components/ItemDisplay";
 import { Container, Flex, Heading } from "@chakra-ui/react";
-import { useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { newArrivalsData } from "../Home/NewArrivals";
 
 const SpecialOffer = () => {
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
   return (
     <Container
       as={"section"}
@@ -20,12 +18,7 @@ const SpecialOffer = () => {
         >
           <Masonry gutter="30px">
             {newArrivalsData.map((data) => (
-              <ItemDisplay
-                key={data.id}
-                hoveredId={hoveredId}
-                setHoveredId={setHoveredId}
-                data={data}
-              />
+              <ItemDisplay key={data.id} data={data} />
             ))}
           </Masonry>
         </ResponsiveMasonry>

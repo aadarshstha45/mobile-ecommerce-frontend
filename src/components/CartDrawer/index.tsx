@@ -68,8 +68,6 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
 
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
   const handleCheckboxChange = (item: any, isChecked: any) => {
-    console.log(items);
-    console.log(item);
     if (isChecked) {
       // Add to deletedImages if not already included
       setItems((prev) => [...prev, item]);
@@ -156,11 +154,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
           ))}
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth={"1px"}>My Cart</DrawerHeader>
-        <DrawerBody
-          onSubmit={handleSubmit(() => {
-            console.log("submitting");
-          })}
-        >
+        <DrawerBody>
           {deletedItems.length > 0 && (
             <Button
               size={"xs"}

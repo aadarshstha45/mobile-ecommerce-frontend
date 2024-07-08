@@ -37,7 +37,6 @@ function RegisterPage() {
   const { mutateAsync, isPending, error } = useRegister();
 
   const errorMessage = (error?.response?.data as any)?.errors;
-  console.log(errorMessage);
 
   const {
     control,
@@ -56,6 +55,7 @@ function RegisterPage() {
   const onSubmit = async (data: any) => {
     await mutateAsync(data);
     navigate("/");
+    window.location.reload();
   };
 
   return (

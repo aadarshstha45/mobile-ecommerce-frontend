@@ -94,7 +94,6 @@ const SavedAddress = () => {
         country_code: countryCode,
       });
     }
-    console.log("data", data);
     onFormClose();
     reset();
   };

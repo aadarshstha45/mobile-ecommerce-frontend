@@ -29,13 +29,10 @@ const App = () => {
 
   useEffect(() => {
     const token = sessionStorage.getItem("access_token");
-    console.log(token);
     setIsAuthenticated(!!token);
   }, [sessionStorage.getItem("access_token")]);
 
-  useEffect(() => {
-    console.log(isAuthenticated);
-  }, [isAuthenticated]);
+  useEffect(() => {}, [isAuthenticated]);
 
   return (
     <Suspense

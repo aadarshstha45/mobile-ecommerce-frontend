@@ -20,7 +20,6 @@ const Cart = lazy(() => import("@/pages/Cart"));
 const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 
 const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
-console.log(sessionStorage.getItem("access_token"));
 
 export const appRoutes = [
   {

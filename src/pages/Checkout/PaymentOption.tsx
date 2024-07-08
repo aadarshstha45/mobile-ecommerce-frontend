@@ -38,7 +38,6 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
   const data = JSON.parse(sessionStorage.getItem("cartItems")!);
   const addOrder = usePostOrder();
   const { stepData, setStepData } = useOrderStore();
-  console.log(stepData);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       payment: "cod",
@@ -47,7 +46,6 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
-    console.log(stepData);
     await addOrder.mutateAsync({
       ...stepData,
       payment: data.payment,

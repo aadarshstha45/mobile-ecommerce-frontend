@@ -40,7 +40,6 @@ function NavBar({ data }: any) {
   const { mutateAsync } = useLogout();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleSignOut = async () => {
-    console.log("signing out");
     await mutateAsync();
     navigate("/");
   };

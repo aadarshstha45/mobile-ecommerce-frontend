@@ -16,14 +16,12 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { CheckIcon, CirclePlus, MapPinIcon } from "lucide-react";
-import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import AddressForm from "./AddressForm";
 
 const ShippingDetails = ({ stepProps }: IStepProps) => {
   const { data, isRefetching } = useFetchAddresses();
-  console.log("data", data);
   const { stepData, setStepData } = useOrderStore();
   const {
     isOpen: isFormOpen,
@@ -36,12 +34,7 @@ const ShippingDetails = ({ stepProps }: IStepProps) => {
     },
   });
 
-  useEffect(() => {
-    console.log("data", stepData);
-  }, [stepData]);
-
   const submit = (data: any) => {
-    console.log("data", data);
     if (!data.delivery_address_id) {
       toast.error("Please select a delivery address");
       return;

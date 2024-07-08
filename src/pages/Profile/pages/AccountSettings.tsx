@@ -19,7 +19,6 @@ const AccountSettings = () => {
   const { mutateAsync: changePassword, isPending, error } = useChangePassword();
 
   const errorMessage = (error?.response?.data as any)?.errors;
-  console.log(errorMessage);
 
   const onSubmit = async (data: any) => {
     await changePassword(data);

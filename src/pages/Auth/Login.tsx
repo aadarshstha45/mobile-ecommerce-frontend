@@ -45,7 +45,6 @@ function LoginPage() {
   });
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     await mutateAsync(data);
     navigate("/");
     window.location.reload();

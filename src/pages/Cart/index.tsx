@@ -26,14 +26,12 @@ import { calculateTotalPrice } from "@/utils/calculateTotalPrice";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const navigate = useNavigate();
   const { data, isPending, isRefetching } = useFetchCart();
   const [items, setItems] = useState<any[]>([]);
-  const { handleSubmit } = useForm();
   const [itemIds, setItemIds] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const deleteCartItem = useDeleteCartItem();
@@ -58,8 +56,6 @@ const Cart = () => {
 
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
   const handleCheckboxChange = (item: any, isChecked: any) => {
-    console.log(items);
-    console.log(item);
     if (isChecked) {
       // Add to deletedImages if not already included
       setItems((prev) => [...prev, item]);

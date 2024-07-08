@@ -3,7 +3,6 @@ import Jean11 from "@/assets/images/NewArrivals/jean1+1.png";
 import Jean1 from "@/assets/images/NewArrivals/jean1.png";
 import ItemDisplay from "@/components/ItemDisplay";
 import { Box, Container, Flex, HStack, Link, Text } from "@chakra-ui/react";
-import { useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 export const newArrivalsData = [
@@ -70,8 +69,6 @@ export const newArrivalsData = [
 ];
 
 function NewArrivals() {
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
-
   return (
     <Container
       as={"section"}
@@ -111,12 +108,7 @@ function NewArrivals() {
         >
           <Masonry gutter="30px">
             {newArrivalsData?.map((data) => (
-              <ItemDisplay
-                key={data.id}
-                data={data}
-                hoveredId={hoveredId}
-                setHoveredId={setHoveredId}
-              />
+              <ItemDisplay key={data.id} data={data} />
             ))}
           </Masonry>
         </ResponsiveMasonry>

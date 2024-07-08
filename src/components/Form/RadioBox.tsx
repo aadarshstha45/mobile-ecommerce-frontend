@@ -12,11 +12,10 @@ type RadioBoxProps = {
   name: string;
   control?: Control<any>;
   options: any;
-  bg?: string;
   handleChange?: any;
 };
 
-function RadioBox({ name, control, options, bg, handleChange }: RadioBoxProps) {
+function RadioBox({ name, control, options, handleChange }: RadioBoxProps) {
   return (
     <Controller
       name={name}

@@ -13,10 +13,9 @@ type RadioBoxProps = {
   control?: Control<any>;
   options: any;
   bg?: string;
-  icon?: any;
 };
 
-const PaymentRadio = ({ name, control, options, icon }: RadioBoxProps) => {
+const PaymentRadio = ({ name, control, options }: RadioBoxProps) => {
   return (
     <FormControl>
       <Controller

@@ -39,7 +39,6 @@ const useUpdateImage = () => {
 const useLogout = () => {
   const useLogoutUser = () => {
     const token = sessionStorage.getItem("access_token");
-    console.log("token", token);
     return HttpClient.post(
       user.logout,
       {},

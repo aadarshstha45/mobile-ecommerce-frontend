@@ -96,7 +96,6 @@ export const TextInput = ({
       }
     } catch (e) {
       setEmailError("Something went wrong");
-      console.log(e);
     } finally {
       setIsDebouncing(false);
     }

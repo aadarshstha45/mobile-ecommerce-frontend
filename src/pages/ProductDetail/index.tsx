@@ -30,7 +30,6 @@ import RelatedProducts from "./RelatedProducts";
 function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { data, isPending } = useFetchProductById(id!);
-  console.log(data);
   const [count, setCount] = useState<number>(1);
   const addToCart = useAddToCart();
 
@@ -50,10 +49,6 @@ function ProductDetail() {
   const [displayImage, setDisplayImage] = useState<string>();
 
   const onSubmit = async (data: any) => {
-    console.log({
-      ...data,
-      quantity: count,
-    });
     await addToCart.mutateAsync({
       ...data,
       quantity: count,
@@ -111,8 +106,6 @@ function ProductDetail() {
   }, [data?.product_properties]);
 
   useEffect(() => {
-    console.log("Color Options", colorOptions);
-    console.log("Size Options", sizeOptions);
     // Ensure reset is called only when sizeOptions and colorOptions are available and not empty
     if (sizeOptions?.length > 0 && colorOptions?.length > 0) {
       reset({
@@ -231,7 +224,6 @@ function ProductDetail() {
 
                             <RadioBox
                               handleChange={(value: string) => {
-                                console.log("Color Value", value);
                                 setValue("color_id", value);
                                 setColorId(value);
                               }}
@@ -255,7 +247,6 @@ function ProductDetail() {
 
                             <RadioBox
                               handleChange={(value: string) => {
-                                console.log("Size Value", value);
                                 setValue("size_id", value);
                                 setSizeId(value);
                               }}

@@ -43,7 +43,6 @@ function Category() {
   const param = category_slug ? { category_slug, slug } : slug!;
 
   const { data, isPending } = useFetchProductsByCategory(pageFromUrl, param);
-  console.log(data);
 
   useEffect(() => {
     setCurrentPage(pageFromUrl);

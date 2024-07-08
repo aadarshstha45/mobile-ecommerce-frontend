@@ -52,7 +52,6 @@ const useUpdate = (requestData: {
           const errorMessage = fieldErrors[key];
           // Assuming you want to log each error message:
           toast.error(`${errorMessage}`);
-          console.log(`${key}: ${errorMessage}`);
           // Or if you want to show each error message to the user, you might use a showError function:
           // showError(`${key}: ${errorMessage}`);
         });
