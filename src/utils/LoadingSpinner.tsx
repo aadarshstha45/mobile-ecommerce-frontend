@@ -1,8 +1,16 @@
 import { Flex, Spinner } from "@chakra-ui/react";
 
-export const LoadingSpinner = () => {
+interface LoadingSpinnerProps {
+  height?: string | number;
+}
+
+export const LoadingSpinner = ({ height }: LoadingSpinnerProps) => {
   return (
-    <Flex justifyContent={"center"} alignItems="center" height={"100vh"}>
+    <Flex
+      justifyContent={"center"}
+      alignItems="center"
+      height={height ?? "100vh"}
+    >
       <Spinner
         thickness="5px"
         speed="0.65s"

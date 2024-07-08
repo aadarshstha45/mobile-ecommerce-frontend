@@ -10,59 +10,64 @@ interface PageSizeProps {
   pageSize: number | undefined;
   setPageSize: (pageSize: number) => void;
   menuPlacement?: MenuPlacement;
+  width?: string;
 }
-
-const chakraStyles: ChakraStylesConfig<PageSizeOption> = {
-  dropdownIndicator: (prev, { selectProps }) => ({
-    ...prev,
-    "> svg": {
-      transition: "transform 0.3s",
-      transform: `rotate(${selectProps.menuIsOpen ? -180 : 0}deg)`,
-    },
-  }),
-  control: (prev) => ({
-    ...prev,
-    borderRadius: 0,
-    border: "none",
-    borderColor: "gray.300",
-    boxShadow: "sm",
-    borderBottom: "1px solid",
-    borderBottomWidth: "2px",
-  }),
-  menuList: (prev) => ({
-    ...prev,
-    borderRadius: 0,
-    boxShadow: "sm",
-    maxH: "200px",
-    overflowY: "auto",
-    scrollbarGutter: "2px",
-    scrollbarWidth: "thin",
-    scrollBehavior: "smooth",
-    minWidth: "fit-content",
-  }),
-};
 
 const PageSizeSelect = ({
   options,
   pageSize,
   setPageSize,
   menuPlacement,
+  width,
 }: PageSizeProps) => {
+  const chakraStyles: ChakraStylesConfig<PageSizeOption> = {
+    dropdownIndicator: (prev, { selectProps }) => ({
+      ...prev,
+
+      "> svg": {
+        transition: "transform 0.3s",
+        transform: `rotate(${selectProps.menuIsOpen ? -180 : 0}deg)`,
+      },
+    }),
+    control: (prev) => ({
+      ...prev,
+      borderRadius: 0,
+      width: width ?? "200px",
+      borderColor: "#000",
+      _hover: {
+        borderColor: "primary.500",
+      },
+      boxShadow: "sm",
+      border: "1px solid",
+    }),
+    menuList: (prev) => ({
+      ...prev,
+      borderRadius: 0,
+      boxShadow: "sm",
+      maxH: "200px",
+      overflowY: "auto",
+      scrollbarGutter: "2px",
+      scrollbarWidth: "thin",
+      scrollBehavior: "smooth",
+      minWidth: "fit-content",
+    }),
+  };
   return (
     <Select
-      size={"sm"}
-      focusBorderColor="teal.500"
+      size={"md"}
+      focusBorderColor="primary.500"
       closeMenuOnSelect={true}
       name="pageSize"
       selectedOptionStyle="check"
       chakraStyles={chakraStyles}
+      defaultValue={options[0]}
       //   selectedOptionColorScheme="teal"
       menuPlacement={menuPlacement ?? "bottom"}
       isMulti={false}
       value={options.find((option) => option.value === pageSize)} // Correctly match the value
       onChange={(selectedOption) => setPageSize(selectedOption!.value)}
       options={options}
-      variant={"unstyled"}
+      variant={"outline"}
       useBasicStyles
     />
   );

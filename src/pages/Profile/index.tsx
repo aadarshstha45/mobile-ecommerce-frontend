@@ -30,6 +30,7 @@ const Profile = () => {
         <MenuButton
           ml={4}
           as={Button}
+          variant={"outline"}
           rightIcon={<ChevronDownIcon />}
           colorScheme="primary"
           borderRadius={2}

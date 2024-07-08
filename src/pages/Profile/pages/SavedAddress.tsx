@@ -10,6 +10,7 @@ import Checkbox from "@/components/Form/Checkbox";
 import DeleteAlert from "@/components/Form/DeleteAlert";
 import { ModalForm } from "@/components/Form/ModalForm";
 import { countryOptions } from "@/components/Form/SelectInput";
+import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import {
   Box,
   Flex,
@@ -19,14 +20,14 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { CirclePlus, MapPin } from "lucide-react";
+import { CirclePlusIcon, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useOutletContext } from "react-router-dom";
 
 const SavedAddress = () => {
   const user: any = useOutletContext();
-  const { data } = useFetchAddresses();
+  const { data, isPending } = useFetchAddresses();
   const [countryCode, setCountryCode] = useState("+977");
   const [id, setId] = useState<string | null>(null);
   const addAddress = useAddAddress();
@@ -152,7 +153,9 @@ const SavedAddress = () => {
   return (
     <Flex w={"full"} flexDir={"column"} gap={4}>
       <Text fontSize={"xl"}>Saved Address</Text>
-      {data ? (
+      {isPending ? (
+        <LoadingSpinner height={window.innerHeight / 2} />
+      ) : data ? (
         data.map((address: any, index: number) => (
           <Box
             py={8}
@@ -197,21 +200,25 @@ const SavedAddress = () => {
           </Box>
         ))
       ) : (
-        <Text fontSize={{ base: "14px", md: "18px" }}>
-          No address saved yet
-        </Text>
+        <>
+          <Text fontSize={{ base: "14px", md: "18px" }}>
+            No address saved yet
+          </Text>
+        </>
       )}
 
-      <HStack
-        onClick={handleAddForm}
-        cursor={"pointer"}
-        color={"primary.500"}
-        mt={4}
-        w={"fit-content"}
-      >
-        <Icon as={CirclePlus} boxSize={6} />
-        <Text fontSize={{ base: "14px", md: "18px" }}>Add New Address</Text>
-      </HStack>
+      {!isPending && (
+        <HStack
+          onClick={handleAddForm}
+          cursor={"pointer"}
+          color={"primary.500"}
+          mt={4}
+          w={"fit-content"}
+        >
+          <Icon as={CirclePlusIcon} boxSize={6} />
+          <Text fontSize={{ base: "14px", md: "18px" }}>Add New Address</Text>
+        </HStack>
+      )}
       <ModalForm
         form="shipping-address-form"
         isOpen={isFormOpen}

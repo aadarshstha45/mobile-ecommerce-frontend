@@ -22,6 +22,7 @@ import { useOutletContext } from "react-router-dom";
 
 const ProfileDetails = () => {
   const data: any = useOutletContext();
+
   const [readOnly, setReadOnly] = useState(true);
   const { mutateAsync, isPending, error, isError } = useUpdateUser();
 

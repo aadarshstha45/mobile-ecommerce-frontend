@@ -21,8 +21,9 @@ interface OrderDisplayProps {
 const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
   return (
     <>
-      {isPending && <LoadingSpinner />}
-      {data && data.length > 0 ? (
+      {isPending ? (
+        <LoadingSpinner height={window.innerHeight / 2} />
+      ) : data && data.length > 0 ? (
         data.map((item: any) => (
           <Card
             key={item.id}
