@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseURL } from "@/api/axiosSetup";
 import { useAddToCart } from "@/api/functions/Cart";
 import { useFetchProductById } from "@/api/functions/Product";
 import NoImage from "@/assets/images/NoImage.png";
@@ -192,7 +191,7 @@ function ProductDetail() {
                           w={40}
                           aspectRatio={4 / 3}
                           onClick={() => setDisplayImage(data?.image)}
-                          src={`${BaseURL}/${data?.image}`}
+                          src={`${data?.image}`}
                         />
                       )}
                       {data?.product_images.map((image: any) => (
@@ -201,7 +200,7 @@ function ProductDetail() {
                           aspectRatio={4 / 3}
                           key={image.id}
                           onClick={() => setDisplayImage(image.image)}
-                          src={`${BaseURL}/${image.image}`}
+                          src={`${image.image}`}
                         />
                       ))}
                     </Flex>

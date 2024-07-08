@@ -1,5 +1,4 @@
 import { useLogout } from "@/api/auth";
-import { BaseURL } from "@/api/axiosSetup";
 import { useFetchMenuItems } from "@/api/functions/Category";
 import NavCart from "@/assets/icons/NavCart";
 import SearchIcon from "@/assets/icons/SearchIcon";
@@ -137,7 +136,7 @@ function NavBar({ data }: any) {
                 <MenuButton>
                   <Avatar
                     cursor={"pointer"}
-                    src={data?.image ? `${BaseURL}/${data?.image}` : NoImage}
+                    src={data?.image ? `${data?.image}` : NoImage}
                     size={{ base: "sm", md: "md" }}
                     loading="lazy"
                   />

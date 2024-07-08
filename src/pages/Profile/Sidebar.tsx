@@ -1,5 +1,4 @@
 import { useUpdateImage } from "@/api/auth";
-import { BaseURL } from "@/api/axiosSetup";
 import { CameraIcon } from "@/assets/icons/CameraIcon";
 import AvatarIcon from "@/assets/icons/UserIcon/user.png";
 import { SingleDropzone } from "@/components/Form/Dropzone";
@@ -121,7 +120,7 @@ const Sidebar = ({ data }: SidebarProps) => {
       <Stack spacing={4}>
         <Box pos={"relative"} w={"fit-content"} borderRadius={50}>
           <Avatar
-            src={data?.image ? `${BaseURL}/${data?.image}` : AvatarIcon}
+            src={data?.image ? `${data?.image}` : AvatarIcon}
             size={"xl"}
             loading="lazy"
           />

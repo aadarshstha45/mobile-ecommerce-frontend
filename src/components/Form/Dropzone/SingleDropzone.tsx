@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseURL } from "@/api/axiosSetup";
 import { UploadIcon } from "@/assets/icons/UploadIcon";
 import { DeleteIcon } from "@chakra-ui/icons";
 import {
@@ -99,7 +98,7 @@ function SingleDropzone({
                       src={
                         file
                           ? typeof file === "string"
-                            ? `${BaseURL}/${file}`
+                            ? `${file}`
                             : URL.createObjectURL(file)
                           : ""
                       }
