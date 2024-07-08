@@ -102,7 +102,7 @@ export const TextInput = ({
   };
 
   // Create a debounced version of the validateEmail function
-  const debouncedValidateEmail = useCallback(debounce(validateEmail, 2000), []);
+  const debouncedValidateEmail = useCallback(debounce(validateEmail, 1000), []);
 
   const handleEmailChange = (value: string) => {
     setEmailExists(null);
