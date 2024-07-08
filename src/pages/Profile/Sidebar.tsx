@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useLocation } from "react-router-dom";
 
-const sidebarLinks = [
+export const sidebarLinks = [
   {
     id: 1,
     label: "Profile Details",
@@ -36,11 +36,6 @@ const sidebarLinks = [
   },
   {
     id: 4,
-    label: "My Orders",
-    to: "orders",
-  },
-  {
-    id: 5,
     label: "Account Settings",
     to: "account-settings",
   },

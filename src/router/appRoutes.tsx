@@ -1,5 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 import LayoutWrapper from "@/layouts";
+import {
+  AccountSettings,
+  MyPurchase,
+  ProfileDetails,
+  SavedAddress,
+} from "@/pages/Profile/pages";
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
 
@@ -9,17 +15,12 @@ const Category = lazy(() => import("@/pages/Category"));
 const SpecialOffer = lazy(() => import("@/pages/SpecialOffer"));
 const Checkout = lazy(() => import("@/pages/Checkout"));
 const Profile = lazy(() => import("@/pages/Profile"));
-const ProfileDetails = lazy(
-  () => import("@/pages/Profile/pages/ProfileDetails")
-);
+const Cart = lazy(() => import("@/pages/Cart"));
+
 const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
-const SavedAddress = lazy(() => import("@/pages/Profile/pages/SavedAddress"));
-const AccountSettings = lazy(
-  () => import("@/pages/Profile/pages/AccountSettings")
-);
-const MyPurchase = lazy(() => import("@/pages/Profile/pages/MyPurchase"));
 
 const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
+console.log(sessionStorage.getItem("access_token"));
 
 export const appRoutes = [
   {
@@ -77,6 +78,10 @@ export const appRoutes = [
           {
             path: "account-settings",
             element: <AccountSettings />,
+          },
+          {
+            path: "my-carts",
+            element: <Cart />,
           },
         ],
       },

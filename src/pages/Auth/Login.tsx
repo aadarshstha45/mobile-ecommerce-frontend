@@ -48,6 +48,7 @@ function LoginPage() {
     console.log(data);
     await mutateAsync(data);
     navigate("/");
+    window.location.reload();
   };
 
   return (

@@ -16,12 +16,7 @@ const AccountSettings = () => {
     },
   });
 
-  const {
-    mutateAsync: changePassword,
-    isPending,
-    isError,
-    error,
-  } = useChangePassword();
+  const { mutateAsync: changePassword, isPending, error } = useChangePassword();
 
   const errorMessage = (error?.response?.data as any)?.errors;
   console.log(errorMessage);
@@ -33,7 +28,7 @@ const AccountSettings = () => {
   return (
     <Flex w={"fit-content"} flexDir={"column"} gap={4}>
       <Text fontSize={"xl"}>Account Settings</Text>
-      <Text fontSize={"xl"} fontWeight={"semibold"}>
+      <Text fontSize={"xl"} fontWeight={500}>
         Change Password
       </Text>
       <Text>Fill the below form to update your password.</Text>

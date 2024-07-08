@@ -156,12 +156,14 @@ const SavedAddress = () => {
       {data ? (
         data.map((address: any, index: number) => (
           <Box
+            py={8}
             key={address.id}
             bg={index === 0 ? "#f5f5f5" : ""}
             w={{ base: "full", lg: "60%" }}
-            border={"1px solid #000"}
+            border={"1px solid "}
+            borderColor={"#939292"}
             borderRadius={2}
-            p={4}
+            px={4}
             pos={"relative"}
             mt={4}
           >

@@ -7,27 +7,33 @@ import ShoppingCart from "@/assets/icons/ShoppingCart";
 import NoImage from "@/assets/icons/UserIcon/user.png";
 import {
   Avatar,
-  Box,
   Button,
   ButtonGroup,
   Container,
   Flex,
   HStack,
+  Icon,
   Link,
-  Popover,
-  PopoverArrow,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Menu as MenuIcon } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import CartDrawer from "../CartDrawer";
+import MobileNav from "./MobileNav";
 
 function NavBar({ data }: any) {
   const path = useLocation().pathname.split("/")[1];
   const { data: menus } = useFetchMenuItems();
+
+  const {
+    isOpen: isMobileNavOpen,
+    onOpen: onMobileNavOpen,
+    onClose: onMobileNavClose,
+  } = useDisclosure();
 
   const navigate = useNavigate();
   const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
@@ -78,15 +84,23 @@ function NavBar({ data }: any) {
               );
             })}
           </HStack>
-          <Box display={{ base: "block", md: "none" }}>
-            <MenuIcon size={24} />
-          </Box>
+          <MobileNav isOpen={isMobileNavOpen} onClose={onMobileNavClose} />
+          <Icon
+            onClick={onMobileNavOpen}
+            display={{ base: "block", md: "none" }}
+            cursor={"pointer"}
+            boxSize={6}
+            as={MenuIcon}
+          />
           <Link as={NavLink} to="/" fontSize={{ base: "14px", sm: "16px" }}>
             <NavCart boxSize={{ base: 6, md: 8 }} />
           </Link>
 
           <HStack gap={"30px"}>
-            <SearchIcon boxSize={{ base: 5, md: 6 }} />
+            <SearchIcon
+              display={{ base: "none", md: "flex" }}
+              boxSize={{ base: 5, md: 6 }}
+            />
             {!isAuthenticated ? (
               <ButtonGroup display={{ base: "none", md: "flex" }}>
                 <Button
@@ -114,52 +128,65 @@ function NavBar({ data }: any) {
                 </Button>
               </ButtonGroup>
             ) : (
-              <Popover
+              <Menu
                 isLazy
                 closeOnBlur
+                colorScheme="primary"
                 variant={"responsive"}
-                closeOnEsc
                 placement="bottom-end"
               >
-                <PopoverTrigger>
+                <MenuButton>
                   <Avatar
                     cursor={"pointer"}
                     src={data?.image ? `${BaseURL}/${data?.image}` : NoImage}
                     size={{ base: "sm", md: "md" }}
                     loading="lazy"
                   />
-                </PopoverTrigger>
-                <PopoverContent
+                </MenuButton>
+                <MenuList
+                  zIndex={9999}
+                  minW={"fit-content"}
                   borderColor={"primary.500"}
-                  w={"fit-content"}
+                  py={0}
                   overflow={"hidden"}
                 >
-                  <PopoverArrow />
                   <Link
                     as={NavLink}
                     _hover={{ textDecor: "none" }}
                     to="/profile/"
                   >
-                    <PopoverHeader
+                    <MenuItem
+                      borderBottom={"1px solid"}
+                      borderColor={"primary.500"}
                       _hover={{ bg: "primary.500", color: "white" }}
                     >
                       {data?.name}
-                    </PopoverHeader>
+                    </MenuItem>
                   </Link>
-                  <PopoverHeader
+                  <MenuItem
+                    display={{ base: "block", md: "none" }}
+                    borderBottom={"1px solid"}
+                    borderColor={"primary.500"}
+                    _hover={{ bg: "primary.500", color: "white" }}
+                    cursor={"pointer"}
+                    onClick={() => navigate("/profile/my-carts")}
+                  >
+                    My Carts
+                  </MenuItem>
+                  <MenuItem
                     _hover={{ bg: "primary.500", color: "white" }}
                     cursor={"pointer"}
                     onClick={handleSignOut}
                   >
                     Logout
-                  </PopoverHeader>
-                </PopoverContent>
-              </Popover>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             )}
-
             <ShoppingCart
               onClick={handleCartOpen}
               cursor={"pointer"}
+              display={{ base: "none", md: "block" }}
               boxSize={{ base: 5, sm: 6 }}
             />
           </HStack>

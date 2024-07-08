@@ -1,8 +1,15 @@
 import { Flex, Spinner } from "@chakra-ui/react";
-import { Suspense } from "react";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { Suspense, useEffect, useState } from "react";
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { appRoutes } from "./router/appRoutes";
 import { authRoutes } from "./router/authRoutes";
+import { authenticatedRoutes } from "./router/authenticatedRoutes";
 
 const renderRoutes = (routes: any) => {
   return routes.map((route: any, index: number) => (
@@ -18,6 +25,18 @@ const renderRoutes = (routes: any) => {
 };
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("access_token");
+    console.log(token);
+    setIsAuthenticated(!!token);
+  }, [sessionStorage.getItem("access_token")]);
+
+  useEffect(() => {
+    console.log(isAuthenticated);
+  }, [isAuthenticated]);
+
   return (
     <Suspense
       fallback={
@@ -42,6 +61,11 @@ const App = () => {
           {/* App Routes */}
           <Route path="/" element={<Outlet />}>
             {renderRoutes(appRoutes)}
+            {isAuthenticated ? (
+              renderRoutes(authenticatedRoutes)
+            ) : (
+              <Route element={<Navigate to={"/login"} />} />
+            )}
           </Route>
         </Routes>
       </BrowserRouter>
