@@ -28,6 +28,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   const [items, setItems] = useState<any[]>([]);
   const [isLessThan469] = useMediaQuery("(max-width: 469px)");
   const [totalPrice, setTotalPrice] = useState(0);
+  const [discountedPrice, setDiscountedPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [promoCode, setPromoCode] = useState("");
   const [promoErrorMessages, setPromoErrorMessages] = useState<string>("");
@@ -48,6 +49,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
       setItems(items);
       const totalPrice = calculateTotalPrice(items);
       setTotalPrice(totalPrice);
+      setDiscountedPrice(totalPrice);
     }
   }, [location.pathname]);
 
@@ -66,16 +68,16 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           const discount = (totalPrice * discount_rate) / 100;
           if (discount >= max_discount) {
             setDiscount(max_discount);
-            setTotalPrice(totalPrice - max_discount);
+            setDiscount(totalPrice - max_discount);
             return;
           } else {
             setDiscount(discount);
-            setTotalPrice(totalPrice - discount);
+            setDiscount(totalPrice - discount);
             return;
           }
         } else {
           setDiscount(discount_rate);
-          setTotalPrice(totalPrice - discount_rate);
+          setDiscount(totalPrice - discount_rate);
           return;
         }
       } else {
@@ -246,7 +248,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           <HStack justify={"space-between"} py={2}>
             <Heading fontSize={"lg"}>Subtotal</Heading>
             <Heading textColor={"primary.500"} fontSize={"lg"}>
-              Rs. {totalPrice}
+              Rs. {discountedPrice}
             </Heading>
           </HStack>
 

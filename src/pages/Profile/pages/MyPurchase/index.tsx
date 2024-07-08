@@ -25,7 +25,7 @@ const MyPurchase = () => {
           bg={"primary.500"}
           borderRadius="1px"
         />
-        <TabPanels mt={2}>
+        <TabPanels mt={8}>
           <TabPanel p={0}>
             <InProcess />
           </TabPanel>

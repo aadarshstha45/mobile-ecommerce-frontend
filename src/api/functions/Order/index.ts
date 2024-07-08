@@ -1,5 +1,5 @@
 import { OrderApi } from "@/api/endpoints/Order";
-import { useMutate } from "@/api/methods";
+import { useFetch, useMutate } from "@/api/methods";
 
 const usePostOrder = () => {
   return useMutate({
@@ -14,4 +14,8 @@ const useIsPromoCodeValid = () => {
   });
 };
 
-export { useIsPromoCodeValid, usePostOrder };
+const useFetchOrders = () => {
+  return useFetch(OrderApi.get);
+};
+
+export { useFetchOrders, useIsPromoCodeValid, usePostOrder };

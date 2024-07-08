@@ -1,7 +1,7 @@
 import { useFetchProductsByCategory } from "@/api/functions/Category";
 import SelectInput from "@/components/Form/SelectInput";
 import ItemDisplay from "@/components/ItemDisplay";
-import PaginationButton from "@/components/PaginationButton";
+import { PaginationButton } from "@/components/Pagination";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import {

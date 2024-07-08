@@ -41,6 +41,7 @@ function NavBar({ data }: any) {
   const handleSignOut = async () => {
     await mutateAsync();
     navigate("/");
+    window.location.reload();
   };
 
   const handleCartOpen = () => {
@@ -100,31 +101,41 @@ function NavBar({ data }: any) {
               boxSize={{ base: 5, md: 6 }}
             />
             {!isAuthenticated ? (
-              <ButtonGroup display={{ base: "none", md: "flex" }}>
+              <>
                 <Button
-                  display={{ base: "none", md: "flex" }}
+                  display={{ base: "flex", md: "none" }}
                   as={NavLink}
                   to="/login"
-                  px={6}
                   size={"sm"}
                   borderRadius={0}
                   colorScheme="primary"
                 >
                   Login
                 </Button>
-                <Button
-                  as={NavLink}
-                  to="/register"
-                  display={{ base: "none", md: "flex" }}
-                  size={"sm"}
-                  variant={"outline"}
-                  borderRadius={0}
-                  px={6}
-                  colorScheme="primary"
-                >
-                  Sign Up
-                </Button>
-              </ButtonGroup>
+                <ButtonGroup display={{ base: "none", md: "flex" }}>
+                  <Button
+                    display={{ base: "none", md: "flex" }}
+                    as={NavLink}
+                    to="/login"
+                    size={"sm"}
+                    borderRadius={0}
+                    colorScheme="primary"
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    as={NavLink}
+                    to="/register"
+                    display={{ base: "none", md: "flex" }}
+                    size={"sm"}
+                    variant={"outline"}
+                    borderRadius={0}
+                    colorScheme="primary"
+                  >
+                    Sign Up
+                  </Button>
+                </ButtonGroup>
+              </>
             ) : (
               <Menu
                 isLazy
