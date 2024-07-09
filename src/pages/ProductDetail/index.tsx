@@ -54,7 +54,6 @@ function ProductDetail() {
   const [displayImage, setDisplayImage] = useState<string>();
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     await addToCart.mutateAsync({
       ...data,
       quantity: count,
@@ -92,15 +91,10 @@ function ProductDetail() {
       if (colors) {
         setColorOptions(colors);
       }
-      console.log(colorId);
       const selectedColor = data.product_properties.find((property: any) => {
-        console.log({
-          property: property.color?.id,
-          color: colorId,
-        });
+       
         return property.color?.id === colorId;
       });
-      console.log(selectedColor);
       if (selectedColor) {
         const sizes = selectedColor.sizes.map((size: any) => ({
           label: size.size?.name,
@@ -122,17 +116,14 @@ function ProductDetail() {
   }, [data?.product_properties, colorId]);
 
   useEffect(() => {
-    console.log("ColorOptions", colorOptions);
   }, [colorOptions]);
 
   useEffect(() => {
     // Ensure reset is called only when sizeOptions and colorOptions are available and not empty
     if (sizeOptions?.length > 0 && colorOptions?.length > 0) {
-      console.log(sizeId);
       const selectedSize = sizeOptions?.find(
         (property: any) => property.value === sizeId
       );
-      console.log("Selected Size: ", selectedSize);
       if (selectedSize) {
         setPrice(selectedSize.price);
       }
@@ -240,7 +231,6 @@ function ProductDetail() {
 
                             <RadioBox
                               handleChange={(value: string) => {
-                                console.log(value);
                                 setValue("color_id", value);
                                 setColorId(parseInt(value));
                               }}
