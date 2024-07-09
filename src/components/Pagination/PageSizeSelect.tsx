@@ -2,13 +2,13 @@ import { ChakraStylesConfig, MenuPlacement, Select } from "chakra-react-select";
 
 interface PageSizeOption {
   label: string;
-  value: number;
+  value: string | number;
 }
 
 interface PageSizeProps {
   options: PageSizeOption[];
-  pageSize: number | undefined;
-  setPageSize: (pageSize: number) => void;
+  pageSize: string | number | undefined;
+  setPageSize: (pageSize: string | number) => void;
   menuPlacement?: MenuPlacement;
   width?: string;
 }

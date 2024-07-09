@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAddToCart } from "@/api/functions/Cart";
 import { useFetchProductById } from "@/api/functions/Product";
+import ShoppingCart from "@/assets/icons/ShoppingCart";
 import NoImage from "@/assets/images/NoImage.png";
 import RadioBox from "@/components/Form/RadioBox";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
@@ -17,6 +18,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { HeartIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -34,8 +36,12 @@ function ProductDetail() {
 
   const [colorOptions, setColorOptions] = useState<any[]>([]);
   const [sizeOptions, setSizeOptions] = useState<any[]>([]);
-  const [colorId, setColorId] = useState<string>();
-  const [sizeId, setSizeId] = useState<string>();
+  const [colorId, setColorId] = useState<number>(
+    data?.product_properties[0]?.color?.id
+  );
+  const [sizeId, setSizeId] = useState<number>(
+    data?.product_properties[0]?.sizes[0]?.size?.id
+  );
   const [price, setPrice] = useState<number | null>(null);
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
@@ -48,6 +54,7 @@ function ProductDetail() {
   const [displayImage, setDisplayImage] = useState<string>();
 
   const onSubmit = async (data: any) => {
+    console.log(data);
     await addToCart.mutateAsync({
       ...data,
       quantity: count,
@@ -66,6 +73,17 @@ function ProductDetail() {
 
   useEffect(() => {
     if (data?.product_properties) {
+      reset({
+        product_id: id,
+        size_id: data?.product_properties[0]?.sizes[0]?.size?.id,
+        color_id: data?.product_properties[0]?.color?.id,
+        quantity: count,
+      });
+    }
+  }, [data?.product_properties]);
+
+  useEffect(() => {
+    if (data?.product_properties) {
       const colors = data?.product_properties?.map((property: any) => ({
         label: property.color?.name,
         value: property.color?.id,
@@ -73,17 +91,16 @@ function ProductDetail() {
       }));
       if (colors) {
         setColorOptions(colors);
-        setSizeOptions(
-          data?.product_properties?.[0]?.sizes?.map((size: any) => ({
-            label: size.size?.name,
-            value: size.size?.id,
-            price: size?.price,
-          }))
-        );
       }
-      const selectedColor = data.product_properties.find(
-        (property: any) => property.color.id === colorId
-      );
+      console.log(colorId);
+      const selectedColor = data.product_properties.find((property: any) => {
+        console.log({
+          property: property.color?.id,
+          color: colorId,
+        });
+        return property.color?.id === colorId;
+      });
+      console.log(selectedColor);
       if (selectedColor) {
         const sizes = selectedColor.sizes.map((size: any) => ({
           label: size.size?.name,
@@ -102,25 +119,25 @@ function ProductDetail() {
         }
       }
     }
-  }, [data?.product_properties]);
+  }, [data?.product_properties, colorId]);
+
+  useEffect(() => {
+    console.log("ColorOptions", colorOptions);
+  }, [colorOptions]);
 
   useEffect(() => {
     // Ensure reset is called only when sizeOptions and colorOptions are available and not empty
     if (sizeOptions?.length > 0 && colorOptions?.length > 0) {
-      reset({
-        product_id: id,
-        size_id: sizeOptions[0].value,
-        color_id: colorOptions[0].value,
-        quantity: count,
-      });
+      console.log(sizeId);
       const selectedSize = sizeOptions?.find(
         (property: any) => property.value === sizeId
       );
+      console.log("Selected Size: ", selectedSize);
       if (selectedSize) {
         setPrice(selectedSize.price);
       }
     }
-  }, [reset, sizeId]);
+  }, [sizeId]);
 
   return (
     <Flex flexDir={"column"}>
@@ -223,8 +240,9 @@ function ProductDetail() {
 
                             <RadioBox
                               handleChange={(value: string) => {
+                                console.log(value);
                                 setValue("color_id", value);
-                                setColorId(value);
+                                setColorId(parseInt(value));
                               }}
                               options={colorOptions}
                               name="color_id"
@@ -247,7 +265,7 @@ function ProductDetail() {
                             <RadioBox
                               handleChange={(value: string) => {
                                 setValue("size_id", value);
-                                setSizeId(value);
+                                setSizeId(parseInt(value));
                               }}
                               options={sizeOptions}
                               name="size_id"
@@ -298,7 +316,33 @@ function ProductDetail() {
                       <Text fontSize={"lg"}>
                         Price: Rs. {price ?? data?.price}
                       </Text>
-                      <Button type="submit">Add to Cart</Button>
+                      <HStack gap={4}>
+                        <Button
+                          colorScheme="primary"
+                          w={"fit-content"}
+                          borderRadius={0}
+                          fontWeight={400}
+                          fontSize={"sm"}
+                          rightIcon={
+                            <ShoppingCart stroke={"white"} boxSize={5} />
+                          }
+                          isLoading={addToCart.isPending}
+                          type="submit"
+                        >
+                          Add to Cart
+                        </Button>
+                        <Button
+                          colorScheme="primary"
+                          w={"fit-content"}
+                          borderRadius={0}
+                          fontWeight={400}
+                          fontSize={"sm"}
+                          rightIcon={<HeartIcon />}
+                          variant={"outline"}
+                        >
+                          Add to WishList
+                        </Button>
+                      </HStack>
                     </Stack>
                   </form>
                 </Flex>

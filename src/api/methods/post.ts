@@ -47,7 +47,7 @@ const useMutate = (requestData: {
       if (dataError && statusCode !== 422) {
         toast.error((dataError as any)?.message);
       }
-      const fieldErrors = (error?.response?.data as any).error;
+      const fieldErrors = (error?.response?.data as any).errors;
       if (fieldErrors && typeof fieldErrors === "object") {
         Object.keys(fieldErrors).forEach((key) => {
           const errorMessage = fieldErrors[key];

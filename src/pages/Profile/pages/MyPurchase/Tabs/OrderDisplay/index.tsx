@@ -12,6 +12,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 interface OrderDisplayProps {
   data: any;
@@ -55,12 +56,20 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
                 gap={4}
               >
                 <HStack align={"start"} gap={4}>
-                  <Image
-                    w={100}
-                    aspectRatio={1 / 1}
-                    src={product.product?.image ?? NoImage}
-                    alt={product.product?.name}
-                  />
+                  <Link
+                    to={
+                      product.product?.sub_category
+                        ? `/product/${product.product?.category.slug}/${product.product?.sub_category.slug}/${product.product?.id}`
+                        : `/product/${product.product?.category.slug}/${product.product?.id}`
+                    }
+                  >
+                    <Image
+                      w={100}
+                      aspectRatio={1 / 1}
+                      src={product.product?.image ?? NoImage}
+                      alt={product.product?.name}
+                    />
+                  </Link>
                   <Stack w={{ base: "200px", md: "400px" }} fontSize={"md"}>
                     <Text
                       mt={4}

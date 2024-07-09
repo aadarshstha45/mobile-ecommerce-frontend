@@ -68,16 +68,16 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           const discount = (totalPrice * discount_rate) / 100;
           if (discount >= max_discount) {
             setDiscount(max_discount);
-            setDiscount(totalPrice - max_discount);
+            setDiscountedPrice(totalPrice - max_discount);
             return;
           } else {
             setDiscount(discount);
-            setDiscount(totalPrice - discount);
+            setDiscountedPrice(totalPrice - discount);
             return;
           }
         } else {
           setDiscount(discount_rate);
-          setDiscount(totalPrice - discount_rate);
+          setDiscountedPrice(totalPrice - discount_rate);
           return;
         }
       } else {

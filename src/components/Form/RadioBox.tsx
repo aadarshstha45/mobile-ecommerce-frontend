@@ -24,6 +24,7 @@ function RadioBox({ name, control, options, handleChange }: RadioBoxProps) {
         <RadioGroup
           overflow={"hidden"}
           value={value}
+          gap={1}
           onChange={(value) => {
             onChange(value);
             handleChange && handleChange(value);
@@ -31,7 +32,7 @@ function RadioBox({ name, control, options, handleChange }: RadioBoxProps) {
         >
           <HStack gap={1}>
             {options.map((option: any, index: number) => (
-              <FormControl key={index}>
+              <FormControl w={"fit-content"} key={index}>
                 <FormLabel
                   w={"fit-content"}
                   cursor={"pointer"}
@@ -58,6 +59,7 @@ function RadioBox({ name, control, options, handleChange }: RadioBoxProps) {
                   {option.label}
                 </FormLabel>
                 <Radio
+                  defaultValue={index === 0 ? option.value : undefined}
                   display={"none"}
                   id={`${name}_${option.value}`}
                   value={option.value}

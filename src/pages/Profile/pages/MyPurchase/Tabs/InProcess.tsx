@@ -6,10 +6,9 @@ import { useState } from "react";
 import OrderDisplay from "./OrderDisplay";
 
 const InProcess = () => {
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState<any>(10);
   const { data, isPending } = useFetchOrders();
 
-  console.log(data);
   return (
     <Flex flexDir={"column"} gap={4}>
       <Flex align={"center"} gap={2}>
