@@ -13,7 +13,7 @@ import { Delivered, InProcess } from "./Tabs";
 const MyPurchase = () => {
   return (
     <Flex w={"full"} flexDir={"column"} gap={4}>
-      <Text fontSize={"xl"}>My Purchases</Text>
+      <Text fontSize={"xl"}>My Orders</Text>
       <Tabs isLazy position="relative" variant="unstyled">
         <TabList>
           <Tab fontSize={{ base: "sm", md: "md", xl: "lg" }}>InProcess</Tab>

@@ -1,5 +1,6 @@
 import { OrderApi } from "@/api/endpoints/Order";
-import { useFetch, useMutate } from "@/api/methods";
+import { useMutate } from "@/api/methods";
+import { usePaginatedFetch } from "@/api/methods/get";
 
 const usePostOrder = () => {
   return useMutate({
@@ -14,8 +15,13 @@ const useIsPromoCodeValid = () => {
   });
 };
 
-const useFetchOrders = () => {
-  return useFetch(OrderApi.get);
+const useFetchOrders = (
+  page: number,
+  day_filter?: string,
+  date_from?: string,
+  date_to?: string
+) => {
+  return usePaginatedFetch(OrderApi.get(page, day_filter, date_from, date_to));
 };
 
 export { useFetchOrders, useIsPromoCodeValid, usePostOrder };

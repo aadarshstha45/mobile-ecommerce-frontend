@@ -20,10 +20,9 @@ import {
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useLocation, useOutletContext } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const ShoppingBag = ({ stepProps }: IStepProps) => {
-  const user: any = useOutletContext();
   const location = useLocation();
   const [items, setItems] = useState<any[]>([]);
   const [isLessThan469] = useMediaQuery("(max-width: 469px)");
@@ -105,7 +104,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           price: item.size ? item.size.price : item.product.price,
           size_id: item?.size?.id,
           color_id: item?.color?.id,
-          total: item.size.price
+          total: item.size?.price
             ? item.size.price * item?.quantity
             : item.product.price * item?.quantity,
         })),

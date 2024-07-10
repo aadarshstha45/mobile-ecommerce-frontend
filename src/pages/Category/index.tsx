@@ -42,7 +42,10 @@ function Category() {
   }
   const param = category_slug ? { category_slug, slug } : slug!;
 
-  const { data, isPending } = useFetchProductsByCategory(pageFromUrl, param);
+  const { data, isPending, isFetching } = useFetchProductsByCategory(
+    pageFromUrl,
+    param
+  );
 
   useEffect(() => {
     setCurrentPage(pageFromUrl);
@@ -105,12 +108,14 @@ function Category() {
           <Flex flexDir={"column"} gap={4}>
             <Flex gap={4} mt={12}>
               <Flex flexDir={"column"} w={{ base: "full" }}>
-                {data ? (
+                {isFetching ? (
+                  <LoadingSpinner />
+                ) : data.data?.length > 0 ? (
                   <ResponsiveMasonry
                     columnsCountBreakPoints={{ 350: 1, 600: 2, 1200: 3 }}
                   >
                     <Masonry gutter="30px">
-                      {data.data.map((item: any) => (
+                      {data?.data.map((item: any) => (
                         <ItemDisplay key={item.id} data={item} />
                       ))}
                     </Masonry>

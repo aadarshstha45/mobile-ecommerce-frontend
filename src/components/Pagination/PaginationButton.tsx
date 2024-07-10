@@ -63,17 +63,18 @@ const PaginationButton = ({
         aria-label="Previous"
         borderRadius={"50%"}
         boxSize={8}
+        variant={"unstyled"}
         icon={<ChevronLeftIcon />}
       />
 
       {renderPageButtons()}
       <IconButton
-        cursor={"pointer"}
         onClick={handleNextPage}
-        borderRadius={"50%"}
         isDisabled={currentPage === totalPages}
+        borderRadius={"50%"}
         aria-label="Next"
         boxSize={8}
+        variant={"unstyled"}
         icon={<ChevronRightIcon />}
       />
     </HStack>

@@ -30,8 +30,8 @@ export const sidebarLinks = [
   },
   {
     id: 3,
-    label: "My Purchases",
-    to: "purchases",
+    label: "My Orders",
+    to: "my-orders",
   },
   {
     id: 4,

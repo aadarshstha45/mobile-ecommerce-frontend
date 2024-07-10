@@ -116,6 +116,7 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
           w={"fit-content"}
           borderRadius={"2PX"}
           size={"sm"}
+          isLoading={addOrder.isPending}
         >
           Submit
         </Button>

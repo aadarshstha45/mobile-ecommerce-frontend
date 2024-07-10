@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import LazyLoadImage from "../Image";
 
@@ -19,12 +20,15 @@ interface ItemDisplayProps {
 }
 
 const ItemDisplay = ({ data, colorOptions }: ItemDisplayProps) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Link
       to={
-        data?.sub_category
-          ? `/product/${data?.category.slug}/${data?.sub_category.slug}/${data.id}`
-          : `/product/${data?.category.slug}/${data.id}`
+        data?.subcategory
+          ? `/product/${data?.category?.slug}/${data?.subcategory.slug}/${data.id}`
+          : `/product/${data?.category?.slug}/${data.id}`
       }
     >
       <Card
@@ -115,11 +119,11 @@ const ItemDisplay = ({ data, colorOptions }: ItemDisplayProps) => {
         </CardHeader>
         <CardBody px={0}>
           <Text fontSize={"13px"} fontWeight={600} textColor={"#939292"}>
-            {data.name}
+            {data.category?.name}
           </Text>
           <HStack justify={"space-between"} align={"center"}>
             <Text fontSize={"16px"} fontWeight={500}>
-              {data.category.name}
+              {data.name}
             </Text>
             <HStack spacing={"2px"}>
               {...Array(5)

@@ -72,7 +72,7 @@ export const appRoutes = [
             element: <SavedAddress />,
           },
           {
-            path: "purchases",
+            path: "my-orders",
             element: <MyPurchase />,
           },
           {

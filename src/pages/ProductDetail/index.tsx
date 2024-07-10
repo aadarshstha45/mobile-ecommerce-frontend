@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAddToCart } from "@/api/functions/Cart";
 import { useFetchProductById } from "@/api/functions/Product";
+import { useSaveWishlist } from "@/api/functions/Wishlist";
 import ShoppingCart from "@/assets/icons/ShoppingCart";
 import NoImage from "@/assets/images/NoImage.png";
 import RadioBox from "@/components/Form/RadioBox";
@@ -33,7 +34,7 @@ function ProductDetail() {
   const { data, isPending } = useFetchProductById(id!);
   const [count, setCount] = useState<number>(1);
   const addToCart = useAddToCart();
-
+  const addToWishList = useSaveWishlist();
   const [colorOptions, setColorOptions] = useState<any[]>([]);
   const [sizeOptions, setSizeOptions] = useState<any[]>([]);
   const [colorId, setColorId] = useState<number>(
@@ -125,6 +126,12 @@ function ProductDetail() {
       }
     }
   }, [sizeId]);
+
+  const handleWishList = async () => {
+    await addToWishList.mutateAsync({
+      product_id: id,
+    });
+  };
 
   return (
     <Flex flexDir={"column"}>
@@ -325,6 +332,8 @@ function ProductDetail() {
                           fontSize={"sm"}
                           rightIcon={<HeartIcon />}
                           variant={"outline"}
+                          isLoading={addToWishList.isPending}
+                          onClick={handleWishList}
                         >
                           Add to WishList
                         </Button>
