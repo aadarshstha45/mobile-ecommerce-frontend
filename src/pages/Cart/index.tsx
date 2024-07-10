@@ -45,29 +45,37 @@ const Cart = () => {
   } = useDisclosure();
 
   useEffect(() => {
-    const items = sessionStorage.getItem("cartItems");
-    if (items) {
-      const cartItems = JSON.parse(items);
+    const storedItems = sessionStorage.getItem("cartItems");
+    if (storedItems) {
+      const cartItems = JSON.parse(storedItems);
+      setItems(cartItems);
       const totalCartPrice = calculateTotalPrice(cartItems);
       setTotalPrice(totalCartPrice);
-      setItems(cartItems);
     }
-  }, [sessionStorage.getItem("cartItems")]);
-
+  }, []);
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
-  const handleCheckboxChange = (item: any, isChecked: any) => {
+  const handleCheckboxChange = (item: any, isChecked: boolean) => {
+    setItems((prevItems) => {
+      let updatedItems;
+      if (isChecked) {
+        // Add to items if not already included
+        if (!prevItems.find((prevItem) => prevItem.id === item.id)) {
+          updatedItems = [...prevItems, item];
+        } else {
+          updatedItems = prevItems;
+        }
+      } else {
+        // Remove from items if unchecked
+        updatedItems = prevItems.filter((prevItem) => prevItem.id !== item.id);
+      }
+      // Update session storage
+      sessionStorage.setItem("cartItems", JSON.stringify(updatedItems));
+      return updatedItems;
+    });
+
     if (isChecked) {
-      // Add to deletedImages if not already included
-      setItems((prev) => [...prev, item]);
-      sessionStorage.setItem("cartItems", JSON.stringify([...items, item]));
-      setDeletedItems((prev) => [...new Set([...prev, item.id])]);
+      setDeletedItems((prev) => [...prev, item.id]);
     } else {
-      // Remove from deletedImages
-      setItems((prev) => prev.filter((i) => i.id !== item.id));
-      sessionStorage.setItem(
-        "cartItems",
-        JSON.stringify(items.filter((i) => i.id !== item.id))
-      );
       setDeletedItems((prev) => prev.filter((id) => id !== item.id));
     }
   };
@@ -132,134 +140,139 @@ const Cart = () => {
         </Button>
       )}
       {data?.length > 0 ? (
-        data?.map((item: any) => (
-          <Card
-            key={item.id}
-            shadow={"none"}
-            borderRadius={0}
-            p={0}
-            borderBottom={"1px solid"}
-            borderColor={"#939292"}
-            mb={4}
-          >
-            <CardHeader></CardHeader>
-            <CardBody p={0}>
-              <Flex flexDir={"column"} gap={4}>
-                <Flex
-                  key={item.id}
-                  p={4}
-                  align={"center"}
-                  justify={{ base: "start", sm: "space-between" }}
-                  gap={{ base: 4, sm: 2 }}
-                  flexWrap={{ base: "wrap", sm: "nowrap" }}
-                >
-                  <Checkbox
-                    defaultChecked={
-                      sessionStorage.getItem("cartItems")?.includes(item.id) ??
-                      false
-                    }
-                    name="checked_item"
-                    colorScheme="primary"
-                    value={item.id}
-                    checked={deletedItems.includes(item.id)}
-                    onChange={(e) =>
-                      handleCheckboxChange(item, e.target.checked)
-                    }
-                  />
-
-                  <Image
-                    borderRadius={"lg"}
-                    h={"100px"}
-                    w={"100px"}
-                    src={item.image ?? NoImage}
-                    objectFit={"cover"}
-                    objectPosition={"center"}
-                    loading="lazy"
-                    alt={item.name}
-                  />
-                  <Stack
-                    flexWrap={{ base: "wrap", md: "nowrap" }}
-                    ml={3}
-                    w={{ base: "100%", sm: "50%" }}
+        data?.map((item: any) => {
+          const storedItems = sessionStorage.getItem("cartItems");
+          const cartItems = storedItems ? JSON.parse(storedItems) : [];
+          console.log("cartItems", cartItems);
+          console.log("item", item);
+          return (
+            <Card
+              key={item.id}
+              shadow={"none"}
+              borderRadius={0}
+              p={0}
+              borderBottom={"1px solid"}
+              borderColor={"#939292"}
+              mb={4}
+            >
+              <CardHeader>{item?.id}</CardHeader>
+              <CardBody p={0}>
+                <Flex flexDir={"column"} gap={4}>
+                  <Flex
+                    key={item.id}
+                    p={4}
+                    align={"center"}
+                    justify={{ base: "start", sm: "space-between" }}
+                    gap={{ base: 4, sm: 2 }}
+                    flexWrap={{ base: "wrap", sm: "nowrap" }}
                   >
-                    <Text fontWeight={"bold"} fontSize={"lg"}>
-                      {item.product?.name}
-                    </Text>
+                    <Checkbox
+                      defaultChecked={cartItems.includes(item.id)}
+                      name="checked_item"
+                      colorScheme="primary"
+                      value={item.id}
+                      onChange={(e) =>
+                        handleCheckboxChange(item, e.target.checked)
+                      }
+                    />
 
-                    <HStack flexWrap={"wrap"}>
-                      {item.size && <Text>Size: {item.size.name} </Text>}
-                      {item.color && <Text>Color: {item.color.name} </Text>}
-                    </HStack>
-                    <HStack gap={2}>
-                      <IconButton
-                        onClick={() => {
-                          if (item.quantity > 1) {
-                            handleUpdateQuantity(item.id, item.quantity - 1);
+                    <Image
+                      borderRadius={"lg"}
+                      h={"100px"}
+                      w={"100px"}
+                      src={item.image ?? NoImage}
+                      objectFit={"cover"}
+                      objectPosition={"center"}
+                      loading="lazy"
+                      alt={item.name}
+                    />
+                    <Stack
+                      flexWrap={{ base: "wrap", md: "nowrap" }}
+                      ml={3}
+                      w={{ base: "100%", sm: "50%" }}
+                    >
+                      <Text fontWeight={"bold"} fontSize={"lg"}>
+                        {item.product?.name}
+                      </Text>
+
+                      <HStack flexWrap={"wrap"}>
+                        {item.size && <Text>Size: {item.size.name} </Text>}
+                        {item.color && <Text>Color: {item.color.name} </Text>}
+                      </HStack>
+                      <HStack gap={2}>
+                        <IconButton
+                          onClick={() => {
+                            if (item.quantity > 1) {
+                              handleUpdateQuantity(item.id, item.quantity - 1);
+                            }
+                          }}
+                          isDisabled={
+                            updateCartQuantity.isPending || item.quantity === 1
                           }
-                        }}
-                        isDisabled={
-                          updateCartQuantity.isPending || item.quantity === 1
-                        }
-                        colorScheme="primary"
-                        borderRadius={0}
-                        aria-label="Decrease quantity"
-                        icon={<MinusIcon />}
-                        size={"xs"}
-                      />
-                      <Input
-                        onChange={(e) => {
-                          handleUpdateQuantity(item.id, Number(e.target.value));
-                        }}
-                        isReadOnly={updateCartQuantity.isPending}
-                        type="number"
-                        size={"xs"}
-                        w={10}
-                        border={"none"}
-                        fontWeight={600}
-                        fontSize={"md"}
-                        focusBorderColor="primary.500"
-                        borderRadius={0}
-                        textAlign={"center"}
-                        px={0}
-                        id={`quantity-${item.id}`}
-                        name={`quantity-${item.id}`}
-                        value={item.quantity}
-                      />
-                      <IconButton
-                        aria-label="Increase quantity"
-                        onClick={() => {
-                          handleUpdateQuantity(item.id, item.quantity + 1);
-                        }}
-                        isDisabled={updateCartQuantity.isPending}
-                        icon={<PlusIcon />}
-                        colorScheme="primary"
-                        borderRadius={0}
-                        size={"xs"}
-                      />
-                    </HStack>
-                  </Stack>
-                  <Text textColor={"primary.500"}>
-                    Rs.
-                    {item.size?.price
-                      ? item.size.price * item.quantity
-                      : item.product.price * item.quantity}
-                  </Text>
-                  <IconButton
-                    w={"fit-content"}
-                    variant={"ghost"}
-                    colorScheme="red"
-                    textColor={"red.400"}
-                    boxSize={6}
-                    py={4}
-                    icon={<Trash2 />}
-                    aria-label="Delete item"
-                    onClick={() => handleDeleteModalOpen(item.id)}
-                  />
+                          colorScheme="primary"
+                          borderRadius={0}
+                          aria-label="Decrease quantity"
+                          icon={<MinusIcon />}
+                          size={"xs"}
+                        />
+                        <Input
+                          onChange={(e) => {
+                            handleUpdateQuantity(
+                              item.id,
+                              Number(e.target.value)
+                            );
+                          }}
+                          isReadOnly={updateCartQuantity.isPending}
+                          type="number"
+                          size={"xs"}
+                          w={10}
+                          border={"none"}
+                          fontWeight={600}
+                          fontSize={"md"}
+                          focusBorderColor="primary.500"
+                          borderRadius={0}
+                          textAlign={"center"}
+                          px={0}
+                          id={`quantity-${item.id}`}
+                          name={`quantity-${item.id}`}
+                          value={item.quantity}
+                        />
+                        <IconButton
+                          aria-label="Increase quantity"
+                          onClick={() => {
+                            handleUpdateQuantity(item.id, item.quantity + 1);
+                          }}
+                          isDisabled={updateCartQuantity.isPending}
+                          icon={<PlusIcon />}
+                          colorScheme="primary"
+                          borderRadius={0}
+                          size={"xs"}
+                        />
+                      </HStack>
+                    </Stack>
+                    <Text textColor={"primary.500"}>
+                      Rs.
+                      {item.size?.price
+                        ? item.size.price * item.quantity
+                        : item.product.price * item.quantity}
+                    </Text>
+                    <IconButton
+                      w={"fit-content"}
+                      variant={"ghost"}
+                      colorScheme="red"
+                      textColor={"red.400"}
+                      boxSize={6}
+                      py={4}
+                      icon={<Trash2 />}
+                      aria-label="Delete item"
+                      onClick={() => handleDeleteModalOpen(item.id)}
+                    />
+                  </Flex>
                 </Flex>
-              </Flex>
-            </CardBody>
-          </Card>
-        ))
+              </CardBody>
+            </Card>
+          );
+        })
       ) : (
         <Text>No items in cart</Text>
       )}

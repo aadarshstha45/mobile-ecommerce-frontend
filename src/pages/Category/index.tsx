@@ -70,9 +70,7 @@ function Category() {
             align={isLessThan540 ? "center" : "space-between"}
           >
             <Stack gap={2}>
-              <Heading textAlign={"center"}>
-                {data?.breadcrumbs?.category.name}
-              </Heading>
+              <Heading>{data?.breadcrumbs?.category.name}</Heading>
               <Breadcrumb
                 spacing="8px"
                 separator={<ChevronRightIcon color="gray.700" />}
@@ -81,10 +79,19 @@ function Category() {
                   <BreadcrumbLink href={"/"}>Home</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={`${data?.breadcrumbs?.category.slug}`}>
+                  <BreadcrumbLink href={`/${data?.breadcrumbs?.category.slug}`}>
                     {data?.breadcrumbs?.category.name}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
+                {data?.breadcrumbs.subcategory && (
+                  <BreadcrumbItem>
+                    <BreadcrumbLink
+                      href={`/${data?.breadcrumbs?.category.slug}/${data?.breadcrumbs.subcategory.slug}`}
+                    >
+                      {data?.breadcrumbs.subcategory.name}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                )}
               </Breadcrumb>
             </Stack>
             <SelectInput

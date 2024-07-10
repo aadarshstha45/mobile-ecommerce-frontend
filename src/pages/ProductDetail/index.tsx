@@ -74,8 +74,8 @@ function ProductDetail() {
     if (data?.product_properties) {
       reset({
         product_id: id,
-        size_id: data?.product_properties[0]?.sizes[0]?.size?.id,
-        color_id: data?.product_properties[0]?.color?.id,
+        size_id: data?.product_properties[0]?.sizes[0]?.size?.id ?? "",
+        color_id: data?.product_properties[0]?.color?.id ?? "",
         quantity: count,
       });
     }
@@ -92,7 +92,6 @@ function ProductDetail() {
         setColorOptions(colors);
       }
       const selectedColor = data.product_properties.find((property: any) => {
-       
         return property.color?.id === colorId;
       });
       if (selectedColor) {
@@ -114,9 +113,6 @@ function ProductDetail() {
       }
     }
   }, [data?.product_properties, colorId]);
-
-  useEffect(() => {
-  }, [colorOptions]);
 
   useEffect(() => {
     // Ensure reset is called only when sizeOptions and colorOptions are available and not empty

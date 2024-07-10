@@ -20,7 +20,7 @@ import { NavLink, useLocation } from "react-router-dom";
 export const sidebarLinks = [
   {
     id: 1,
-    label: "Profile Details",
+    label: "Profile",
     to: "",
   },
   {
@@ -35,6 +35,11 @@ export const sidebarLinks = [
   },
   {
     id: 4,
+    label: "My Wishlist",
+    to: "wishlist",
+  },
+  {
+    id: 5,
     label: "Account Settings",
     to: "account-settings",
   },

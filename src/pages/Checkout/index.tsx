@@ -32,10 +32,7 @@ const ChakraStepper = () => {
   ];
 
   return (
-    <Container
-      maxW={{ base: "99vw", sm: "95vw", md: "90vw", lg: "85vw" }}
-      py={10}
-    >
+    <Container maxW={{ base: "99vw", md: "95vw" }} py={10}>
       <Flex flexDir="column" gap={"20"} width="100%" userSelect={"none"}>
         <Steps
           variant={"circles-alt"}

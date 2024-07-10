@@ -5,6 +5,7 @@ import {
   MyPurchase,
   ProfileDetails,
   SavedAddress,
+  WishList,
 } from "@/pages/Profile/pages";
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
@@ -81,6 +82,14 @@ export const appRoutes = [
           {
             path: "my-carts",
             element: <Cart />,
+          },
+          {
+            path: "wishlist",
+            element: <WishList />,
+          },
+          {
+            path: "*",
+            element: <Navigate to="/profile/" />,
           },
         ],
       },
