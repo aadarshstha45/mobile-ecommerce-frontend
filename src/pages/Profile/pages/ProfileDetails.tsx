@@ -136,8 +136,8 @@ const ProfileDetails = () => {
           <GridItem colSpan={1}>
             <DatePicker
               isReadOnly={readOnly}
-              isRequired={!readOnly}
               name="dob"
+              isControlled
               label="Birthday (Optional)"
               control={control}
               errors={errors}

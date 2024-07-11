@@ -6,31 +6,44 @@ interface PaginationButtonProps {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
+  dayFilter?: string;
+  fromDate?: string;
+  toDate?: string;
 }
 
 const PaginationButton = ({
   currentPage,
   setCurrentPage,
   totalPages,
+  fromDate,
+  toDate,
 }: PaginationButtonProps) => {
   const navigate = useNavigate();
-
+  const queryParams = (page: number) => {
+    const params = new URLSearchParams({ page: String(page) });
+    if (fromDate) {
+      console.log("from", fromDate);
+      params.append("date_from", fromDate);
+    }
+    if (toDate) params.append("date_to", toDate);
+    return params.toString();
+  };
   const handlePrevPage = () => {
     const prevPage = currentPage - 1;
     setCurrentPage(prevPage);
-    navigate(`?page=${prevPage}`);
+    navigate(`?${queryParams(prevPage)}`);
   };
 
   // Function to handle next page
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
     setCurrentPage(nextPage);
-    navigate(`?page=${nextPage}`);
+    navigate(`?${queryParams(nextPage)}`);
   };
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
-    navigate(`?page=${page}`);
+    navigate(`?${queryParams(page)}`);
   };
   const renderPageButtons = () => {
     const buttons = [];
@@ -69,9 +82,10 @@ const PaginationButton = ({
 
       {renderPageButtons()}
       <IconButton
+        cursor={"pointer"}
         onClick={handleNextPage}
-        isDisabled={currentPage === totalPages}
         borderRadius={"50%"}
+        isDisabled={currentPage === totalPages}
         aria-label="Next"
         boxSize={8}
         variant={"unstyled"}

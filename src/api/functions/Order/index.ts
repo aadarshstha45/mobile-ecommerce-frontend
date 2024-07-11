@@ -15,13 +15,8 @@ const useIsPromoCodeValid = () => {
   });
 };
 
-const useFetchOrders = (
-  page: number,
-  day_filter?: string,
-  date_from?: string,
-  date_to?: string
-) => {
-  return usePaginatedFetch(OrderApi.get(page, day_filter, date_from, date_to));
+const useFetchOrders = (page: number, date_from?: string, date_to?: string) => {
+  return usePaginatedFetch(OrderApi.get(page, date_from, date_to));
 };
 
 export { useFetchOrders, useIsPromoCodeValid, usePostOrder };
