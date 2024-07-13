@@ -23,7 +23,7 @@ type InputProps = {
   isReadOnly?: boolean;
   pointerEvents?: ResponsiveValue<Property.PointerEvents>;
   backErrors?: any;
-  width?: string;
+  width?: any;
   isControlled?: boolean;
   [key: string]: any;
 };
@@ -61,7 +61,6 @@ export const DatePicker = ({
         control={control}
         render={({ field: { value, onChange } }) => (
           <SimpleDatePicker
-            withArrow={true}
             inputProps={{
               borderRadius: "2px",
               errorBorderColor: "red.500",
@@ -87,7 +86,12 @@ export const DatePicker = ({
             formatDate={(date) => {
               return formatDateToLocalISOString(date);
             }}
-            todayLabel="Today"
+            popoverProps={{
+              colorScheme: "primary",
+              matchWidth: true,
+              strategy: "fixed",
+              boundary: "clippingParents",
+            }}
             inactiveColor="gray.100"
             dateBorderRadius={"2px"}
             icon={<CalendarIcon />}

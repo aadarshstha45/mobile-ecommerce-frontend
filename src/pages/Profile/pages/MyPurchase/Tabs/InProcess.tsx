@@ -2,8 +2,7 @@ import { useFetchOrders } from "@/api/functions/Order";
 import { DatePicker } from "@/components/Form";
 import { PaginationButton } from "@/components/Pagination";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
-import { Button, Flex, HStack, Stack } from "@chakra-ui/react";
-import { createBrowserHistory } from "history";
+import { Button, Flex, HStack, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
@@ -15,7 +14,6 @@ const InProcess = () => {
   const pageFromUrl = Number(urlParams.get("page")) || 1;
   const dateFromUrl = urlParams.get("date_from") || undefined;
   const dateToUrl = urlParams.get("date_to") || undefined;
-  const history = createBrowserHistory();
   const [currentPage, setCurrentPage] = useState(1);
   const [fromDate, setFromDate] = useState<any>();
   const [toDate, setToDate] = useState<any>();
@@ -70,9 +68,6 @@ const InProcess = () => {
       setToDate(undefined);
       searchParams.delete("date_to");
     }
-    history.push(
-      `${location.pathname}?page=${currentPage}&${searchParams.toString()}`
-    );
   };
 
   return (
@@ -83,22 +78,25 @@ const InProcess = () => {
           onSubmit={handleSubmit(handleDateFilter)}
           align={"center"}
           gap={2}
+          w={{ base: "100%", sm: "auto" }}
+          flexDir={{ base: "column", sm: "row" }}
         >
           <DatePicker
-            width="fit-content"
-            label="From"
+            width={{ base: "full", sm: "fit-content" }}
+            placeholder="Select From"
             control={control}
             isControlled
             name="date_from"
           />
+          <Text>TO</Text>
           <DatePicker
-            width="fit-content"
-            label="To"
+            width={{ base: "full", sm: "fit-content" }}
+            placeholder="Select To"
             isControlled
             control={control}
             name="date_to"
           />
-          <Button mt={3} borderRadius={2} type="submit" colorScheme="primary">
+          <Button mt={-2} borderRadius={2} type="submit" colorScheme="primary">
             Apply
           </Button>
         </HStack>

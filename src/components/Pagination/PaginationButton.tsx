@@ -15,35 +15,34 @@ const PaginationButton = ({
   currentPage,
   setCurrentPage,
   totalPages,
-  fromDate,
-  toDate,
 }: PaginationButtonProps) => {
   const navigate = useNavigate();
-  const queryParams = (page: number) => {
-    const params = new URLSearchParams({ page: String(page) });
-    if (fromDate) {
-      console.log("from", fromDate);
-      params.append("date_from", fromDate);
-    }
-    if (toDate) params.append("date_to", toDate);
-    return params.toString();
-  };
+  // const queryParams = (page: number) => {
+  //   const params = new URLSearchParams({ page: String(page) });
+  //   if (fromDate) {
+  //     params.append("date_from", fromDate);
+  //   }
+  //   return params.toString();
+  // };
   const handlePrevPage = () => {
     const prevPage = currentPage - 1;
     setCurrentPage(prevPage);
-    navigate(`?${queryParams(prevPage)}`);
+    // navigate(`?${queryParams(prevPage)}`);
+    navigate(`?page=${prevPage}`);
   };
 
   // Function to handle next page
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
     setCurrentPage(nextPage);
-    navigate(`?${queryParams(nextPage)}`);
+    // navigate(`?${queryParams(nextPage)}`);
+    navigate(`?page=${nextPage}`);
   };
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
-    navigate(`?${queryParams(page)}`);
+    // navigate(`?${queryParams(page)}`);
+    navigate(`?page=${page}`);
   };
   const renderPageButtons = () => {
     const buttons = [];

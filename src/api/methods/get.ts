@@ -13,8 +13,6 @@ const useFetch = (apiEndpoint: string, params?: any) => {
     queryKey: [apiEndpoint, params],
     queryFn: fetchData,
     select: (response) => response?.data?.data,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   });
 };
 
