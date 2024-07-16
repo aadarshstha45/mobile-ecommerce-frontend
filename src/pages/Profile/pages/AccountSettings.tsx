@@ -1,6 +1,8 @@
 import { useChangePassword } from "@/api/auth";
 import { TextInput } from "@/components/Form";
+import { ChangePasswordSchema } from "@/utils/validation/auth";
 import { Button, Divider, Flex, Text } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 const AccountSettings = () => {
@@ -8,12 +10,14 @@ const AccountSettings = () => {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
       current_password: "",
       new_password: "",
       c_new_password: "",
     },
+    resolver: zodResolver(ChangePasswordSchema),
   });
 
   const { mutateAsync: changePassword, isPending, error } = useChangePassword();
@@ -22,6 +26,7 @@ const AccountSettings = () => {
 
   const onSubmit = async (data: any) => {
     await changePassword(data);
+    reset();
   };
 
   return (
@@ -32,7 +37,7 @@ const AccountSettings = () => {
       </Text>
       <Text>Fill the below form to update your password.</Text>
       <Divider my={2} />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextInput
           name={"current_password"}
           label={"Old Password"}
@@ -47,6 +52,7 @@ const AccountSettings = () => {
           label={"New Password"}
           type={"password"}
           backErrors={errorMessage}
+          errors={errors}
           isRequired
           control={control}
         />
@@ -55,6 +61,7 @@ const AccountSettings = () => {
           label={"Confirm Password"}
           type={"password"}
           backErrors={errorMessage}
+          errors={errors}
           isRequired
           control={control}
         />

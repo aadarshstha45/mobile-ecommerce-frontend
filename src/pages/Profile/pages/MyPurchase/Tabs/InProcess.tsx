@@ -5,7 +5,7 @@ import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { Button, Flex, HStack, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import OrderDisplay from "./OrderDisplay";
 
 const InProcess = () => {
@@ -19,10 +19,12 @@ const InProcess = () => {
   const [toDate, setToDate] = useState<any>();
 
   const { data, isPending, isFetching } = useFetchOrders(
-    pageFromUrl,
+    currentPage,
     fromDate,
     toDate
   );
+
+  const navigate = useNavigate();
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -52,21 +54,21 @@ const InProcess = () => {
   }, [fromDate]);
 
   const handleDateFilter = (data: any) => {
-    console.log(data);
-    const searchParams = new URLSearchParams(location.search);
+    urlParams.set("page", "1");
+    navigate(`${location.pathname}?${urlParams.toString()}`);
     if (data.date_from !== "") {
-      searchParams.set("date_from", data.date_from);
+      urlParams.set("date_from", data.date_from);
       setFromDate(data.date_from);
     } else {
       setFromDate(undefined);
-      searchParams.delete("date_from");
+      urlParams.delete("date_from");
     }
     if (data.date_to !== "") {
-      searchParams.set("date_to", data.date_to);
+      urlParams.set("date_to", data.date_to);
       setToDate(data.date_to);
     } else {
       setToDate(undefined);
-      searchParams.delete("date_to");
+      urlParams.delete("date_to");
     }
   };
 

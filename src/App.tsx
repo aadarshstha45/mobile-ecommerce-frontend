@@ -26,13 +26,10 @@ const renderRoutes = (routes: any) => {
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   useEffect(() => {
     const token = sessionStorage.getItem("access_token");
     setIsAuthenticated(!!token);
   }, [sessionStorage.getItem("access_token")]);
-
-  useEffect(() => {}, [isAuthenticated]);
 
   return (
     <Suspense
@@ -58,10 +55,10 @@ const App = () => {
           {/* App Routes */}
           <Route path="/" element={<Outlet />}>
             {renderRoutes(appRoutes)}
-            {isAuthenticated ? (
+            {authenticatedRoutes && isAuthenticated ? (
               renderRoutes(authenticatedRoutes)
             ) : (
-              <Route element={<Navigate to={"/login"} />} />
+              <Route element={<Navigate to={`/aa`} />} />
             )}
           </Route>
         </Routes>

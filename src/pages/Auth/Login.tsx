@@ -31,6 +31,7 @@ import { Link, useNavigate } from "react-router-dom";
 function LoginPage() {
   const { mutateAsync, isPending } = useLogin();
   const [isLessThan340] = useMediaQuery("(max-width: 340px)");
+  const urlParams = new URLSearchParams(window.location.search);
   const navigate = useNavigate();
   const {
     control,
@@ -46,7 +47,8 @@ function LoginPage() {
 
   const onSubmit = async (data: any) => {
     await mutateAsync(data);
-    navigate("/");
+    const redirect = urlParams.get("redirect");
+    redirect ? navigate(redirect) : navigate("/");
     window.location.reload();
   };
 

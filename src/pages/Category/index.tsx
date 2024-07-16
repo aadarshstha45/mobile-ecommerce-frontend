@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { sortOptions } from "./data/data";
 
 type OptionType = {
@@ -30,12 +30,14 @@ function Category() {
     category_slug: string;
     slug: string;
   }>();
+  const navigate = useNavigate();
   const [isLessThan540] = useMediaQuery("(max-width: 540px)");
-
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const pageFromUrl = Number(urlParams.get("page")) || 1;
+  const sortFromUrl = urlParams.get("sort") || "newest";
   const [currentPage, setCurrentPage] = useState(1);
+  const [sort, setSort] = useState("newest");
   // Ensure slug is not undefined
   if (!slug) {
     throw new Error("Slug is required");
@@ -44,15 +46,25 @@ function Category() {
 
   const { data, isPending, isFetching } = useFetchProductsByCategory(
     pageFromUrl,
-    param
+    param,
+    sort
   );
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setCurrentPage(pageFromUrl);
   }, [pageFromUrl]);
 
+  useEffect(() => {
+    setSort(sortFromUrl);
+  }, [sortFromUrl]);
+
   const handleSelectChange = (selectedOption: OptionType) => {
-    console.log(selectedOption.value);
+    setSort(selectedOption.value);
+    if (selectedOption.value !== "") {
+      urlParams.set("sort", selectedOption.value);
+      navigate(`?${urlParams.toString()}`);
+    }
   };
 
   return (
@@ -99,6 +111,7 @@ function Category() {
             </Stack>
             <SelectInput
               isControlled={false}
+              value={sort}
               placeholder="Sort by"
               name={"sort"}
               handleChange={handleSelectChange}
@@ -110,7 +123,7 @@ function Category() {
               <Flex flexDir={"column"} w={{ base: "full" }}>
                 {isFetching ? (
                   <LoadingSpinner />
-                ) : data.data?.length > 0 ? (
+                ) : data && data.data?.length > 0 ? (
                   <ResponsiveMasonry
                     columnsCountBreakPoints={{ 350: 1, 600: 2, 1200: 3 }}
                   >
@@ -125,11 +138,14 @@ function Category() {
                 )}
               </Flex>
             </Flex>
-            <PaginationButton
-              currentPage={data?.pagination?.current_page ?? currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={data?.pagination?.total_pages ?? 10}
-            />
+            {data?.pagination.total_items > 12 && (
+              <PaginationButton
+                currentPage={data?.pagination?.current_page ?? currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={data?.pagination?.total_pages ?? 2}
+                sort={sort}
+              />
+            )}
           </Flex>
         </>
       )}

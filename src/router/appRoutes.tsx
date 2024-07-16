@@ -57,11 +57,19 @@ export const appRoutes = [
       },
       {
         path: "checkout",
-        element: isAuthenticated ? <Checkout /> : <Navigate to={"/login"} />,
+        element: isAuthenticated ? (
+          <Checkout />
+        ) : (
+          <Navigate to={`/login?redirect=${window.location.pathname}`} />
+        ),
       },
       {
         path: "profile",
-        element: isAuthenticated ? <Profile /> : <Navigate to={"/login"} />,
+        element: isAuthenticated ? (
+          <Profile />
+        ) : (
+          <Navigate to={`/login?redirect=${window.location.pathname}`} />
+        ),
         children: [
           {
             index: true,

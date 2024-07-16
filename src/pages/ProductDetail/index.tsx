@@ -18,6 +18,8 @@ import {
   Image,
   Stack,
   Text,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import { HeartIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -161,6 +163,7 @@ function ProductDetail() {
                       w={"full"}
                       aspectRatio={4 / 3}
                       src={`${displayImage}`}
+                      objectFit={"cover"}
                     />
                   ) : (
                     <Flex
@@ -178,7 +181,7 @@ function ProductDetail() {
                       sx={{
                         "&::-webkit-scrollbar": {
                           height: "5px", // Height of the scrollbar
-                          backgroundColor: "transparent", // Background color of the scrollbar track
+                          backgroundCol1or: "transparent", // Background color of the scrollbar track
                           py: 100,
                         },
                         "&::-webkit-scrollbar-thumb": {
@@ -203,10 +206,12 @@ function ProductDetail() {
                           aspectRatio={4 / 3}
                           onClick={() => setDisplayImage(data?.image)}
                           src={`${data?.image}`}
+                          objectFit={"cover"}
                         />
                       )}
                       {data?.product_images.map((image: any) => (
                         <Image
+                          objectFit={"cover"}
                           w={40}
                           aspectRatio={4 / 3}
                           key={image.id}
@@ -309,35 +314,39 @@ function ProductDetail() {
                       <Text fontSize={"lg"}>
                         Price: Rs. {price ?? data?.price}
                       </Text>
-                      <HStack gap={4}>
-                        <Button
-                          colorScheme="primary"
-                          w={"fit-content"}
-                          borderRadius={0}
-                          fontWeight={400}
-                          fontSize={"sm"}
-                          rightIcon={
-                            <ShoppingCart stroke={"white"} boxSize={5} />
-                          }
-                          isLoading={addToCart.isPending}
-                          type="submit"
-                        >
-                          Add to Cart
-                        </Button>
-                        <Button
-                          colorScheme="primary"
-                          w={"fit-content"}
-                          borderRadius={0}
-                          fontWeight={400}
-                          fontSize={"sm"}
-                          rightIcon={<HeartIcon />}
-                          variant={"outline"}
-                          isLoading={addToWishList.isPending}
-                          onClick={handleWishList}
-                        >
-                          Add to WishList
-                        </Button>
-                      </HStack>
+                      <Wrap gap={4}>
+                        <WrapItem>
+                          <Button
+                            colorScheme="primary"
+                            w={"fit-content"}
+                            borderRadius={0}
+                            fontWeight={400}
+                            fontSize={"sm"}
+                            rightIcon={
+                              <ShoppingCart stroke={"white"} boxSize={5} />
+                            }
+                            isLoading={addToCart.isPending}
+                            type="submit"
+                          >
+                            Add to Cart
+                          </Button>
+                        </WrapItem>
+                        <WrapItem>
+                          <Button
+                            colorScheme="primary"
+                            w={"fit-content"}
+                            borderRadius={0}
+                            fontWeight={400}
+                            fontSize={"sm"}
+                            rightIcon={<HeartIcon />}
+                            variant={"outline"}
+                            isLoading={addToWishList.isPending}
+                            onClick={handleWishList}
+                          >
+                            Add to WishList
+                          </Button>
+                        </WrapItem>
+                      </Wrap>
                     </Stack>
                   </form>
                 </Flex>

@@ -8,9 +8,12 @@ const useFetchMenuItems = () => {
 
 const useFetchProductsByCategory = (
   page: number,
-  param: { category_slug?: string; slug: string } | string
+  param: { category_slug?: string; slug: string } | string,
+  sort: string
 ) => {
-  return usePaginatedFetch(CategoryMenuApi.getProductsByCategory(page, param));
+  return usePaginatedFetch(
+    CategoryMenuApi.getProductsByCategory(page, param, sort)
+  );
 };
 
 export { useFetchMenuItems, useFetchProductsByCategory };

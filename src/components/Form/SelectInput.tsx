@@ -18,6 +18,7 @@ interface SelectProps {
   width?: string;
   isRequired?: boolean;
   isReadOnly?: boolean;
+  value?: string | number;
 }
 
 export const countryOptions = CountryCodes.map((country) => ({
@@ -49,6 +50,7 @@ const SelectInput = ({
   width,
   isReadOnly,
   isRequired,
+  value,
 }: SelectProps) => {
   const chakraStyles: ChakraStylesConfig = {
     dropdownIndicator: (prev, { selectProps }) => ({
@@ -103,6 +105,7 @@ const SelectInput = ({
         />
       ) : (
         <Select
+          defaultValue={options.find((option) => option.value === value)}
           chakraStyles={chakraStyles}
           placeholder={placeholder}
           options={options}

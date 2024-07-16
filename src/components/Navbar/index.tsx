@@ -41,6 +41,7 @@ function NavBar({ data }: any) {
   const handleSignOut = async () => {
     await mutateAsync();
     navigate("/");
+    sessionStorage.clear();
     window.location.reload();
   };
 

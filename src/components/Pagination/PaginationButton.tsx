@@ -1,4 +1,4 @@
-import { HStack, IconButton, Text } from "@chakra-ui/react";
+import { Button, ButtonGroup, HStack, IconButton } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,12 +9,14 @@ interface PaginationButtonProps {
   dayFilter?: string;
   fromDate?: string;
   toDate?: string;
+  sort?: string;
 }
 
 const PaginationButton = ({
   currentPage,
   setCurrentPage,
   totalPages,
+  sort,
 }: PaginationButtonProps) => {
   const navigate = useNavigate();
   // const queryParams = (page: number) => {
@@ -28,7 +30,7 @@ const PaginationButton = ({
     const prevPage = currentPage - 1;
     setCurrentPage(prevPage);
     // navigate(`?${queryParams(prevPage)}`);
-    navigate(`?page=${prevPage}`);
+    navigate(`?page=${prevPage}${sort ? `&sort=${sort}` : ""}`);
   };
 
   // Function to handle next page
@@ -36,13 +38,13 @@ const PaginationButton = ({
     const nextPage = currentPage + 1;
     setCurrentPage(nextPage);
     // navigate(`?${queryParams(nextPage)}`);
-    navigate(`?page=${nextPage}`);
+    navigate(`?page=${nextPage}${sort ? `&sort=${sort}` : ""}`);
   };
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
     // navigate(`?${queryParams(page)}`);
-    navigate(`?page=${page}`);
+    navigate(`?page=${page}${sort ? `&sort=${sort}` : ""}`);
   };
   const renderPageButtons = () => {
     const buttons = [];
@@ -51,45 +53,43 @@ const PaginationButton = ({
 
     for (let i = startPage; i <= endPage; i++) {
       buttons.push(
-        <IconButton
+        <Button
+          gap={0}
           key={i}
-          borderRadius={"50%"}
           onClick={() => handlePageClick(i)}
-          bg={currentPage === i ? "primary.500" : "#CBCBCB"}
-          _hover={{ bg: "primary.500" }}
-          textColor={"white"}
           variant={currentPage === i ? "solid" : "outline"}
           aria-label={`Page ${i}`}
-          icon={<Text>{i}</Text>}
-        />
+          colorScheme="primary"
+        >
+          {i}
+        </Button>
       );
     }
-
     return buttons;
   };
-  return (
-    <HStack gap={4} py={10} align={"center"} justify={"center"}>
-      <IconButton
-        onClick={handlePrevPage}
-        isDisabled={currentPage === 1}
-        aria-label="Previous"
-        borderRadius={"50%"}
-        boxSize={8}
-        variant={"unstyled"}
-        icon={<ChevronLeftIcon />}
-      />
 
-      {renderPageButtons()}
-      <IconButton
-        cursor={"pointer"}
-        onClick={handleNextPage}
-        borderRadius={"50%"}
-        isDisabled={currentPage === totalPages}
-        aria-label="Next"
-        boxSize={8}
-        variant={"unstyled"}
-        icon={<ChevronRightIcon />}
-      />
+  return (
+    <HStack py={10} align={"center"} justify={"center"}>
+      <ButtonGroup size={"sm"} isAttached>
+        <IconButton
+          onClick={handlePrevPage}
+          isDisabled={currentPage === 1}
+          variant={"outline"}
+          colorScheme="primary"
+          aria-label="Previous"
+          icon={<ChevronLeftIcon />}
+        />
+        {renderPageButtons()}
+        <IconButton
+          cursor={"pointer"}
+          onClick={handleNextPage}
+          isDisabled={currentPage === totalPages}
+          variant={"outline"}
+          colorScheme="primary"
+          aria-label="Next"
+          icon={<ChevronRightIcon />}
+        />
+      </ButtonGroup>
     </HStack>
   );
 };

@@ -1,9 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
+import LayoutWrapper from "@/layouts";
 import {
   AccountSettings,
   MyPurchase,
   ProfileDetails,
   SavedAddress,
+  WishList,
 } from "@/pages/Profile/pages";
 import { lazy } from "react";
 
@@ -13,32 +15,42 @@ const Cart = lazy(() => import("@/pages/Cart"));
 
 export const authenticatedRoutes = [
   {
-    path: "checkout",
-    element: <Checkout />,
-  },
-  {
-    path: "profile",
-    element: <Profile />,
+    path: "/",
+    element: <LayoutWrapper />,
     children: [
       {
-        index: true,
-        element: <ProfileDetails />,
+        path: "checkout",
+        element: <Checkout />,
       },
       {
-        path: "saved-address",
-        element: <SavedAddress />,
-      },
-      {
-        path: "purchases",
-        element: <MyPurchase />,
-      },
-      {
-        path: "account-settings",
-        element: <AccountSettings />,
-      },
-      {
-        path: "my-carts",
-        element: <Cart />,
+        path: "profile",
+        element: <Profile />,
+        children: [
+          {
+            index: true,
+            element: <ProfileDetails />,
+          },
+          {
+            path: "saved-address",
+            element: <SavedAddress />,
+          },
+          {
+            path: "my-orders",
+            element: <MyPurchase />,
+          },
+          {
+            path: "account-settings",
+            element: <AccountSettings />,
+          },
+          {
+            path: "wishlist",
+            element: <WishList />,
+          },
+          {
+            path: "my-carts",
+            element: <Cart />,
+          },
+        ],
       },
     ],
   },
