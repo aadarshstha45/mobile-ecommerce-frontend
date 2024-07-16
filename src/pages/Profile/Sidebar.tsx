@@ -145,6 +145,7 @@ const Sidebar = ({ data }: SidebarProps) => {
         </Text>
       </Stack>
       <ModalForm
+        form="profile-change-image"
         onSubmit={handleSubmit(onSubmit)}
         heading="Change Profile Picture"
         isOpen={isOpen}

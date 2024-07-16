@@ -1,16 +1,17 @@
 import { QueryApi } from "@/api/endpoints/Query";
-import { useFetch, useMutate } from "@/api/methods";
+import { useMutate } from "@/api/methods";
+import { usePaginatedFetch } from "@/api/methods/get";
 
-const useFetchProductQuery = () => {
-  return useFetch(QueryApi.get);
-};
-
-const useSendProductQuery = () => {
+const useSendProductQuery = (id: string, perPage: number) => {
   return useMutate({
     apiEndPoint: QueryApi.create,
-    inValidateEndpoint: QueryApi.get,
+    inValidateEndpoint: QueryApi.get(id, perPage),
     message: "Query sent successfully",
   });
+};
+
+const useFetchProductQuery = (id: string, perPage: number) => {
+  return usePaginatedFetch(QueryApi.get(id, perPage));
 };
 
 export { useFetchProductQuery, useSendProductQuery };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { HttpClient } from "../axiosSetup";
 
@@ -26,6 +26,7 @@ const usePaginatedFetch = (apiEndpoint: string, params?: any) => {
     queryKey: [apiEndpoint, params],
     queryFn: fetchData,
     select: (response) => response?.data,
+    placeholderData: keepPreviousData,
   });
 };
 

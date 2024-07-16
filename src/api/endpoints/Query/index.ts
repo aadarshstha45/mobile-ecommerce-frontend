@@ -1,4 +1,5 @@
 export const QueryApi = {
-  get: "/product-query",
   create: "/product-query",
+  get: (id: string, perPage: number) =>
+    `/product-query?product_id=${id}&per_page=${perPage}`,
 };

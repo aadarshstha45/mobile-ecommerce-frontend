@@ -30,11 +30,13 @@
     "react-blurhash": "^0.3.0",
     "react-country-flag": "^3.1.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.52.0",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.2.1",
     "react-responsive-masonry": "^2.2.0",
     "react-router-dom": "^6.23.1",
+    "simple-chakra-ui-datepicker": "^1.1.0",
     "swiper": "^11.1.4",
     "vite-plugin-svgr": "^4.2.0",
     "zod": "^3.23.8",
@@ -50,7 +52,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "vite-plugin-compression": "^0.5.1"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

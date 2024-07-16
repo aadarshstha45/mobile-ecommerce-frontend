@@ -32,6 +32,7 @@ const useMutate = (requestData: {
       {
         response.data?.access_token &&
           sessionStorage.setItem("access_token", response.data?.access_token);
+        localStorage.setItem("access_token", response.data?.access_token);
       }
       if (requestData.message) {
         toast.success(requestData.message!);
