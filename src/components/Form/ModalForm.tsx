@@ -19,6 +19,8 @@ interface ModalProps {
   isLoading?: boolean;
   buttonText?: string;
   form?: string;
+  height?: string;
+  isHidden?: boolean;
 }
 
 export const ModalForm = ({
@@ -31,6 +33,8 @@ export const ModalForm = ({
   isLoading,
   buttonText,
   form,
+  height,
+  isHidden,
 }: ModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -38,13 +42,17 @@ export const ModalForm = ({
       <ModalContent
         pos={"fixed"}
         maxW={["90%", "80%", "60%", "40%"]}
-        maxH={window.innerHeight - 100}
+        maxH={height ?? window.innerHeight - 100}
       >
-        <ModalHeader borderBottom={"1px solid"} fontWeight={500}>
+        <ModalHeader borderBottom={"1px solid #939292"} fontWeight={500}>
           {heading}
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody minH={window.innerHeight - 250} overflow={"auto"} pt={4}>
+        <ModalBody
+          minH={height ?? window.innerHeight - 250}
+          overflow={"auto"}
+          pt={4}
+        >
           <form id={form} onSubmit={onSubmit}>
             {children}
           </form>
@@ -57,6 +65,7 @@ export const ModalForm = ({
             borderRadius={3}
             size={"sm"}
             mr={3}
+            display={isHidden ? "none" : "flex"}
             isDisabled={isDisabled}
             isLoading={isLoading}
             form={form}

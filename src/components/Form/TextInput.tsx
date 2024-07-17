@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { CheckIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   FormControl,
   FormHelperText,
@@ -19,7 +19,7 @@ import IconButton from "./IconButton";
 import { baseURL } from "@/api/axiosSetup";
 import axios from "axios";
 import { Property } from "csstype";
-import { CircleCheckBig, CircleX } from "lucide-react";
+import { X } from "lucide-react";
 
 type InputProps = {
   label?: string;
@@ -78,11 +78,15 @@ export const TextInput = ({
   };
 
   const [emailError, setEmailError] = useState<string | null>(null);
-  const [emailExists, setEmailExists] = useState<boolean | null>(null);
+  const [emailExists, setEmailExists] = useState<boolean | null>(false);
   const [isDebouncing, setIsDebouncing] = useState(false);
+  const [displayCheckIcon, setDisplayCheckIcon] = useState(false);
 
   const validateEmail = async (email: string) => {
     setIsDebouncing(true);
+    setDisplayCheckIcon(true);
+
+    console.log("started");
     try {
       const response = await axios.get(
         `${baseURL}/check-unique-email?email=${email}`
@@ -105,7 +109,9 @@ export const TextInput = ({
   const debouncedValidateEmail = useCallback(debounce(validateEmail, 1000), []);
 
   const handleEmailChange = (value: string) => {
+    setIsDebouncing(true);
     setEmailExists(null);
+    setDisplayCheckIcon(false);
     debouncedValidateEmail(value);
     return value;
   };
@@ -198,23 +204,23 @@ export const TextInput = ({
                 {isDebouncing && (
                   <InputRightElement
                     pointerEvents="none"
-                    children={<Spinner />}
+                    children={<Spinner thickness={"0.67px"} />}
                     color={"#000"}
                   />
                 )}
-                {emailExists ? (
-                  <InputRightElement
-                    pointerEvents="none"
-                    children={<CircleX size={24} color="red" />}
-                    color={"#000"}
-                  />
-                ) : (
-                  <InputRightElement
-                    pointerEvents="none"
-                    children={<CircleCheckBig size={24} color="green" />}
-                    color={"#000"}
-                  />
-                )}
+
+                <InputRightElement
+                  opacity={!isDebouncing && displayCheckIcon ? 1 : 0}
+                  pointerEvents="none"
+                  children={
+                    !emailExists ? (
+                      <CheckIcon color={"green.500"} />
+                    ) : (
+                      <X color="red" />
+                    )
+                  }
+                  color={"#000"}
+                />
               </InputGroup>
               {emailError && (
                 <FormHelperText

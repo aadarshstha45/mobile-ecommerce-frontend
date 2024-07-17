@@ -21,9 +21,11 @@ const QueryReply = () => {
   console.log(data);
   return (
     <Flex w={{ base: "100%", md: "60%" }} flexDir={"column"} gap={6}>
-      <Heading fontWeight={"500"} size={"md"}>
-        Product Related Questions ({data?.pagination.total})
-      </Heading>
+      {data?.pagination.total > 0 && (
+        <Heading fontWeight={"500"} size={"md"}>
+          Product Related Questions ({data?.pagination.total})
+        </Heading>
+      )}
       {data?.data &&
         data?.data.length > 0 &&
         data.data.map((query: any) => (

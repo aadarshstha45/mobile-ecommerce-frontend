@@ -62,6 +62,7 @@ function Category() {
   const handleSelectChange = (selectedOption: OptionType) => {
     setSort(selectedOption.value);
     if (selectedOption.value !== "") {
+      urlParams.set("page", "1");
       urlParams.set("sort", selectedOption.value);
       navigate(`?${urlParams.toString()}`);
     }

@@ -149,6 +149,7 @@ const Sidebar = ({ data }: SidebarProps) => {
         onSubmit={handleSubmit(onSubmit)}
         heading="Change Profile Picture"
         isOpen={isOpen}
+        height="fit-content"
         onClose={handleClose}
         isLoading={isPending}
         isDisabled={!isImageUpdated}

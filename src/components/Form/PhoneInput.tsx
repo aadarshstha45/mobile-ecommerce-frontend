@@ -115,6 +115,7 @@ const PhoneInput = ({
               useBasicStyles
             />
             <Input
+              type="number"
               w={"full"}
               focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
               _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}

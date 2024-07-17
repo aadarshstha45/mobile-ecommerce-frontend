@@ -55,15 +55,14 @@ function LoginPage() {
   return (
     <Flex
       bg={{ base: "#f2f2f2", md: "" }}
-      minH={{ base: window.innerHeight, sm: "100vh" }}
+      minH={window.innerHeight}
       maxW={"100vw"}
-      align={"center"}
       justify={"center"}
-      overflow={"hidden"}
+      align={"center"}
     >
       <Container maxW={{ base: "98vw", lg: "90vw", xl: "85vw" }}>
         <Card shadow={"none"}>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
             <GridItem
               display={{ base: "none", md: "block" }}
               colSpan={1}

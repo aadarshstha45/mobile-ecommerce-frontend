@@ -1,15 +1,8 @@
 import { Flex, Spinner } from "@chakra-ui/react";
 import { Suspense, useEffect, useState } from "react";
-import {
-  BrowserRouter,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { appRoutes } from "./router/appRoutes";
 import { authRoutes } from "./router/authRoutes";
-import { authenticatedRoutes } from "./router/authenticatedRoutes";
 
 const renderRoutes = (routes: any) => {
   return routes.map((route: any, index: number) => (
@@ -48,18 +41,13 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           {/* Auth Routes */}
-          {authRoutes.map((route, index) => (
-            <Route key={index} path={route.path} element={route.element} />
-          ))}
 
           {/* App Routes */}
           <Route path="/" element={<Outlet />}>
+            {authRoutes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
             {renderRoutes(appRoutes)}
-            {authenticatedRoutes && isAuthenticated ? (
-              renderRoutes(authenticatedRoutes)
-            ) : (
-              <Route element={<Navigate to={`/aa`} />} />
-            )}
           </Route>
         </Routes>
       </BrowserRouter>

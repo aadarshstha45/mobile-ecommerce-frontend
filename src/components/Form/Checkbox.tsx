@@ -5,7 +5,6 @@ interface CheckboxProps {
   name: string;
   control?: Control<any>;
   label?: string;
-  checked?: boolean;
   isReadOnly?: boolean;
   isRequired?: boolean;
 }
@@ -14,7 +13,6 @@ const Checkbox = ({
   label,
   name,
   control,
-  checked,
   isReadOnly,
   isRequired,
 }: CheckboxProps) => {
@@ -25,7 +23,7 @@ const Checkbox = ({
         control={control}
         render={({ field: { value, onChange } }) => (
           <Check
-            isChecked={checked}
+            defaultChecked={value}
             colorScheme="primary"
             value={value}
             onChange={onChange}

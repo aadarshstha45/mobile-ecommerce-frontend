@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { isAuthenticated } from "@/api/axiosSetup";
 import { useAddToCart } from "@/api/functions/Cart";
 import { useFetchProductById } from "@/api/functions/Product";
 import { useSaveWishlist } from "@/api/functions/Wishlist";
@@ -18,6 +19,7 @@ import {
   Image,
   Stack,
   Text,
+  useDisclosure,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
@@ -25,6 +27,7 @@ import { HeartIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import ModalLogin from "../Auth/ModalLogin";
 import DetailTab from "./DetailTab";
 import ProductFAQ from "./ProductFAQ";
 import Queries from "./Queries";
@@ -34,6 +37,8 @@ import RelatedProducts from "./RelatedProducts";
 function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { data, isPending } = useFetchProductById(id!);
+  console.log("data", data);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [count, setCount] = useState<number>(1);
   const addToCart = useAddToCart();
   const addToWishList = useSaveWishlist();
@@ -55,14 +60,6 @@ function ProductDetail() {
     },
   });
   const [displayImage, setDisplayImage] = useState<string>();
-
-  const onSubmit = async (data: any) => {
-    await addToCart.mutateAsync({
-      ...data,
-      quantity: count,
-    });
-  };
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -100,17 +97,27 @@ function ProductDetail() {
       if (selectedColor) {
         const sizes = selectedColor.sizes.map((size: any) => ({
           label: size.size?.name,
-          value: size.size?.id,
-          price: size?.price,
+          value: parseInt(size.size?.id),
+          price: parseFloat(size?.price ?? data.price),
         }));
-        setSizeOptions(sizes);
+        if (sizes && sizes.length > 0) {
+          setSizeId(sizes[0].value);
+          setValue("size_id", sizes[0].value);
+          setSizeOptions(sizes);
+          setPrice(sizes[0].price ?? data.price);
+        } else {
+          setPrice(selectedColor.price);
+          setSizeOptions([]);
+        }
       } else {
         const sizes = data.product_properties?.[0]?.sizes?.map((size: any) => ({
           label: size.size?.name,
-          value: size.size?.id,
-          price: size?.price,
+          value: parseInt(size.size?.id),
+          price: parseFloat(size?.price ?? data.price),
         }));
         if (sizes) {
+          setSizeId(sizes[0].value);
+          setValue("size_id", sizes[0].value);
           setSizeOptions(sizes);
         }
       }
@@ -124,10 +131,20 @@ function ProductDetail() {
         (property: any) => property.value === sizeId
       );
       if (selectedSize) {
-        setPrice(selectedSize.price);
+        setPrice(selectedSize.price ?? data.price);
       }
     }
   }, [sizeId]);
+
+  const onSubmit = async (data: any) => {
+    console.log("isAuthenticated", isAuthenticated);
+    isAuthenticated
+      ? await addToCart.mutateAsync({
+          ...data,
+          quantity: count,
+        })
+      : onOpen();
+  };
 
   const handleWishList = async () => {
     await addToWishList.mutateAsync({
@@ -223,6 +240,7 @@ function ProductDetail() {
                   )}
                 </Flex>
                 <Flex gap={10}>
+                  <ModalLogin isOpen={isOpen} onClose={onClose} />
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <Flex flexDir={"column"}>
                       <Text fontSize={"xl"}>{data?.name}</Text>
@@ -259,7 +277,6 @@ function ProductDetail() {
                         <>
                           <Flex flexDir={"column"} gap={2}>
                             <Text fontSize={"lg"}>Available Sizes: </Text>
-
                             <RadioBox
                               handleChange={(value: string) => {
                                 setValue("size_id", value);
@@ -288,6 +305,7 @@ function ProductDetail() {
                             icon={<MinusIcon />}
                             borderRadius={0}
                             size={"xs"}
+                            isDisabled={count === 1}
                             onClick={() => setCount(count - 1)}
                           />
                           <Text fontWeight={700} fontSize={"20px"}>
@@ -326,7 +344,7 @@ function ProductDetail() {
                               <ShoppingCart stroke={"white"} boxSize={5} />
                             }
                             isLoading={addToCart.isPending}
-                            type="submit"
+                            type={"submit"}
                           >
                             Add to Cart
                           </Button>

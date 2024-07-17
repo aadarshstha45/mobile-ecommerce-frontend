@@ -11,6 +11,10 @@ const getAuthToken = () => {
   return token ? `Bearer ${token}` : "";
 };
 
+export const isAuthenticated = sessionStorage.getItem("access_token")
+  ? true
+  : false;
+
 /**
  * Axios HTTP Client
  * {@link https://github.com/axios/axios#request-config Axios Request Config}

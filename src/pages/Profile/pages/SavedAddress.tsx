@@ -54,7 +54,6 @@ const SavedAddress = () => {
   useEffect(() => {
     if (id) {
       const foundData = data?.find((address: any) => address.id === id);
-
       setPrevData(foundData);
       setCountryCode(foundData?.country_code);
       reset({
@@ -70,6 +69,10 @@ const SavedAddress = () => {
       });
     }
   }, [id, data, reset, user]);
+
+  useEffect(() => {
+    console.log("data", prevData);
+  }, [prevData]);
 
   const {
     isOpen: isFormOpen,
@@ -89,6 +92,8 @@ const SavedAddress = () => {
         ...data,
         country_code: countryCode,
       });
+      setId(null);
+      setPrevData(null);
     } else {
       await addAddress.mutateAsync({
         ...data,
@@ -96,7 +101,15 @@ const SavedAddress = () => {
       });
     }
     onFormClose();
-    reset();
+    reset({
+      country: "",
+      city: "",
+      street: "",
+      landmark: "",
+      recipient_name: "",
+      phone_number: "",
+      is_billing_address: false,
+    });
   };
 
   const handleViewForm = (addressId: string) => {
@@ -130,7 +143,7 @@ const SavedAddress = () => {
       landmark: "",
       recipient_name: "",
       phone_number: "",
-      is_billing_address: true,
+      is_billing_address: false,
     });
     setReadOnly(false);
     onFormClose();
@@ -156,48 +169,55 @@ const SavedAddress = () => {
       {isPending ? (
         <LoadingSpinner height={window.innerHeight / 2} />
       ) : data ? (
-        data.map((address: any, index: number) => (
-          <Box
-            py={8}
-            key={address.id}
-            bg={index === 0 ? "#f5f5f5" : ""}
-            w={{ base: "full", lg: "60%" }}
-            border={"1px solid "}
-            borderColor={"#939292"}
-            borderRadius={2}
-            px={4}
-            pos={"relative"}
-            mt={4}
-          >
-            <HStack spacing={4} align={"start"}>
-              <Icon as={MapPin} color="primary.500" boxSize={8} />
-              <Stack spacing={2}>
-                <HStack spacing={4}>
+        data.map((address: any) => (
+          <Stack gap={1} key={address.id}>
+            <Box
+              py={8}
+              key={address.id}
+              bg={address.is_billing_address ? "#f5f5f5" : ""}
+              w={{ base: "full", lg: "60%" }}
+              border={address.is_billing_address ? "2px solid" : "1px solid"}
+              borderColor={"#939292"}
+              borderRadius={2}
+              px={4}
+              pos={"relative"}
+              mt={4}
+            >
+              <HStack spacing={4} align={"start"}>
+                <Icon as={MapPin} color="primary.500" boxSize={8} />
+                <Stack spacing={2}>
+                  <HStack spacing={4}>
+                    <Text
+                      fontSize={{
+                        base: "14px",
+                        md: "18px",
+                      }}
+                    >
+                      {address?.street}, {address?.city}, {address?.country}
+                    </Text>
+                  </HStack>
                   <Text
                     fontSize={{
                       base: "14px",
                       md: "18px",
                     }}
                   >
-                    {address?.street}, {address?.city}, {address?.country}
+                    {address?.landmark}
                   </Text>
-                </HStack>
-                <Text
-                  fontSize={{
-                    base: "14px",
-                    md: "18px",
-                  }}
-                >
-                  {address?.landmark}
-                </Text>
-              </Stack>
-            </HStack>
-            <ActionMenu
-              onView={() => handleViewForm(address?.id)}
-              onDelete={() => handleDeleteAlert(address?.id)}
-              onEdit={() => handleEditForm(address?.id)}
-            />
-          </Box>
+                </Stack>
+              </HStack>
+              <ActionMenu
+                onView={() => handleViewForm(address?.id)}
+                onDelete={() => handleDeleteAlert(address?.id)}
+                onEdit={() => handleEditForm(address?.id)}
+              />
+            </Box>
+            {address.is_billing_address && (
+              <Text fontStyle={"italic"} fontSize={"sm"} color={"#939292"}>
+                * This address is used for billing by default.
+              </Text>
+            )}
+          </Stack>
         ))
       ) : (
         <>
@@ -223,11 +243,18 @@ const SavedAddress = () => {
         form="shipping-address-form"
         isOpen={isFormOpen}
         onClose={handleFormClose}
-        heading={"Add New Address"}
+        heading={
+          readOnly
+            ? "View Address"
+            : prevData
+            ? "Edit Address"
+            : "Add New Address"
+        }
         buttonText={id ? "Update" : "Add"}
         onSubmit={handleSubmit(onSubmit)}
         isLoading={prevData ? editAddress.isPending : addAddress.isPending}
         isDisabled={readOnly}
+        isHidden={readOnly}
       >
         <SelectInput
           width="full"
