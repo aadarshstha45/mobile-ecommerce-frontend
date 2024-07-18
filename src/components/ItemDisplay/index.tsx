@@ -1,4 +1,3 @@
-import { AddCartIcon, AddWishListIcon } from "@/assets/icons/CartIcon";
 import { StarIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -7,9 +6,11 @@ import {
   CardHeader,
   Flex,
   HStack,
+  Icon,
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { Heart, ShoppingBag } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import LazyLoadImage from "../Image";
@@ -17,9 +18,15 @@ import LazyLoadImage from "../Image";
 interface ItemDisplayProps {
   data: any;
   colorOptions?: any;
+  discountPercent?: number;
 }
 
-const ItemDisplay = ({ data, colorOptions }: ItemDisplayProps) => {
+const ItemDisplay = ({
+  data,
+  colorOptions,
+  discountPercent,
+}: ItemDisplayProps) => {
+  console.log(data);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -37,6 +44,7 @@ const ItemDisplay = ({ data, colorOptions }: ItemDisplayProps) => {
         w={"full"}
         shadow={"none"}
         borderRadius={0}
+        role="group"
       >
         <CardHeader
           pos={"relative"}
@@ -44,34 +52,42 @@ const ItemDisplay = ({ data, colorOptions }: ItemDisplayProps) => {
           border={"1px solid #D2CFCF"}
           p={0}
         >
-          <Stack gap={2} pos={"absolute"} right={4} top={4}>
-            <Box
+          <Stack zIndex={90} gap={2} pos={"absolute"} right={4} top={4}>
+            <Flex
               border={"1px solid #D2CFCF"}
               borderRadius={"50%"}
-              p={1}
               bg={"#D9D9D9"}
               _hover={{
                 bg: "#C6C6C6",
-                textColor: "white",
               }}
+              justify={"center"}
+              align={"center"}
+              p={2}
             >
-              <AddCartIcon _hover={{ textColor: "white" }} boxSize={6} />
-            </Box>
-            <Box
+              <Icon as={ShoppingBag} />
+            </Flex>
+            <Flex
               border={"1px solid #D2CFCF"}
               borderRadius={"50%"}
-              p={1}
               bg={"#D9D9D9"}
               _hover={{
                 bg: "#C6C6C6",
-                textColor: "white",
               }}
+              justify={"center"}
+              align={"center"}
+              p={2}
             >
-              <AddWishListIcon _hover={{ fill: "white" }} boxSize={6} />
-            </Box>
+              <Icon as={Heart} />
+            </Flex>
           </Stack>
           {data.image ? (
-            <Box>
+            <Box
+              _groupHover={{
+                transition: "0.3s",
+                transform: "scale(1.1)",
+                zIndex: -1,
+              }}
+            >
               <LazyLoadImage
                 id={data.id}
                 src={data.image}
@@ -106,15 +122,17 @@ const ItemDisplay = ({ data, colorOptions }: ItemDisplayProps) => {
             <Box w={"fit-content"} px={1} bg={"primary.500"} fontSize={"12px"}>
               New
             </Box>
-            <Box
-              w={"fit-content"}
-              px={1}
-              bg={"#D2CFCF"}
-              textColor={"primary.500"}
-              fontSize={"12px"}
-            >
-              -40%
-            </Box>
+            {discountPercent && (
+              <Box
+                w={"fit-content"}
+                px={1}
+                bg={"#D2CFCF"}
+                textColor={"primary.500"}
+                fontSize={"12px"}
+              >
+                {discountPercent}% Off
+              </Box>
+            )}
           </Flex>
         </CardHeader>
         <CardBody px={0}>
@@ -156,16 +174,16 @@ const ItemDisplay = ({ data, colorOptions }: ItemDisplayProps) => {
             </HStack>
             <HStack spacing={"2px"}>
               <Text
-                fontSize={data.discountedPrice ? "13px" : "16px"}
+                fontSize={data.discount ? "13px" : "16px"}
                 fontWeight={500}
-                textColor={data.discountedPrice ? "#939292" : ""}
-                textDecoration={data.discountedPrice ? "line-through" : "none"}
+                textColor={data.discount ? "#939292" : ""}
+                textDecoration={data.discount ? "line-through" : "none"}
               >
                 ${data.price}
               </Text>
-              {data.discountedPrice && (
+              {data.discount && (
                 <Text fontSize={"16px"} fontWeight={600}>
-                  ${data.discountedPrice}
+                  ${data.discount}
                 </Text>
               )}
             </HStack>

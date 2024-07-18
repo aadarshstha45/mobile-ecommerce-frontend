@@ -68,12 +68,20 @@ export const TextInput = ({
 }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [backError, setBackError] = useState<any>(null);
+  const [errorMessages, setErrorMessages] = useState<string | undefined>(
+    undefined
+  );
   useEffect(() => {
     setBackError(backErrors);
   }, [backErrors]);
 
+  useEffect(() => {
+    setErrorMessages(errorMessage);
+  }, [errorMessage]);
+
   const handleInputChange = (value: string) => {
     setBackError(null);
+    setErrorMessages(undefined);
     return value;
   };
 
@@ -204,7 +212,13 @@ export const TextInput = ({
                 {isDebouncing && (
                   <InputRightElement
                     pointerEvents="none"
-                    children={<Spinner thickness={"0.67px"} />}
+                    children={
+                      <Spinner
+                        thickness="3px"
+                        speed="0.65s"
+                        color="primary.500"
+                      />
+                    }
                     color={"#000"}
                   />
                 )}
@@ -278,9 +292,9 @@ export const TextInput = ({
           {message}
         </FormHelperText>
       )}
-      {errorMessage && (
+      {errorMessages && (
         <FormHelperText color={"red.400"} fontSize="xs" fontStyle={"italic"}>
-          {errorMessage}
+          {errorMessages}
         </FormHelperText>
       )}
       {errors && errors[name] && (

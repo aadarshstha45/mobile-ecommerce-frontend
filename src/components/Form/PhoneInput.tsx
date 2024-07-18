@@ -21,7 +21,7 @@ type SelectProps = {
   control?: Control<any>;
   isRequired?: boolean;
   isReadOnly?: boolean;
-  errors?: FieldErrors;
+  errors: FieldErrors;
 };
 
 const options = CountryCodes.map((country) => ({
@@ -107,6 +107,7 @@ const PhoneInput = ({
                   ? options.find((option) => option.value === defaultValue)
                   : options.find((option) => option.value === value)
               }
+              errorBorderColor="red.500"
               onChange={handleChange}
               focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
               chakraStyles={chakraStyles}
@@ -122,7 +123,9 @@ const PhoneInput = ({
               borderRadius={"2px"}
               errorBorderColor="red.500"
               border={"1px solid"}
-              borderColor={isReadOnly ? "gray.300" : "#000"}
+              borderColor={
+                isReadOnly ? "gray.300" : errors[name] ? "red.500" : "#000"
+              }
               value={value}
               onChange={onChange}
             />

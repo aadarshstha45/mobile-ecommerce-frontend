@@ -164,6 +164,7 @@ const ProfileDetails = () => {
               placeholder="Select Country"
               control={control}
               isReadOnly={readOnly}
+              errors={errors}
             />
           </GridItem>
           <GridItem colSpan={1}>

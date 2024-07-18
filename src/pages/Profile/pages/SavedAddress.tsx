@@ -193,7 +193,9 @@ const SavedAddress = () => {
                         md: "18px",
                       }}
                     >
-                      {address?.street}, {address?.city}, {address?.country}
+                      {address?.street}
+                      {address.street && ","} {address?.city},{" "}
+                      {address?.country}
                     </Text>
                   </HStack>
                   <Text
@@ -266,6 +268,7 @@ const SavedAddress = () => {
           placeholder="Select Country"
           control={control}
           isReadOnly={readOnly}
+          errors={errors}
         />
         <TextInput
           label="City"

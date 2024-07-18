@@ -47,6 +47,7 @@ const DeleteAlert = ({
             <Button
               size={"sm"}
               variant={"outline"}
+              colorScheme="gray"
               ref={cancelRef}
               borderRadius={4}
               onClick={onClose}

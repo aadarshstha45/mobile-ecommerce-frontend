@@ -19,7 +19,7 @@ import QueryReply from "./QueryReply";
 const Queries = () => {
   const { id } = useParams<{ id: string }>();
   const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
-  const sendQuery = useSendProductQuery(id!, 3);
+  const sendQuery = useSendProductQuery(id!);
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       question: "",

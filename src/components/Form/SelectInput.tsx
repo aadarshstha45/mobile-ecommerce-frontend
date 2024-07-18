@@ -1,7 +1,7 @@
-import { FormControl, FormLabel } from "@chakra-ui/react";
+import { FormControl, FormHelperText, FormLabel } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import ReactCountryFlag from "react-country-flag";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldErrors } from "react-hook-form";
 import { CountryCodes } from "../data";
 
 interface SelectProps {
@@ -19,6 +19,7 @@ interface SelectProps {
   isRequired?: boolean;
   isReadOnly?: boolean;
   value?: string | number;
+  errors: FieldErrors | null;
 }
 
 export const countryOptions = CountryCodes.map((country) => ({
@@ -51,6 +52,7 @@ const SelectInput = ({
   isReadOnly,
   isRequired,
   value,
+  errors,
 }: SelectProps) => {
   const chakraStyles: ChakraStylesConfig = {
     dropdownIndicator: (prev, { selectProps }) => ({
@@ -62,7 +64,11 @@ const SelectInput = ({
     }),
     control: (styles: any) => ({
       ...styles,
-      borderColor: isReadOnly ? "gray.300" : "#000",
+      borderColor: isReadOnly
+        ? "gray.300"
+        : errors && errors[name]
+        ? "red.500"
+        : "#000",
       "&:hover": {
         borderColor: isReadOnly ? "gray.300" : "#000",
       },
@@ -115,6 +121,16 @@ const SelectInput = ({
           focusBorderColor="primary.500"
           useBasicStyles
         />
+      )}
+      {errors && errors[name] && (
+        <FormHelperText
+          color="red.400"
+          fontSize={{ base: "14px", md: "16px" }}
+          fontStyle={"italic"}
+          fontWeight={400}
+        >
+          {(errors[name] as any).message}
+        </FormHelperText>
       )}
     </FormControl>
   );

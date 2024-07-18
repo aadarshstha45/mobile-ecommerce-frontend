@@ -17,7 +17,7 @@ type RadioBoxProps = {
 
 const PaymentRadio = ({ name, control, options }: RadioBoxProps) => {
   return (
-    <FormControl>
+    <FormControl w={"400px"}>
       <Controller
         name={name}
         control={control}
@@ -28,13 +28,13 @@ const PaymentRadio = ({ name, control, options }: RadioBoxProps) => {
                 <Flex
                   as={FormLabel}
                   p={2}
-                  w={"200px"}
-                  border={"1px solid"}
+                  w={"full"}
+                  border={option.value === value ? "2px solid" : "1px solid"}
                   borderColor={
                     option.value === value ? "primary.500" : "gray.200"
                   }
-                  borderRadius={5}
                   justify={"space-between"}
+                  borderRadius={5}
                   align={"center"}
                   htmlFor={option.value}
                 >
@@ -42,6 +42,7 @@ const PaymentRadio = ({ name, control, options }: RadioBoxProps) => {
                   {option.icon && option.icon}
                 </Flex>
                 <Radio
+                  pos={"absolute"}
                   hidden
                   id={option.value}
                   name={option.value}

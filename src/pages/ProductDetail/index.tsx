@@ -137,19 +137,25 @@ function ProductDetail() {
   }, [sizeId]);
 
   const onSubmit = async (data: any) => {
-    console.log("isAuthenticated", isAuthenticated);
-    isAuthenticated
-      ? await addToCart.mutateAsync({
-          ...data,
-          quantity: count,
-        })
-      : onOpen();
+    if (isAuthenticated) {
+      console.log("data", data);
+      await addToCart.mutateAsync({
+        ...data,
+        quantity: count,
+      });
+    } else {
+      onOpen();
+    }
   };
 
   const handleWishList = async () => {
-    await addToWishList.mutateAsync({
-      product_id: id,
-    });
+    if (isAuthenticated) {
+      await addToWishList.mutateAsync({
+        product_id: id,
+      });
+    } else {
+      onOpen();
+    }
   };
 
   return (
@@ -245,11 +251,6 @@ function ProductDetail() {
                     <Flex flexDir={"column"}>
                       <Text fontSize={"xl"}>{data?.name}</Text>
                       <Text fontSize={"sm"}>{data?.category?.name}</Text>
-
-                      <Flex fontSize={"lg"} mt={4} gap={2}>
-                        <Text>Available Quantity: </Text>
-                        <Text>{data?.available_quantity}</Text>
-                      </Flex>
                       {colorOptions.length > 0 && (
                         <>
                           <Flex flexDir={"column"} mt={4} gap={2}>

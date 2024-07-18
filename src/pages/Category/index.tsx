@@ -117,6 +117,7 @@ function Category() {
               name={"sort"}
               handleChange={handleSelectChange}
               options={sortOptions}
+              errors={null}
             />
           </Flex>
           <Flex flexDir={"column"} gap={4}>

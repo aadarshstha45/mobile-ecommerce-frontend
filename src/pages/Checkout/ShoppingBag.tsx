@@ -33,7 +33,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   const [promoErrorMessages, setPromoErrorMessages] = useState<string>("");
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      total_price: "",
+      total_amount: "",
       promo_code: "",
     },
   });
@@ -56,7 +56,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
     try {
       const response = await PromoCode.mutateAsync({
         ...data,
-        total_price: totalPrice,
+        total_amount: totalPrice,
       });
       if (response.data.valid) {
         setPromoCode(data.promo_code);
@@ -190,6 +190,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
         gap={2}
         flexDir={"column"}
         colSpan={1}
+        maxW={{ md: "350px" }}
         justifySelf={{ md: "end" }}
       >
         <form onSubmit={handleSubmit(promoSubmit)}>
@@ -220,7 +221,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                 fontWeight={500}
                 fontSize={{ base: "14px", md: "16px", xl: "18px" }}
               >
-                Rs. {item.product.name}
+                {item.product.name}
               </Text>
               <Text
                 fontWeight={500}

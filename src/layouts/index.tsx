@@ -1,12 +1,13 @@
 import { useFetchUser } from "@/api/auth";
+import { isAuthenticated } from "@/api/axiosSetup";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/Navbar";
-import { Flex, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Spinner } from "@chakra-ui/react";
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
 function LayoutWrapper() {
-  const { data: user } = useFetchUser();
+  const { data: user } = isAuthenticated ? useFetchUser() : { data: null };
   return (
     <Flex flexDir={"column"} overflow={"hidden"}>
       <NavBar data={user && user} />
@@ -23,7 +24,9 @@ function LayoutWrapper() {
           </Flex>
         }
       >
-        <Outlet context={(user && user) || []} />
+        <Box mt={{ base: "80px", md: "100px" }}>
+          <Outlet context={(user && user) || []} />
+        </Box>
       </Suspense>
       <Footer />
     </Flex>

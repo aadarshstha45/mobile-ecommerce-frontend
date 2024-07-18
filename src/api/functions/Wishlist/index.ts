@@ -1,5 +1,6 @@
 import { WishlistAPI } from "@/api/endpoints/Wishlist";
-import { useFetch, useMutate } from "@/api/methods";
+import { useDelete, useMutate } from "@/api/methods";
+import { usePaginatedFetch } from "@/api/methods/get";
 
 const useSaveWishlist = () => {
   return useMutate({
@@ -8,8 +9,16 @@ const useSaveWishlist = () => {
   });
 };
 
-const useFetchWishlist = () => {
-  return useFetch(WishlistAPI.get);
+const useFetchWishlist = (perPage: number) => {
+  return usePaginatedFetch(WishlistAPI.get(perPage));
 };
 
-export { useFetchWishlist, useSaveWishlist };
+const useDeleteWishlist = () => {
+  return useDelete({
+    apiEndPoint: WishlistAPI.delete,
+    inValidateEndpoint: WishlistAPI.get(5),
+    message: "Item removed successfully",
+  });
+};
+
+export { useDeleteWishlist, useFetchWishlist, useSaveWishlist };

@@ -13,12 +13,12 @@ import {
   IconButton,
   Image,
   Input,
-  Spinner,
   Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 
+import { isAuthenticated } from "@/api/axiosSetup";
 import {
   useDeleteCartItem,
   useDeleteCartItems,
@@ -40,9 +40,11 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const navigate = useNavigate();
-  const { data, isPending, isRefetching } = useFetchCart();
+  const { data, isPending, isFetching } = isAuthenticated
+    ? useFetchCart()
+    : { data: null, isPending: false, isFetching: false };
   const [items, setItems] = useState<any[]>([]);
-  const [itemIds, setItemIds] = useState("");
+  const [itemIds, setItemIds] = useState<string>("");
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const deleteCartItem = useDeleteCartItem();
@@ -88,18 +90,36 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
       setItemIds(id);
       onDeleteModalOpen();
     } else {
+      setItemIds("");
       onDeleteModalOpen();
     }
   };
 
   const handleDeleteItem = async () => {
     const formData = new FormData();
-    if (deletedItems.length > 0) {
+    if (deletedItems.length > 0 && itemIds === "") {
       formData.append("ids", JSON.stringify(deletedItems));
       await deleteCartItems.mutateAsync(formData);
+      const currentCartItems = JSON.parse(
+        sessionStorage.getItem("cartItems") || "[]"
+      );
+      // Filter out the deleted items
+      const updatedCartItems = currentCartItems.filter(
+        (item: any) => !deletedItems.includes(item.id)
+      );
+      // Update the session storage with the new list of items
+      sessionStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+
       setDeletedItems([]);
     } else {
       await deleteCartItem.mutateAsync(itemIds);
+      const currentCartItems = JSON.parse(
+        sessionStorage.getItem("cartItems") || "[]"
+      );
+      const updatedCartItems = currentCartItems.filter(
+        (item: any) => item.id !== itemIds
+      );
+      sessionStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
     }
     setItemIds("");
     closeDeleteModal();
@@ -116,9 +136,13 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
 
   const handleCartClose = () => {
     onClose();
-    setDeletedItems([]);
-    setItems([]);
-    setItemIds("");
+  };
+
+  const handleQuantityChange = async (id: string, quantity: number) => {
+    await updateCartQuantity.mutateAsync({
+      id: id,
+      data: { quantity },
+    });
   };
 
   const handleUpdateQuantity = async (id: string, quantity: number) => {
@@ -126,6 +150,21 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
       id: id,
       data: { quantity },
     });
+
+    const currentCartItems = JSON.parse(
+      sessionStorage.getItem("cartItems") || "[]"
+    );
+    // Update the quantity for the specified item
+    const updatedCartItems = currentCartItems.map((item: any) => {
+      if (item.id === id) {
+        return { ...item, quantity: quantity };
+      }
+      return item;
+    });
+
+    // Update the session storage with the new list of items
+    sessionStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    setItems(updatedCartItems);
   };
 
   return (
@@ -139,7 +178,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     >
       <DrawerOverlay />
       <DrawerContent pos={"relative"}>
-        {isRefetching ||
+        {isFetching ||
           (isPending && (
             <Flex
               pos={"absolute"}
@@ -153,15 +192,16 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
           ))}
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth={"1px"}>My Cart</DrawerHeader>
-        <DrawerBody>
+        <DrawerBody px={1}>
           {deletedItems.length > 0 && (
             <Button
               size={"xs"}
-              justifySelf={"end"}
               alignSelf={"end"}
               leftIcon={<Trash2 size={18} />}
               colorScheme="red"
               borderRadius={0}
+              py={4}
+              mb={4}
               onClick={() => handleDeleteModalOpen("")}
             >
               Delete
@@ -176,120 +216,151 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                 const isItemChecked = items.some(
                   (cartItem: any) => cartItem.id === item.id
                 );
-
                 return (
                   <Flex
                     borderBottomWidth={"1px"}
                     key={item.id}
-                    p={4}
                     align={"center"}
-                    justify={"space-between"}
                     gap={2}
+                    pb={4}
+                    flexWrap={{ base: "wrap", sm: "nowrap" }}
                   >
-                    <Checkbox
-                      defaultChecked={isItemChecked}
-                      name="checked_item"
-                      colorScheme="primary"
-                      value={item.id}
-                      checked={deletedItems.includes(item.id)}
-                      onChange={(e) =>
-                        handleCheckboxChange(item, e.target.checked)
-                      }
-                    />
-
-                    <Image
-                      borderRadius={"lg"}
-                      h={"100px"}
-                      w={"100px"}
-                      src={item.image ?? NoImage}
-                      objectFit={"cover"}
-                      objectPosition={"center"}
-                      loading="lazy"
-                      alt={item.name}
-                    />
-                    <Stack ml={3} w={"50%"}>
-                      <Text fontWeight={"bold"} fontSize={"lg"}>
-                        {item.product?.name}
-                      </Text>
-
-                      <HStack flexWrap={"wrap"}>
-                        {item.size && <Text>Size: {item.size.name} </Text>}
-                        {item.color && <Text>Color: {item.color.name} </Text>}
-                      </HStack>
-                      <HStack gap={2}>
-                        <IconButton
-                          onClick={() => {
-                            if (item.quantity > 1) {
-                              handleUpdateQuantity(item.id, item.quantity - 1);
+                    <HStack gap={2} w={"full"} align={"start"}>
+                      <Checkbox
+                        alignSelf={"center"}
+                        defaultChecked={isItemChecked}
+                        name="checked_item"
+                        colorScheme="primary"
+                        value={item.id}
+                        checked={deletedItems.includes(item.id)}
+                        onChange={(e) =>
+                          handleCheckboxChange(item, e.target.checked)
+                        }
+                      />
+                      <Image
+                        borderRadius={"sm"}
+                        w={"100px"}
+                        aspectRatio={1 / 1}
+                        src={item.product?.image ?? NoImage}
+                        objectFit={"cover"}
+                        objectPosition={"center"}
+                        loading="lazy"
+                        alt={item.name}
+                      />
+                      <Stack w={"full"} gap={{ base: 4, md: 8 }}>
+                        <Text
+                          noOfLines={{ base: 1, md: 2 }}
+                          fontSize={{ base: "14px", md: "16px" }}
+                        >
+                          {item.product?.name}
+                        </Text>
+                        {item.size ||
+                          (item.color && (
+                            <HStack flexWrap={"wrap"}>
+                              {item.size && (
+                                <Text>Size: {item.size.name} </Text>
+                              )}
+                              {item.color && (
+                                <Text>Color: {item.color.name} </Text>
+                              )}
+                            </HStack>
+                          ))}
+                        <Text
+                          display={{ base: "flex", sm: "none" }}
+                          fontSize={{ base: "12px", md: "14px" }}
+                          color={"gray.800"}
+                        >
+                          Rs.
+                          {item.size?.price
+                            ? item.size.price * item.quantity
+                            : item.product.price * item.quantity}
+                        </Text>
+                        <HStack gap={2}>
+                          <IconButton
+                            onClick={() => {
+                              if (item.quantity > 1) {
+                                handleUpdateQuantity(
+                                  item.id,
+                                  item.quantity - 1
+                                );
+                              }
+                            }}
+                            isDisabled={
+                              updateCartQuantity.isPending ||
+                              item.quantity === 1
                             }
-                          }}
-                          isDisabled={
-                            updateCartQuantity.isPending || item.quantity === 1
-                          }
-                          colorScheme="primary"
-                          borderRadius={0}
-                          aria-label="Decrease quantity"
-                          icon={<MinusIcon />}
-                          size={"xs"}
-                        />
-                        <Input
-                          onChange={(e) => {
-                            handleUpdateQuantity(
-                              item.id,
-                              Number(e.target.value)
-                            );
-                          }}
-                          isReadOnly={updateCartQuantity.isPending}
-                          type="number"
-                          size={"xs"}
-                          w={10}
-                          border={"none"}
-                          fontWeight={600}
-                          fontSize={"md"}
-                          focusBorderColor="primary.500"
-                          borderRadius={0}
-                          textAlign={"center"}
-                          px={0}
-                          id={`quantity-${item.id}`}
-                          name={`quantity-${item.id}`}
-                          value={item.quantity}
-                        />
-                        <IconButton
-                          aria-label="Increase quantity"
-                          onClick={() => {
-                            handleUpdateQuantity(item.id, item.quantity + 1);
-                          }}
-                          isDisabled={updateCartQuantity.isPending}
-                          icon={<PlusIcon />}
-                          colorScheme="primary"
-                          borderRadius={0}
-                          size={"xs"}
-                        />
-                      </HStack>
-                    </Stack>
-                    <Text textColor={"primary.500"}>
-                      Rs.
-                      {item.size?.price
-                        ? item.size.price * item.quantity
-                        : item.product.price * item.quantity}
-                    </Text>
-                    <IconButton
-                      w={"fit-content"}
-                      variant={"ghost"}
-                      colorScheme="red"
-                      textColor={"red.400"}
-                      boxSize={6}
-                      py={4}
-                      icon={<Trash2 />}
-                      aria-label="Delete item"
-                      onClick={() => handleDeleteModalOpen(item.id)}
-                    />
+                            colorScheme="primary"
+                            borderRadius={0}
+                            aria-label="Decrease quantity"
+                            icon={<MinusIcon />}
+                            size={"xs"}
+                          />
+                          <Input
+                            onChange={(e) =>
+                              handleQuantityChange(
+                                item.id,
+                                Number(e.target.value)
+                              )
+                            }
+                            type="number"
+                            isReadOnly
+                            size={"xs"}
+                            w={10}
+                            border={"1px solid #000"}
+                            fontWeight={600}
+                            fontSize={"md"}
+                            focusBorderColor="primary.500"
+                            borderRadius={0}
+                            textAlign={"center"}
+                            px={0}
+                            id={`quantity-${item.id}`}
+                            name={`quantity-${item.id}`}
+                            value={item.quantity}
+                          />
+
+                          <IconButton
+                            aria-label="Increase quantity"
+                            onClick={() => {
+                              handleUpdateQuantity(item.id, item.quantity + 1);
+                            }}
+                            isDisabled={updateCartQuantity.isPending}
+                            icon={<PlusIcon />}
+                            colorScheme="primary"
+                            borderRadius={0}
+                            size={"xs"}
+                          />
+                        </HStack>
+                      </Stack>
+                    </HStack>
+
+                    <HStack
+                      display={{ base: "none", sm: "flex" }}
+                      justifySelf={"end"}
+                      justify={"end"}
+                      gap={4}
+                    >
+                      <Text textColor={"primary.500"}>
+                        Rs.
+                        {item.size?.price
+                          ? item.size.price * item.quantity
+                          : item.product.price * item.quantity}
+                      </Text>
+                      <IconButton
+                        w={"fit-content"}
+                        variant={"ghost"}
+                        colorScheme="red"
+                        textColor={"red.400"}
+                        boxSize={6}
+                        py={4}
+                        icon={<Trash2 />}
+                        aria-label="Delete item"
+                        onClick={() => handleDeleteModalOpen(item.id)}
+                      />
+                    </HStack>
                   </Flex>
                 );
               })}
             </Flex>
-          ) : isPending ? (
-            <Spinner />
           ) : (
             <Text>No items in cart</Text>
           )}
@@ -322,6 +393,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
             aria-label="Checkout"
             icon={<Text>Checkout</Text>}
             onClick={handleCheckout}
+            isDisabled={items.length === 0}
           />
         </DrawerFooter>
         <DeleteAlert

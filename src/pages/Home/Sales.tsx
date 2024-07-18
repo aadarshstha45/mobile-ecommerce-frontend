@@ -1,8 +1,8 @@
+import { useFetchHomeSales } from "@/api/functions/Sales";
 import { ArrowForward } from "@/assets/icons/ArrowForward";
-import LazyLoadImage from "@/components/Image";
+import ItemDisplay from "@/components/ItemDisplay";
 import {
   Box,
-  Card,
   Container,
   Flex,
   GridItem,
@@ -12,11 +12,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-interface SalesProps {
-  salesData: any;
-}
-
-function Sales({ salesData }: SalesProps) {
+function Sales() {
+  const { data: salesData } = useFetchHomeSales();
   return (
     <Container
       as={"section"}
@@ -55,23 +52,16 @@ function Sales({ salesData }: SalesProps) {
           columns={{ base: 1, sm: 2, lg: 4 }}
           gap={{ base: 1, sm: 5 }}
         >
-          {salesData?.map((data: any) => (
-            <GridItem colSpan={1} key={data.id}>
-              <Card
-                h={"80%"}
-                p={0}
-                shadow={"none"}
-                borderRadius={0}
-                bg={"#D9D9D9"}
-              >
-                <LazyLoadImage
-                  id={data.id}
-                  src={data.image}
-                  alt={data.id.toString()}
+          {salesData &&
+            salesData.products.length > 0 &&
+            salesData.products.map((item: any) => (
+              <GridItem colSpan={1} key={item.id}>
+                <ItemDisplay
+                  data={item}
+                  discountPercent={salesData?.discount_percentage}
                 />
-              </Card>
-            </GridItem>
-          ))}
+              </GridItem>
+            ))}
         </SimpleGrid>
       </Flex>
     </Container>

@@ -19,10 +19,11 @@ import {
   MenuList,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Menu as MenuIcon } from "lucide-react";
+import { LogOutIcon, Menu as MenuIcon } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import CartDrawer from "../CartDrawer";
 import MobileNav from "./MobileNav";
+import { profileMenuItems } from "./MobileNav/profileMenuItems";
 
 function NavBar({ data }: any) {
   const path = useLocation().pathname.split("/")[1];
@@ -56,6 +57,9 @@ function NavBar({ data }: any) {
       as={"nav"}
       w="100%"
       p={{ base: 4, sm: 6 }}
+      pos={"fixed"}
+      h={{ base: "80px", md: "100px" }}
+      zIndex={99}
     >
       <Container maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}>
         <Flex align={"center"} justify={"space-between"}>
@@ -147,6 +151,7 @@ function NavBar({ data }: any) {
               >
                 <MenuButton>
                   <Avatar
+                    display={{ base: "none", md: "flex" }}
                     cursor={"pointer"}
                     src={data?.image ? `${data?.image}` : NoImage}
                     size={{ base: "sm", md: "md" }}
@@ -156,36 +161,42 @@ function NavBar({ data }: any) {
                 <MenuList
                   zIndex={9999}
                   minW={"fit-content"}
+                  maxW={"fit-content"}
                   borderColor={"primary.500"}
-                  py={0}
                   overflow={"hidden"}
+                  py={0}
                 >
-                  <Link
-                    as={NavLink}
-                    _hover={{ textDecor: "none" }}
-                    to="/profile/"
-                  >
-                    <MenuItem
-                      borderBottom={"1px solid"}
-                      borderColor={"primary.500"}
-                      _hover={{ bg: "primary.500", color: "white" }}
+                  {profileMenuItems.map((item, index) => (
+                    <Link
+                      key={index}
+                      as={NavLink}
+                      _hover={{ textDecor: "none" }}
+                      to={item.to}
                     >
-                      {data?.name}
-                    </MenuItem>
-                  </Link>
+                      <MenuItem
+                        borderBottom={"1px solid"}
+                        borderColor={"primary.500"}
+                        _hover={{ bg: "primary.500", color: "white" }}
+                        py={2}
+                        icon={<Icon as={item.icon} boxSize={4} />}
+                        fontSize={{ base: "12px", md: "14px" }}
+                      >
+                        {item.label}
+                      </MenuItem>
+                    </Link>
+                  ))}
                   <MenuItem
-                    display={{ base: "block", md: "none" }}
-                    borderBottom={"1px solid"}
                     borderColor={"primary.500"}
                     _hover={{ bg: "primary.500", color: "white" }}
-                    cursor={"pointer"}
-                    onClick={() => navigate("/profile/my-carts")}
-                  >
-                    My Carts
-                  </MenuItem>
-                  <MenuItem
-                    _hover={{ bg: "primary.500", color: "white" }}
-                    cursor={"pointer"}
+                    py={2}
+                    icon={
+                      <Icon
+                        transform={"rotate(180deg)"}
+                        as={LogOutIcon}
+                        boxSize={4}
+                      />
+                    }
+                    fontSize={{ base: "12px", md: "14px" }}
                     onClick={handleSignOut}
                   >
                     Logout
@@ -196,7 +207,6 @@ function NavBar({ data }: any) {
             <ShoppingCart
               onClick={handleCartOpen}
               cursor={"pointer"}
-              display={{ base: "none", md: "block" }}
               boxSize={{ base: 5, sm: 6 }}
             />
           </HStack>
