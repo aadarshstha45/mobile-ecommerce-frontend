@@ -13,7 +13,7 @@ import { Navigate } from "react-router-dom";
 const Home = lazy(() => import("@/pages/Home"));
 // const About = lazy(() => import("@/pages/About"));
 const Category = lazy(() => import("@/pages/Category"));
-const SpecialOffer = lazy(() => import("@/pages/SpecialOffer"));
+const Sales = lazy(() => import("@/pages/Sales"));
 const Checkout = lazy(() => import("@/pages/Checkout"));
 const Profile = lazy(() => import("@/pages/Profile"));
 const Cart = lazy(() => import("@/pages/Cart"));
@@ -58,8 +58,8 @@ export const appRoutes = [
         element: <ProductDetail />,
       },
       {
-        path: "special-offer",
-        element: <SpecialOffer />,
+        path: "sales-offer",
+        element: <Sales />,
       },
       {
         path: "checkout",

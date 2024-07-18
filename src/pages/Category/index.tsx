@@ -127,11 +127,20 @@ function Category() {
                   <LoadingSpinner />
                 ) : data && data.data?.length > 0 ? (
                   <ResponsiveMasonry
-                    columnsCountBreakPoints={{ 350: 1, 600: 2, 1200: 3 }}
+                    columnsCountBreakPoints={{
+                      350: 1,
+                      750: 2,
+                      900: 3,
+                      1300: 4,
+                    }}
                   >
                     <Masonry gutter="30px">
                       {data?.data.map((item: any) => (
-                        <ItemDisplay key={item.id} data={item} />
+                        <ItemDisplay
+                          key={item.id}
+                          data={item}
+                          discountPercent={item?.discount}
+                        />
                       ))}
                     </Masonry>
                   </ResponsiveMasonry>

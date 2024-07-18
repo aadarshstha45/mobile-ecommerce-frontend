@@ -26,7 +26,7 @@ const ItemDisplay = ({
   colorOptions,
   discountPercent,
 }: ItemDisplayProps) => {
-  console.log(data);
+  console.log(discountPercent);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -100,8 +100,8 @@ const ItemDisplay = ({
             <Flex
               justify={"center"}
               align={"center"}
-              h={"400px"}
               w={"full"}
+              aspectRatio={1 / 1}
               bgColor={"#D9D9D9"}
             >
               No Image
@@ -116,27 +116,18 @@ const ItemDisplay = ({
             textColor={"white"}
             gap={2}
           >
-            <Box w={"fit-content"} px={1} bg={"#FB4C51"} fontSize={"12px"}>
-              Sold Out
-            </Box>
             <Box w={"fit-content"} px={1} bg={"primary.500"} fontSize={"12px"}>
               New
             </Box>
-            {discountPercent && (
-              <Box
-                w={"fit-content"}
-                px={1}
-                bg={"#D2CFCF"}
-                textColor={"primary.500"}
-                fontSize={"12px"}
-              >
-                {discountPercent}% Off
+            {discountPercent! > 0 && (
+              <Box w={"fit-content"} px={1} bg={"red.500"} fontSize={"12px"}>
+                {discountPercent}%
               </Box>
             )}
           </Flex>
         </CardHeader>
         <CardBody px={0}>
-          <Text fontSize={"13px"} fontWeight={600} textColor={"#939292"}>
+          <Text fontSize={"12px"} fontWeight={600} textColor={"#939292"}>
             {data.category?.name}
           </Text>
           <HStack justify={"space-between"} align={"center"}>
@@ -172,18 +163,18 @@ const ItemDisplay = ({
                   />
                 ))}
             </HStack>
-            <HStack spacing={"2px"}>
+            <HStack gap={2} align={"center"}>
               <Text
-                fontSize={data.discount ? "13px" : "16px"}
+                fontSize={discountPercent ? "13px" : "16px"}
                 fontWeight={500}
-                textColor={data.discount ? "#939292" : ""}
-                textDecoration={data.discount ? "line-through" : "none"}
+                textColor={discountPercent ? "#939292" : ""}
+                textDecoration={discountPercent ? "line-through" : "none"}
               >
-                ${data.price}
+                Rs. {data.price}
               </Text>
-              {data.discount && (
+              {discountPercent && (
                 <Text fontSize={"16px"} fontWeight={600}>
-                  ${data.discount}
+                  Rs.{data.price * (1 - discountPercent / 100)}
                 </Text>
               )}
             </HStack>
