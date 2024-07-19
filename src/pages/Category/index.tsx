@@ -1,20 +1,10 @@
 import { useFetchProductsByCategory } from "@/api/functions/Category";
+import BreadCrumbs from "@/components/BreadCrumbs";
 import SelectInput from "@/components/Form/SelectInput";
 import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
 import { PaginationButton } from "@/components/Pagination";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Container,
-  Flex,
-  Heading,
-  Stack,
-  Text,
-  useMediaQuery,
-} from "@chakra-ui/react";
+import { Container, Flex, Stack, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -86,29 +76,13 @@ function Category() {
             align={isLessThan540 ? "center" : "space-between"}
           >
             <Stack gap={2}>
-              <Heading>{data?.breadcrumbs?.category.name}</Heading>
-              <Breadcrumb
-                spacing="8px"
-                separator={<ChevronRightIcon color="gray.700" />}
+              <Text
+                fontSize={{ base: "18px", sm: "20px", md: "22px", lg: "24px" }}
+                fontWeight={500}
               >
-                <BreadcrumbItem>
-                  <BreadcrumbLink href={"/"}>Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href={`/${data?.breadcrumbs?.category.slug}`}>
-                    {data?.breadcrumbs?.category.name}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                {data?.breadcrumbs.subcategory && (
-                  <BreadcrumbItem>
-                    <BreadcrumbLink
-                      href={`/${data?.breadcrumbs?.category.slug}/${data?.breadcrumbs.subcategory.slug}`}
-                    >
-                      {data?.breadcrumbs.subcategory.name}
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                )}
-              </Breadcrumb>
+                {data?.breadcrumbs?.category.name}
+              </Text>
+              <BreadCrumbs />
             </Stack>
             <SelectInput
               isControlled={false}
@@ -119,7 +93,7 @@ function Category() {
               options={sortOptions}
             />
           </Flex>
-          <Flex flexDir={"column"} gap={4}>
+          <Flex mt={-6} flexDir={"column"} gap={4}>
             <Flex gap={4} mt={12}>
               <Flex flexDir={"column"} w={{ base: "full" }}>
                 {isFetching ? (

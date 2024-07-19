@@ -177,6 +177,7 @@ export const TextInput = ({
                   bg={"transparent"}
                   onClick={handleShowPassword}
                   aria-label="Show Password"
+                  color={"#000"}
                   icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
                 />
               </InputRightElement>

@@ -44,9 +44,9 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
       payment: data.payment,
     });
     setStepData({});
-    console.log("After clearing:", stepData);
     sessionStorage.removeItem("cartItems");
     navigate("/");
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   return (
@@ -87,7 +87,7 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
                   fontSize={"lg"}
                 >
                   Rs.
-                  {item.size.price
+                  {item.size && item.size.price
                     ? item.size.price * item.quantity
                     : item.product?.price * item.quantity}
                 </Heading>

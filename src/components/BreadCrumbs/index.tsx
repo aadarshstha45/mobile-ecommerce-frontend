@@ -1,17 +1,47 @@
-import { Breadcrumb, BreadcrumbItem } from "@chakra-ui/react";
-import { ChevronRightIcon } from "lucide-react";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
+import { ChevronRight } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 interface BreadCrumbsProps {
-  children: React.ReactNode;
+  bg?: string;
 }
 
-const BreadCrumbs = ({ children }: BreadCrumbsProps) => {
+const BreadCrumbs = ({ bg }: BreadCrumbsProps) => {
+  const location = useLocation();
+  let currentLink = "";
+
+  const crumbs = location.pathname
+    .split("/")
+    .filter((crumb) => crumb !== "" && crumb !== "product")
+    .map((crumb) => {
+      currentLink += `/${crumb}`;
+      const crumbWithSpaces = crumb.replace(/-/g, " ");
+
+      return (
+        <BreadcrumbLink
+          textTransform={"capitalize"}
+          as={Link}
+          to={currentLink}
+          key={crumb}
+        >
+          {crumbWithSpaces}
+        </BreadcrumbLink>
+      );
+    });
+
   return (
-    <Breadcrumb
-      spacing="20px"
-      separator={<ChevronRightIcon color="gray.500" />}
-    >
-      <BreadcrumbItem>{children}</BreadcrumbItem>
+    <Breadcrumb bg={bg} separator={<ChevronRight />}>
+      {crumbs.map((crumb, index) => (
+        <BreadcrumbItem key={index}>
+          <BreadcrumbLink
+            textTransform={"capitalize"}
+            as={Link}
+            to={currentLink}
+          >
+            {crumb}
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      ))}
     </Breadcrumb>
   );
 };

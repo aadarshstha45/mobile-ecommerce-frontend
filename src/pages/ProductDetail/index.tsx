@@ -5,6 +5,7 @@ import { useFetchProductById } from "@/api/functions/Product";
 import { useSaveWishlist } from "@/api/functions/Wishlist";
 import ShoppingCart from "@/assets/icons/ShoppingCart";
 import NoImage from "@/assets/images/NoImage.png";
+import BreadCrumbs from "@/components/BreadCrumbs";
 import RadioBox from "@/components/Form/RadioBox";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
@@ -178,6 +179,7 @@ function ProductDetail() {
 
   return (
     <Flex flexDir={"column"}>
+      <BreadCrumbs />
       <Container
         maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}
         id="product-detail"
@@ -297,7 +299,13 @@ function ProductDetail() {
                         </Text>
                         {colorOptions.length > 0 && (
                           <>
-                            <Flex flexDir={"column"} mt={4} gap={2}>
+                            <Flex
+                              borderBottom={"1px solid"}
+                              borderColor={"primary.500"}
+                              py={4}
+                              flexDir={"column"}
+                              gap={2}
+                            >
                               <Text
                                 fontSize={{
                                   base: "12px",
@@ -318,17 +326,17 @@ function ProductDetail() {
                                 control={control}
                               />
                             </Flex>
-                            <Divider
-                              opacity={1}
-                              borderColor={"primary.500"}
-                              w={"full"}
-                              my={4}
-                            />
                           </>
                         )}
                         {sizeOptions && sizeOptions.length > 0 && (
                           <>
-                            <Flex flexDir={"column"} gap={2}>
+                            <Flex
+                              borderBottom={"1px solid"}
+                              borderColor={"primary.500"}
+                              py={4}
+                              flexDir={"column"}
+                              gap={2}
+                            >
                               <Text
                                 fontSize={{
                                   base: "12px",
@@ -348,16 +356,15 @@ function ProductDetail() {
                                 control={control}
                               />
                             </Flex>
-
-                            <Divider
-                              opacity={1}
-                              borderColor={"primary.500"}
-                              w={"full"}
-                              my={4}
-                            />
                           </>
                         )}
-                        <Flex flexDir={"column"} gap={2}>
+                        <Flex
+                          borderBottom={"1px solid"}
+                          borderColor={"primary.500"}
+                          py={4}
+                          flexDir={"column"}
+                          gap={2}
+                        >
                           <Text
                             fontSize={{
                               base: "12px",
@@ -390,23 +397,37 @@ function ProductDetail() {
                             />
                           </HStack>
                         </Flex>
-                        <Divider
-                          opacity={1}
-                          borderColor={"primary.500"}
-                          w={"full"}
-                          my={4}
-                        />
                       </Flex>
-                      <Stack gap={4}>
-                        <Text
-                          fontSize={{
-                            base: "12px",
-                            md: "14px",
-                            lg: "16px",
-                          }}
-                        >
-                          Price: Rs. {price ?? data?.price}
-                        </Text>
+                      <Stack py={4} gap={4}>
+                        <HStack>
+                          {data?.discount && (
+                            <Text
+                              fontSize={{
+                                base: "12px",
+                                sm: "14px",
+                                lg: "16px",
+                              }}
+                              fontWeight={500}
+                            >
+                              Rs.{price && price * (1 - data?.discount / 100)}
+                            </Text>
+                          )}
+                          <Text
+                            fontSize={
+                              data?.discount
+                                ? { base: "10px", sm: "12px", lg: "14px" }
+                                : { base: "12px", sm: "14px", lg: "16px" }
+                            }
+                            textColor={data?.discount ? "#939292" : ""}
+                            textDecoration={
+                              data?.discount ? "line-through" : "none"
+                            }
+                            fontWeight={data?.discount ? 400 : 500}
+                          >
+                            Rs. {data.price}
+                          </Text>
+                        </HStack>
+
                         <Wrap gap={4}>
                           <WrapItem>
                             <Button
