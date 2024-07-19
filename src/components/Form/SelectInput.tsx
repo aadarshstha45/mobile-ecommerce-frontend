@@ -19,7 +19,7 @@ interface SelectProps {
   isRequired?: boolean;
   isReadOnly?: boolean;
   value?: string | number;
-  errors: FieldErrors | null;
+  errors?: FieldErrors | null;
 }
 
 export const countryOptions = CountryCodes.map((country) => ({

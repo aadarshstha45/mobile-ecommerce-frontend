@@ -204,11 +204,13 @@ function NavBar({ data }: any) {
                 </MenuList>
               </Menu>
             )}
-            <ShoppingCart
-              onClick={handleCartOpen}
-              cursor={"pointer"}
-              boxSize={{ base: 5, sm: 6 }}
-            />
+            {isAuthenticated && (
+              <ShoppingCart
+                onClick={handleCartOpen}
+                cursor={"pointer"}
+                boxSize={{ base: 5, sm: 6 }}
+              />
+            )}
           </HStack>
         </Flex>
         <CartDrawer isOpen={isOpen} onClose={onClose} />

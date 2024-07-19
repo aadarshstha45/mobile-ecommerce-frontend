@@ -15,6 +15,12 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import LazyLoadImage from "../Image";
 
+export const columnBreakpoints = {
+  350: 1,
+  450: 2,
+  850: 3,
+  1300: 4,
+};
 interface ItemDisplayProps {
   data: any;
   colorOptions?: any;
@@ -30,6 +36,7 @@ const ItemDisplay = ({
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <Link
       to={
@@ -120,8 +127,14 @@ const ItemDisplay = ({
               New
             </Box>
             {discountPercent! > 0 && (
-              <Box w={"fit-content"} px={1} bg={"red.500"} fontSize={"12px"}>
-                {discountPercent}%
+              <Box
+                w={"fit-content"}
+                px={1}
+                py={0.5}
+                bg={"red.400"}
+                fontSize={"12px"}
+              >
+                {discountPercent} %
               </Box>
             )}
           </Flex>
@@ -130,30 +143,19 @@ const ItemDisplay = ({
           <Text fontSize={"12px"} fontWeight={600} textColor={"#939292"}>
             {data.category?.name}
           </Text>
-          <HStack justify={"space-between"} align={"center"}>
-            <Text fontSize={"16px"} fontWeight={500}>
+          <Stack mb={2}>
+            <Text
+              noOfLines={1}
+              fontSize={{ base: "14px", sm: "16px", lg: "18px" }}
+              fontWeight={500}
+            >
               {data.name}
             </Text>
-            <HStack spacing={"2px"}>
-              {...Array(5)
-                .fill(0)
-                .map((_, index) => (
-                  <StarIcon
-                    key={index}
-                    boxSize={3}
-                    color={
-                      index < Math.floor(data.averageRating)
-                        ? "#FFC700"
-                        : "#FFC700"
-                    }
-                  />
-                ))}
-            </HStack>
-          </HStack>
-          <HStack justify={"space-between"} align={"center"}>
-            <HStack spacing={"4px"}>
-              {colorOptions &&
-                colorOptions?.map((color: any, index: number) => (
+          </Stack>
+          <HStack justify={"space-between"}>
+            {colorOptions && (
+              <HStack spacing={"4px"}>
+                {colorOptions?.map((color: any, index: number) => (
                   <Box
                     key={index}
                     h={"14px"}
@@ -162,22 +164,38 @@ const ItemDisplay = ({
                     bg={color.option}
                   />
                 ))}
-            </HStack>
-            <HStack gap={2} align={"center"}>
+              </HStack>
+            )}
+          </HStack>
+          <HStack spacing={"2px"}>
+            <StarIcon boxSize={3} color={"#FFC700"} />
+            <Text fontSize={"12px"} fontWeight={500} textColor={"#939292"}>
+              {/* {data.rating} ({data.ratingCount}) */}
+              {/* Hardcoded values */}
+              4.5 / 20 (200)
+            </Text>
+          </HStack>
+          <HStack gap={2} mt={2}>
+            <Text
+              fontSize={
+                discountPercent
+                  ? { base: "10px", sm: "12px", lg: "14px" }
+                  : { base: "12px", sm: "14px", lg: "16px" }
+              }
+              textColor={discountPercent ? "#939292" : ""}
+              textDecoration={discountPercent ? "line-through" : "none"}
+              fontWeight={discountPercent ? 400 : 500}
+            >
+              Rs. {data.price}
+            </Text>
+            {discountPercent && (
               <Text
-                fontSize={discountPercent ? "13px" : "16px"}
+                fontSize={{ base: "12px", sm: "14px", lg: "16px" }}
                 fontWeight={500}
-                textColor={discountPercent ? "#939292" : ""}
-                textDecoration={discountPercent ? "line-through" : "none"}
               >
-                Rs. {data.price}
+                Rs.{data.price * (1 - discountPercent / 100)}
               </Text>
-              {discountPercent && (
-                <Text fontSize={"16px"} fontWeight={600}>
-                  Rs.{data.price * (1 - discountPercent / 100)}
-                </Text>
-              )}
-            </HStack>
+            )}
           </HStack>
         </CardBody>
       </Card>

@@ -5,17 +5,14 @@ import { lazy, useState } from "react";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
-import { salesData } from "./data";
-import { handPickedData } from "./data/data";
-import { wardrobeData } from "./data/wardrobeData";
 
 // import pages
 const Sales = lazy(() => import("./Sales"));
 const Customer = lazy(() => import("./Customer"));
 const NewArrivals = lazy(() => import("./NewArrivals"));
-const Wardrobe = lazy(() => import("./Wardrobe"));
+// const Wardrobe = lazy(() => import("./Wardrobe"));
 const Discount = lazy(() => import("./Discount"));
-const HandPicked = lazy(() => import("./HandPicked"));
+// const HandPicked = lazy(() => import("./HandPicked"));
 // const Instagram = lazy(() => import("./Instagram"));
 
 const sliderData = [
@@ -43,8 +40,8 @@ const Home = () => {
         className="hero-slider"
         slidesPerView={1}
         loop={true}
-        autoplay={{ delay: 4000 }}
-        speed={4000}
+        autoplay={{ delay: 3000 }}
+        speed={3000}
         modules={[Autoplay]}
       >
         {sliderData?.map((data) => (
@@ -73,15 +70,15 @@ const Home = () => {
         ))}
       </Swiper>
 
-      <Sales salesData={salesData} />
+      <Sales />
       <Customer />
       <NewArrivals />
-      <Wardrobe
+      {/* <Wardrobe
         menWardrobeData={wardrobeData}
         womenWardrobeData={wardrobeData}
-      />
+      /> */}
       <Discount />
-      <HandPicked data={handPickedData} />
+      {/* <HandPicked data={handPickedData} /> */}
       {/* <Instagram /> */}
     </Flex>
   );

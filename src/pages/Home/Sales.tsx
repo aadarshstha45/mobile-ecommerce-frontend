@@ -1,16 +1,8 @@
 import { useFetchHomeSales } from "@/api/functions/Sales";
 import { ArrowForward } from "@/assets/icons/ArrowForward";
-import ItemDisplay from "@/components/ItemDisplay";
-import {
-  Box,
-  Container,
-  Flex,
-  GridItem,
-  HStack,
-  Link,
-  SimpleGrid,
-  Text,
-} from "@chakra-ui/react";
+import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
+import { Box, Container, Flex, HStack, Link, Text } from "@chakra-ui/react";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 function Sales() {
   const { data: salesData } = useFetchHomeSales();
@@ -48,21 +40,19 @@ function Sales() {
             <ArrowForward boxSize={{ base: 4, md: 5 }} />
           </HStack>
         </Flex>
-        <SimpleGrid
-          columns={{ base: 1, sm: 2, lg: 4 }}
-          gap={{ base: 1, sm: 5 }}
-        >
-          {salesData &&
-            salesData.products.length > 0 &&
-            salesData.products.map((item: any) => (
-              <GridItem colSpan={1} key={item.id}>
+
+        {salesData && salesData.products.length > 0 && (
+          <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
+            <Masonry gutter="30px">
+              {salesData.products.map((item: any) => (
                 <ItemDisplay
                   data={item}
                   discountPercent={salesData?.discount_percentage}
                 />
-              </GridItem>
-            ))}
-        </SimpleGrid>
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
+        )}
       </Flex>
     </Container>
   );

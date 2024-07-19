@@ -13,10 +13,11 @@ import {
   Container,
   Divider,
   Flex,
-  Grid,
+  GridItem,
   HStack,
   IconButton,
   Image,
+  SimpleGrid,
   Stack,
   Text,
   useDisclosure,
@@ -60,6 +61,7 @@ function ProductDetail() {
     },
   });
   const [displayImage, setDisplayImage] = useState<string>();
+  const [colorImages, setColorImages] = useState<any[]>([]);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -109,6 +111,18 @@ function ProductDetail() {
           setPrice(selectedColor.price);
           setSizeOptions([]);
         }
+
+        const images = selectedColor.images;
+        if (images && images.length > 0) {
+          setColorImages(images);
+          setDisplayImage(images[0].image);
+        } else if (data?.product_images && data.product_images.length > 0) {
+          setColorImages(data?.product_images);
+          setDisplayImage(data?.product_images[0].image);
+        } else {
+          setColorImages([]);
+          setDisplayImage(data?.image);
+        }
       } else {
         const sizes = data.product_properties?.[0]?.sizes?.map((size: any) => ({
           label: size.size?.name,
@@ -119,6 +133,10 @@ function ProductDetail() {
           setSizeId(sizes[0].value);
           setValue("size_id", sizes[0].value);
           setSizeOptions(sizes);
+        }
+        const images = data.product_properties?.[0]?.images;
+        if (images && images.length > 0) {
+          setColorImages(images);
         }
       }
     }
@@ -176,200 +194,267 @@ function ProductDetail() {
             </Flex>
           ) : (
             <>
-              <Grid
-                templateColumns={{ base: "1fr", md: "repeat(2,1fr)" }}
-                gap={10}
-              >
-                <Flex alignContent={"center"} flexDir={"column"} gap={10}>
-                  {displayImage ? (
-                    <Image
-                      w={"full"}
-                      aspectRatio={4 / 3}
-                      src={`${displayImage}`}
-                      objectFit={"cover"}
-                    />
-                  ) : (
-                    <Flex
-                      w={"full"}
-                      aspectRatio={4 / 3}
-                      align={"center"}
-                      justify={"center"}
-                    >
-                      <Image w={"200px"} h={"200px"} src={NoImage} />
-                    </Flex>
-                  )}
-
-                  {data?.product_images && (
-                    <Flex
-                      sx={{
-                        "&::-webkit-scrollbar": {
-                          height: "5px", // Height of the scrollbar
-                          backgroundCol1or: "transparent", // Background color of the scrollbar track
-                          py: 100,
-                        },
-                        "&::-webkit-scrollbar-thumb": {
-                          backgroundColor: "#4A57B3", // Color of the scrollbar thumb
-                          borderRadius: "10px", // Rounded corners for the thumb
-                          border: "3px solid #4A57B3", // Border to make it visible
-                          scrollBehavior: "smooth",
-                        },
-                        "&::-webkit-scrollbar-thumb:hover": {
-                          backgroundColor: "#404E9E", // Color of the thumb on hover
-                        },
-                        "&::-webkit-scrollbar-track": {
-                          borderRadius: "10px", // Rounded corners for the track
-                        },
-                      }}
-                      gap={2}
-                      overflowX={"scroll"}
-                    >
-                      {displayImage && (
-                        <Image
-                          w={40}
-                          aspectRatio={4 / 3}
-                          onClick={() => setDisplayImage(data?.image)}
-                          src={`${data?.image}`}
-                          objectFit={"cover"}
-                        />
-                      )}
-                      {data?.product_images.map((image: any) => (
-                        <Image
-                          objectFit={"cover"}
-                          w={40}
-                          aspectRatio={4 / 3}
-                          key={image.id}
-                          onClick={() => setDisplayImage(image.image)}
-                          src={`${image.image}`}
-                        />
-                      ))}
-                    </Flex>
-                  )}
-                </Flex>
-                <Flex gap={10}>
-                  <ModalLogin isOpen={isOpen} onClose={onClose} />
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <Flex flexDir={"column"}>
-                      <Text fontSize={"xl"}>{data?.name}</Text>
-                      <Text fontSize={"sm"}>{data?.category?.name}</Text>
-                      {colorOptions.length > 0 && (
-                        <>
-                          <Flex flexDir={"column"} mt={4} gap={2}>
-                            <Text fontSize={"lg"}>Available Colors: </Text>
-
-                            <RadioBox
-                              handleChange={(value: string) => {
-                                setValue("color_id", value);
-                                setColorId(parseInt(value));
-                              }}
-                              options={colorOptions}
-                              name="color_id"
-                              control={control}
-                            />
-                          </Flex>
-                          <Divider
-                            opacity={1}
-                            borderColor={"primary.500"}
-                            w={"full"}
-                            my={4}
-                          />
-                        </>
-                      )}
-                      {sizeOptions && sizeOptions.length > 0 && (
-                        <>
-                          <Flex flexDir={"column"} gap={2}>
-                            <Text fontSize={"lg"}>Available Sizes: </Text>
-                            <RadioBox
-                              handleChange={(value: string) => {
-                                setValue("size_id", value);
-                                setSizeId(parseInt(value));
-                              }}
-                              options={sizeOptions}
-                              name="size_id"
-                              control={control}
-                            />
-                          </Flex>
-
-                          <Divider
-                            opacity={1}
-                            borderColor={"primary.500"}
-                            w={"full"}
-                            my={4}
-                          />
-                        </>
-                      )}
-                      <Flex flexDir={"column"} gap={2}>
-                        <Text fontSize={"lg"}>Quantity </Text>
-                        <HStack gap={3}>
-                          <IconButton
-                            aria-label="decrement"
-                            colorScheme="primary"
-                            icon={<MinusIcon />}
-                            borderRadius={0}
-                            size={"xs"}
-                            isDisabled={count === 1}
-                            onClick={() => setCount(count - 1)}
-                          />
-                          <Text fontWeight={700} fontSize={"20px"}>
-                            {count}
-                          </Text>
-                          <IconButton
-                            aria-label="increment"
-                            size={"xs"}
-                            colorScheme="primary"
-                            icon={<AddIcon />}
-                            borderRadius={0}
-                            onClick={() => setCount(count + 1)}
-                          />
-                        </HStack>
-                      </Flex>
-                      <Divider
-                        opacity={1}
-                        borderColor={"primary.500"}
-                        w={"full"}
-                        my={4}
+              <SimpleGrid columns={{ base: 1, sm: 2 }} spacingX={6} spacing={4}>
+                <GridItem colSpan={1}>
+                  <Flex
+                    flexDir={"column"}
+                    align={"center"}
+                    justify={"center"}
+                    gap={10}
+                  >
+                    {displayImage ? (
+                      <Image
+                        w={{ base: "250px", md: "70%" }}
+                        aspectRatio={1 / 1}
+                        src={`${displayImage}`}
+                        objectFit={"cover"}
+                        objectPosition={"center"}
                       />
-                    </Flex>
-                    <Stack gap={4}>
-                      <Text fontSize={"lg"}>
-                        Price: Rs. {price ?? data?.price}
-                      </Text>
-                      <Wrap gap={4}>
-                        <WrapItem>
-                          <Button
-                            colorScheme="primary"
-                            w={"fit-content"}
-                            borderRadius={0}
-                            fontWeight={400}
-                            fontSize={"sm"}
-                            rightIcon={
-                              <ShoppingCart stroke={"white"} boxSize={5} />
-                            }
-                            isLoading={addToCart.isPending}
-                            type={"submit"}
+                    ) : (
+                      <Flex
+                        aspectRatio={1 / 1}
+                        align={"center"}
+                        justify={"center"}
+                      >
+                        <Image
+                          w={{ base: "250px", md: "70%" }}
+                          justifySelf={"center"}
+                          aspectRatio={1 / 1}
+                          src={NoImage}
+                        />
+                      </Flex>
+                    )}
+
+                    {colorImages && (
+                      <Flex
+                        sx={{
+                          "&::-webkit-scrollbar": {
+                            height: "5px", // Height of the scrollbar
+                            backgroundCol1or: "transparent", // Background color of the scrollbar track
+                            py: 100,
+                          },
+                          "&::-webkit-scrollbar-thumb": {
+                            backgroundColor: "#4A57B3", // Color of the scrollbar thumb
+                            borderRadius: "10px", // Rounded corners for the thumb
+                            border: "3px solid #4A57B3", // Border to make it visible
+                            scrollBehavior: "smooth",
+                          },
+                          "&::-webkit-scrollbar-thumb:hover": {
+                            backgroundColor: "#404E9E", // Color of the thumb on hover
+                          },
+                          "&::-webkit-scrollbar-track": {
+                            borderRadius: "10px", // Rounded corners for the track
+                          },
+                        }}
+                        gap={2}
+                        overflowX={"scroll"}
+                        alignSelf={"start"}
+                      >
+                        {displayImage && (
+                          <Image
+                            w={{ base: "100px", md: "150px" }}
+                            aspectRatio={1 / 1}
+                            onClick={() => setDisplayImage(data?.image)}
+                            src={`${data?.image}`}
+                            objectFit={"cover"}
+                            border={displayImage === data?.image ? "1px" : "0"}
+                            borderColor={"primary.500"}
+                          />
+                        )}
+                        {colorImages.map((image: any) => (
+                          <Image
+                            objectFit={"cover"}
+                            w={{ base: "100px", md: "150px" }}
+                            aspectRatio={1 / 1}
+                            key={image.index}
+                            onClick={() => setDisplayImage(image.image)}
+                            src={`${image.image}`}
+                            border={displayImage === image.image ? "1px" : "0"}
+                            borderColor={"primary.500"}
+                          />
+                        ))}
+                      </Flex>
+                    )}
+                  </Flex>
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <Flex gap={10}>
+                    <ModalLogin isOpen={isOpen} onClose={onClose} />
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <Flex flexDir={"column"}>
+                        <Text fontSize={{ base: "16px", md: "18px" }}>
+                          {data?.name}
+                        </Text>
+                        <Text
+                          mt={2}
+                          textColor={"#939292"}
+                          fontSize={{
+                            base: "12px",
+                            md: "14px ",
+                          }}
+                        >
+                          {data?.category?.name}
+                        </Text>
+                        {colorOptions.length > 0 && (
+                          <>
+                            <Flex flexDir={"column"} mt={4} gap={2}>
+                              <Text
+                                fontSize={{
+                                  base: "12px",
+                                  md: "14px",
+                                  lg: "16px",
+                                }}
+                              >
+                                Available Colors:{" "}
+                              </Text>
+
+                              <RadioBox
+                                handleChange={(value: string) => {
+                                  setValue("color_id", value);
+                                  setColorId(parseInt(value));
+                                }}
+                                options={colorOptions}
+                                name="color_id"
+                                control={control}
+                              />
+                            </Flex>
+                            <Divider
+                              opacity={1}
+                              borderColor={"primary.500"}
+                              w={"full"}
+                              my={4}
+                            />
+                          </>
+                        )}
+                        {sizeOptions && sizeOptions.length > 0 && (
+                          <>
+                            <Flex flexDir={"column"} gap={2}>
+                              <Text
+                                fontSize={{
+                                  base: "12px",
+                                  md: "14px",
+                                  lg: "16px",
+                                }}
+                              >
+                                Available Sizes:{" "}
+                              </Text>
+                              <RadioBox
+                                handleChange={(value: string) => {
+                                  setValue("size_id", value);
+                                  setSizeId(parseInt(value));
+                                }}
+                                options={sizeOptions}
+                                name="size_id"
+                                control={control}
+                              />
+                            </Flex>
+
+                            <Divider
+                              opacity={1}
+                              borderColor={"primary.500"}
+                              w={"full"}
+                              my={4}
+                            />
+                          </>
+                        )}
+                        <Flex flexDir={"column"} gap={2}>
+                          <Text
+                            fontSize={{
+                              base: "12px",
+                              md: "14px",
+                              lg: "16px",
+                            }}
                           >
-                            Add to Cart
-                          </Button>
-                        </WrapItem>
-                        <WrapItem>
-                          <Button
-                            colorScheme="primary"
-                            w={"fit-content"}
-                            borderRadius={0}
-                            fontWeight={400}
-                            fontSize={"sm"}
-                            rightIcon={<HeartIcon />}
-                            variant={"outline"}
-                            isLoading={addToWishList.isPending}
-                            onClick={handleWishList}
-                          >
-                            Add to WishList
-                          </Button>
-                        </WrapItem>
-                      </Wrap>
-                    </Stack>
-                  </form>
-                </Flex>
-              </Grid>
+                            Quantity{" "}
+                          </Text>
+                          <HStack gap={3}>
+                            <IconButton
+                              aria-label="decrement"
+                              colorScheme="primary"
+                              icon={<MinusIcon />}
+                              borderRadius={0}
+                              size={"xs"}
+                              isDisabled={count === 1}
+                              onClick={() => setCount(count - 1)}
+                            />
+                            <Text fontWeight={700} fontSize={"20px"}>
+                              {count}
+                            </Text>
+                            <IconButton
+                              aria-label="increment"
+                              size={"xs"}
+                              colorScheme="primary"
+                              icon={<AddIcon />}
+                              borderRadius={0}
+                              onClick={() => setCount(count + 1)}
+                            />
+                          </HStack>
+                        </Flex>
+                        <Divider
+                          opacity={1}
+                          borderColor={"primary.500"}
+                          w={"full"}
+                          my={4}
+                        />
+                      </Flex>
+                      <Stack gap={4}>
+                        <Text
+                          fontSize={{
+                            base: "12px",
+                            md: "14px",
+                            lg: "16px",
+                          }}
+                        >
+                          Price: Rs. {price ?? data?.price}
+                        </Text>
+                        <Wrap gap={4}>
+                          <WrapItem>
+                            <Button
+                              colorScheme="primary"
+                              w={"fit-content"}
+                              borderRadius={0}
+                              fontWeight={400}
+                              fontSize={{
+                                base: "12px",
+                                md: "14px",
+                                lg: "16px",
+                              }}
+                              size={"sm"}
+                              rightIcon={
+                                <ShoppingCart stroke={"white"} boxSize={5} />
+                              }
+                              isLoading={addToCart.isPending}
+                              type={"submit"}
+                            >
+                              Add to Cart
+                            </Button>
+                          </WrapItem>
+                          <WrapItem>
+                            <Button
+                              colorScheme="primary"
+                              w={"fit-content"}
+                              borderRadius={0}
+                              fontWeight={400}
+                              fontSize={{
+                                base: "12px",
+                                md: "14px",
+                                lg: "16px",
+                              }}
+                              size={"sm"}
+                              rightIcon={<HeartIcon />}
+                              variant={"outline"}
+                              isLoading={addToWishList.isPending}
+                              onClick={handleWishList}
+                            >
+                              Add to WishList
+                            </Button>
+                          </WrapItem>
+                        </Wrap>
+                      </Stack>
+                    </form>
+                  </Flex>
+                </GridItem>
+              </SimpleGrid>
               <DetailTab description={data?.description} />
               <Divider opacity={1} borderColor={"gray.300"} />
               <Ratings />

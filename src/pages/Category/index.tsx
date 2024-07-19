@@ -1,6 +1,6 @@
 import { useFetchProductsByCategory } from "@/api/functions/Category";
 import SelectInput from "@/components/Form/SelectInput";
-import ItemDisplay from "@/components/ItemDisplay";
+import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
 import { PaginationButton } from "@/components/Pagination";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { ChevronRightIcon } from "@chakra-ui/icons";
@@ -117,7 +117,6 @@ function Category() {
               name={"sort"}
               handleChange={handleSelectChange}
               options={sortOptions}
-              errors={null}
             />
           </Flex>
           <Flex flexDir={"column"} gap={4}>
@@ -127,12 +126,7 @@ function Category() {
                   <LoadingSpinner />
                 ) : data && data.data?.length > 0 ? (
                   <ResponsiveMasonry
-                    columnsCountBreakPoints={{
-                      350: 1,
-                      750: 2,
-                      900: 3,
-                      1300: 4,
-                    }}
+                    columnsCountBreakPoints={columnBreakpoints}
                   >
                     <Masonry gutter="30px">
                       {data?.data.map((item: any) => (

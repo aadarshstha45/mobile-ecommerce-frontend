@@ -11,6 +11,17 @@ interface DetailTabProps {
   description?: string;
 }
 
+const tabList = [
+  {
+    id: 1,
+    title: "Specifications",
+  },
+  {
+    id: 2,
+    title: "Details",
+  },
+];
+
 const DetailTab = ({ description }: DetailTabProps) => {
   return (
     <Tabs
@@ -19,10 +30,16 @@ const DetailTab = ({ description }: DetailTabProps) => {
       position="relative"
       variant="unstyled"
     >
-      <TabList justifySelf={"center"}>
-        <Tab>ProductDetail</Tab>
-        <Tab>Two</Tab>
-        <Tab>Three</Tab>
+      <TabList
+        fontSize={{
+          base: "12px",
+          md: "14px ",
+        }}
+        justifySelf={"center"}
+      >
+        {tabList.map((tab) => (
+          <Tab fontSize={{ base: "16px", md: "18px" }}>{tab.title}</Tab>
+        ))}
       </TabList>
       <TabIndicator
         mt="-1.5px"
@@ -36,9 +53,6 @@ const DetailTab = ({ description }: DetailTabProps) => {
         </TabPanel>
         <TabPanel>
           <p>two!</p>
-        </TabPanel>
-        <TabPanel>
-          <p>three!</p>
         </TabPanel>
       </TabPanels>
     </Tabs>

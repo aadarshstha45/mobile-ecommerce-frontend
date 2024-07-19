@@ -32,7 +32,6 @@ import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeleteAlert from "../Form/DeleteAlert";
-
 interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -43,6 +42,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const { data, isPending, isFetching } = isAuthenticated
     ? useFetchCart()
     : { data: null, isPending: false, isFetching: false };
+  console.log(data);
   const [items, setItems] = useState<any[]>([]);
   const [itemIds, setItemIds] = useState<string>("");
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
@@ -208,9 +208,9 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
             </Button>
           )}
 
-          {data?.length > 0 ? (
+          {data && data?.length > 0 ? (
             <Flex flexDir={"column"} gap={4}>
-              {data?.map((item: any) => {
+              {data.map((item: any) => {
                 // Retrieve and parse the cartItems from sessionStorage, defaulting to an empty array if not found
                 // Determine if the item's ID is included in the cartItems array for the defaultChecked property
                 const isItemChecked = items.some(
@@ -223,6 +223,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                     align={"center"}
                     gap={2}
                     pb={4}
+                    px={4}
                     flexWrap={{ base: "wrap", sm: "nowrap" }}
                   >
                     <HStack gap={2} w={"full"} align={"start"}>
@@ -247,24 +248,27 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                         loading="lazy"
                         alt={item.name}
                       />
-                      <Stack w={"full"} gap={{ base: 4, md: 8 }}>
+                      <Stack w={"full"} gap={2}>
                         <Text
                           noOfLines={{ base: 1, md: 2 }}
                           fontSize={{ base: "14px", md: "16px" }}
                         >
                           {item.product?.name}
                         </Text>
-                        {item.size ||
-                          (item.color && (
-                            <HStack flexWrap={"wrap"}>
-                              {item.size && (
-                                <Text>Size: {item.size.name} </Text>
-                              )}
-                              {item.color && (
-                                <Text>Color: {item.color.name} </Text>
-                              )}
-                            </HStack>
-                          ))}
+                        {item.size || item.color ? (
+                          <HStack flexWrap={"wrap"}>
+                            {item.size && (
+                              <Text fontSize={{ base: "12px", md: "14px" }}>
+                                Size: {item.size.name}{" "}
+                              </Text>
+                            )}
+                            {item.color && (
+                              <Text fontSize={{ base: "12px", md: "14px" }}>
+                                Color: {item.color.name}{" "}
+                              </Text>
+                            )}
+                          </HStack>
+                        ) : null}
                         <Text
                           display={{ base: "flex", sm: "none" }}
                           fontSize={{ base: "12px", md: "14px" }}

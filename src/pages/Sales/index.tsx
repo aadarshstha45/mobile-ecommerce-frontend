@@ -1,5 +1,5 @@
 import { useFetchSales } from "@/api/functions/Sales";
-import ItemDisplay from "@/components/ItemDisplay";
+import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { Container, Flex, Heading } from "@chakra-ui/react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
@@ -31,12 +31,14 @@ const SalesOffer = () => {
                 <Heading fontSize={{ base: "lg", md: "xl", xl: "2xl" }}>
                   {items?.title}
                 </Heading>
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3, 1300: 4 }}
-                >
+                <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
                   <Masonry gutter="30px">
                     {items.products?.map((item: any) => (
-                      <ItemDisplay key={item.id} data={item} />
+                      <ItemDisplay
+                        key={item.id}
+                        data={item}
+                        discountPercent={item.discount ?? ""}
+                      />
                     ))}
                   </Masonry>
                 </ResponsiveMasonry>

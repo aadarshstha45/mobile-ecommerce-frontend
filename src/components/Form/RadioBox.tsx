@@ -24,13 +24,12 @@ function RadioBox({ name, control, options, handleChange }: RadioBoxProps) {
         <RadioGroup
           overflow={"hidden"}
           value={value}
-          gap={1}
           onChange={(value) => {
             onChange(value);
             handleChange && handleChange(value);
           }}
         >
-          <HStack gap={1}>
+          <HStack gap={0}>
             {options.map((option: any, index: number) => (
               <FormControl w={"fit-content"} key={index}>
                 <FormLabel
@@ -47,14 +46,13 @@ function RadioBox({ name, control, options, handleChange }: RadioBoxProps) {
                     border: "1px solid ",
                     borderColor: "primary.500",
                   }}
-                  borderRadius={"9999px"}
+                  borderRadius={2}
                   textColor={
                     option.value === parseInt(value) ? "white" : "black"
                   }
-                  px={4}
-                  py={2}
+                  p={1}
                   htmlFor={`${name}_${option.value}`}
-                  fontSize={"sm"}
+                  fontSize={{ base: "12px", md: "14px", lg: "16px" }}
                 >
                   {option.label}
                 </FormLabel>

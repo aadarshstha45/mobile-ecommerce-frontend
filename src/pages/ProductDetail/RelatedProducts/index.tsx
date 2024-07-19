@@ -1,8 +1,5 @@
-import ItemDisplay from "@/components/ItemDisplay";
 import { Slider } from "@/components/Slider";
-import { handPickedData } from "@/pages/Home/data/data";
 import { Box, Heading } from "@chakra-ui/react";
-import { SwiperSlide } from "swiper/react";
 
 const RelatedProducts = () => {
   return (
@@ -30,11 +27,9 @@ const RelatedProducts = () => {
         speed={3000}
         space={20}
       >
-        {handPickedData?.slice(0, 6).map((data) => (
-          <SwiperSlide className="swiper-items swiper-activities" key={data.id}>
-            <ItemDisplay key={data.id} data={data} />
-          </SwiperSlide>
-        ))}
+        {/* <SwiperSlide className="swiper-items swiper-activities" key={data.id}>
+          <ItemDisplay key={data.id} data={data} />
+        </SwiperSlide> */}
       </Slider>
     </Box>
   );
