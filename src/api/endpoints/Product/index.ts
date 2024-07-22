@@ -1,6 +1,7 @@
 export const ProductApi = {
   getProducts: "/get-products",
   getProductById: (id: string) => `/get-product-details/${id}`,
+  getRelatedProducts: (id: string) => `/get-related-products/${id}`,
   getProductsByCategory: (id: number) => `/get-products-by-category/${id}`,
   getProductsBySearch: (query: string) => `/get-products-by-search/${query}`,
   getProductsByFilter: (query: string) => `/get-products-by-filter/${query}`,

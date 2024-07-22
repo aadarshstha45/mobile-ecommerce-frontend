@@ -7,6 +7,7 @@ import {
   Flex,
   HStack,
   Icon,
+  Image,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -32,7 +33,6 @@ const ItemDisplay = ({
   colorOptions,
   discountPercent,
 }: ItemDisplayProps) => {
-  console.log(discountPercent);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -99,19 +99,18 @@ const ItemDisplay = ({
                 id={data.id}
                 src={data.image}
                 alt={data.id.toString()}
-                h={"400px"}
                 w={"full"}
               />
             </Box>
           ) : (
-            <Flex
-              justify={"center"}
-              align={"center"}
-              w={"full"}
-              aspectRatio={1 / 1}
-              bgColor={"#D9D9D9"}
-            >
-              No Image
+            <Flex w={"full"} h={"full"} bg={"#D9D9D9"}>
+              <Image
+                w={"full"}
+                aspectRatio={1 / 1}
+                src={"https://bit.ly/naruto-sage"}
+                alt="naruto"
+                objectFit="cover"
+              />
             </Flex>
           )}
           <Flex

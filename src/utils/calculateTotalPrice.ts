@@ -1,7 +1,11 @@
 export const calculateTotalPrice = (items: any) => {
   return items.reduce((total: any, item: any) => {
-    const price = item.size?.price ?? item.product?.price;
+    const discountedPrice = item.discountedPrice;
+    const totalPrice = item.totalPrice;
     const quantity = item.quantity;
-    return total + price * quantity;
+    if (discountedPrice) {
+      return total + discountedPrice * quantity;
+    }
+    return total + totalPrice * quantity;
   }, 0);
 };

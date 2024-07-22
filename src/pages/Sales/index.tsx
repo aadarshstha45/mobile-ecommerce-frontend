@@ -6,7 +6,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 const SalesOffer = () => {
   const { data, isPending } = useFetchSales();
-  console.log(data);
+  console.log("Data", data);
   return (
     <Container
       as={"section"}
@@ -19,8 +19,10 @@ const SalesOffer = () => {
       ) : (
         <Flex gap={10} flexDir={"column"}>
           {data &&
+            data.length > 0 &&
             data.map((items: any, index: number) => (
               <Flex
+                key={index}
                 pb={4}
                 borderBottom={
                   index === data.length - 1 ? "none" : "2px solid #D2CFCF"
@@ -33,9 +35,9 @@ const SalesOffer = () => {
                 </Heading>
                 <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
                   <Masonry gutter="30px">
-                    {items.products?.map((item: any) => (
+                    {items.products?.map((item: any, index: number) => (
                       <ItemDisplay
-                        key={item.id}
+                        key={index}
                         data={item}
                         discountPercent={item.discount ?? ""}
                       />

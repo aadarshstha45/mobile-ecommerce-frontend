@@ -15,7 +15,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { CirclePlusIcon, EyeIcon, Trash2Icon } from "lucide-react";
+import { CirclePlusIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 const WishList = () => {
@@ -52,63 +52,62 @@ const WishList = () => {
               p={0}
               shadow={"none"}
             >
-              <CardBody
-                flexWrap={"wrap"}
-                p={4}
-                gap={4}
-                as={Flex}
-                justify={{ base: "end", md: "space-between" }}
-                align={"center"}
+              <Link
+                to={
+                  item?.subcategory
+                    ? `/product/${item.category.slug}/${item.subcategory.slug}/${item.id}`
+                    : `/product/${item.category.slug}/${item.id}`
+                }
               >
-                <HStack
-                  align={"start"}
-                  spacing={4}
-                  w={{ base: "full", md: "60%" }}
+                <CardBody
+                  flexWrap={"wrap"}
+                  p={4}
+                  gap={4}
+                  as={Flex}
+                  justify={{ base: "end", md: "space-between" }}
+                  align={"center"}
                 >
-                  <Image
-                    src={item.image ?? NoImage}
-                    alt="No Image"
-                    w={"100px"}
-                    objectFit={"cover"}
-                    objectPosition={"center"}
-                    aspectRatio={1 / 1}
-                  />
-                  <Stack gap={0}>
-                    <Text fontSize={{ base: "14px", md: "20px" }}>
-                      {item.name}
-                    </Text>
-                    <Text
-                      textColor={"gray.500"}
-                      fontSize={{ base: "12px", md: "16px" }}
+                  <HStack
+                    align={"start"}
+                    spacing={4}
+                    w={{ base: "full", md: "60%" }}
+                  >
+                    <Image
+                      src={item.image ?? NoImage}
+                      alt="No Image"
+                      w={"100px"}
+                      objectFit={"cover"}
+                      objectPosition={"center"}
+                      aspectRatio={1 / 1}
+                    />
+                    <Stack gap={0}>
+                      <Text fontSize={{ base: "14px", md: "20px" }}>
+                        {item.name}
+                      </Text>
+                      <Text
+                        textColor={"gray.500"}
+                        fontSize={{ base: "12px", md: "16px" }}
+                      >
+                        {item.category?.name}
+                      </Text>
+                    </Stack>
+                  </HStack>
+                  <Text size={"md"}>Rs. {item?.price}</Text>
+                  <HStack>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault(); // Prevent click event from propagating to parent elements
+                        handleDeleteOpen(item.id);
+                      }}
+                      colorScheme="red"
+                      borderRadius={2}
+                      size="xs"
                     >
-                      {item.category?.name}
-                    </Text>
-                  </Stack>
-                </HStack>
-                <Text size={"md"}>Rs. {item?.price}</Text>
-                <HStack>
-                  <Button
-                    as={Link}
-                    to={
-                      item?.subcategory
-                        ? `/product/${item.category.slug}/${item.subcategory.slug}/${item.id}`
-                        : `/product/${item.category.slug}/${item.id}`
-                    }
-                    borderRadius={2}
-                    size="xs"
-                  >
-                    <Icon as={EyeIcon} />
-                  </Button>
-                  <Button
-                    onClick={() => handleDeleteOpen(item.id)}
-                    colorScheme="red"
-                    borderRadius={2}
-                    size="xs"
-                  >
-                    <Icon as={Trash2Icon} cursor={"pointer"} />
-                  </Button>
-                </HStack>
-              </CardBody>
+                      <Icon as={Trash2Icon} cursor={"pointer"} />
+                    </Button>
+                  </HStack>
+                </CardBody>
+              </Link>
             </Card>
           ))}
         </Flex>

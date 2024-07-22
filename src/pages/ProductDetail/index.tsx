@@ -10,6 +10,7 @@ import RadioBox from "@/components/Form/RadioBox";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Container,
   Divider,
@@ -53,6 +54,7 @@ function ProductDetail() {
     data?.product_properties[0]?.sizes[0]?.size?.id
   );
   const [price, setPrice] = useState<number | null>(null);
+
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
       product_id: id,
@@ -66,6 +68,10 @@ function ProductDetail() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    setPrice(data?.price);
+  }, [data?.price]);
 
   useEffect(() => {
     if (data?.image) {
@@ -101,7 +107,7 @@ function ProductDetail() {
         const sizes = selectedColor.sizes.map((size: any) => ({
           label: size.size?.name,
           value: parseInt(size.size?.id),
-          price: parseFloat(size?.price ?? data.price),
+          price: parseFloat(size?.price ?? data.price).toFixed(2),
         }));
         if (sizes && sizes.length > 0) {
           setSizeId(sizes[0].value);
@@ -128,7 +134,7 @@ function ProductDetail() {
         const sizes = data.product_properties?.[0]?.sizes?.map((size: any) => ({
           label: size.size?.name,
           value: parseInt(size.size?.id),
-          price: parseFloat(size?.price ?? data.price),
+          price: parseFloat(size?.price ?? data.price).toFixed(2),
         }));
         if (sizes) {
           setSizeId(sizes[0].value);
@@ -150,7 +156,7 @@ function ProductDetail() {
         (property: any) => property.value === sizeId
       );
       if (selectedSize) {
-        setPrice(selectedSize.price ?? data.price);
+        setPrice(selectedSize.price);
       }
     }
   }, [sizeId]);
@@ -179,7 +185,11 @@ function ProductDetail() {
 
   return (
     <Flex flexDir={"column"}>
-      <BreadCrumbs />
+      <Box p={1} bg={"#F0F0F0"}>
+        <Container maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}>
+          <BreadCrumbs />
+        </Container>
+      </Box>
       <Container
         maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}
         id="product-detail"
@@ -424,7 +434,7 @@ function ProductDetail() {
                             }
                             fontWeight={data?.discount ? 400 : 500}
                           >
-                            Rs. {data.price}
+                            Rs. {price}
                           </Text>
                         </HStack>
 

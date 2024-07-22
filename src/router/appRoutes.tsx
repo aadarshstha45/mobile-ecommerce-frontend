@@ -16,7 +16,6 @@ const Category = lazy(() => import("@/pages/Category"));
 const Sales = lazy(() => import("@/pages/Sales"));
 const Checkout = lazy(() => import("@/pages/Checkout"));
 const Profile = lazy(() => import("@/pages/Profile"));
-const Cart = lazy(() => import("@/pages/Cart"));
 
 const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 
@@ -92,10 +91,6 @@ export const appRoutes = [
           {
             path: "account-settings",
             element: <AccountSettings />,
-          },
-          {
-            path: "my-carts",
-            element: <Cart />,
           },
           {
             path: "wishlist",

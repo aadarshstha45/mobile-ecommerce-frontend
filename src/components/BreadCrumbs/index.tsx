@@ -12,7 +12,9 @@ const BreadCrumbs = ({ bg }: BreadCrumbsProps) => {
 
   const crumbs = location.pathname
     .split("/")
-    .filter((crumb) => crumb !== "" && crumb !== "product")
+    .filter(
+      (crumb) => crumb !== "" && crumb !== "product" && !/^\d+$/.test(crumb)
+    )
     .map((crumb) => {
       currentLink += `/${crumb}`;
       const crumbWithSpaces = crumb.replace(/-/g, " ");
@@ -30,17 +32,14 @@ const BreadCrumbs = ({ bg }: BreadCrumbsProps) => {
     });
 
   return (
-    <Breadcrumb bg={bg} separator={<ChevronRight />}>
+    <Breadcrumb bg={bg} separator={<ChevronRight size={20} />}>
+      <BreadcrumbItem>
+        <BreadcrumbLink as={Link} to={"/"}>
+          Home
+        </BreadcrumbLink>
+      </BreadcrumbItem>
       {crumbs.map((crumb, index) => (
-        <BreadcrumbItem key={index}>
-          <BreadcrumbLink
-            textTransform={"capitalize"}
-            as={Link}
-            to={currentLink}
-          >
-            {crumb}
-          </BreadcrumbLink>
-        </BreadcrumbItem>
+        <BreadcrumbItem key={index}>{crumb}</BreadcrumbItem>
       ))}
     </Breadcrumb>
   );

@@ -38,7 +38,9 @@ const DetailTab = ({ description }: DetailTabProps) => {
         justifySelf={"center"}
       >
         {tabList.map((tab) => (
-          <Tab fontSize={{ base: "16px", md: "18px" }}>{tab.title}</Tab>
+          <Tab key={tab.id} fontSize={{ base: "16px", md: "18px" }}>
+            {tab.title}
+          </Tab>
         ))}
       </TabList>
       <TabIndicator

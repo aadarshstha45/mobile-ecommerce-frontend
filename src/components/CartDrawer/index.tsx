@@ -27,6 +27,7 @@ import {
 } from "@/api/functions/Cart";
 import NoImage from "@/assets/images/NoImage.png";
 import { calculateTotalPrice } from "@/utils/calculateTotalPrice";
+import { discount } from "@/utils/discount";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -42,7 +43,6 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const { data, isPending, isFetching } = isAuthenticated
     ? useFetchCart()
     : { data: null, isPending: false, isFetching: false };
-  console.log(data);
   const [items, setItems] = useState<any[]>([]);
   const [itemIds, setItemIds] = useState<string>("");
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
@@ -71,8 +71,32 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const handleCheckboxChange = (item: any, isChecked: any) => {
     if (isChecked) {
       // Add to deletedImages if not already included
-      setItems((prev) => [...prev, item]);
-      sessionStorage.setItem("cartItems", JSON.stringify([...items, item]));
+      setItems((prev) => [
+        ...prev,
+        {
+          ...item,
+          discountedPrice:
+            item.product.discount && item.size?.price
+              ? discount(item?.size.price, item.product.discount)
+              : discount(item.product.price, item.product.discount),
+          totalPrice: item.size?.price ?? item.product.price,
+        },
+      ]);
+      sessionStorage.setItem(
+        "cartItems",
+        JSON.stringify([
+          ...items,
+          {
+            ...item,
+            discountedPrice:
+              item.product.discount &&
+              (item.size?.price
+                ? discount(item?.size.price, item.product.discount)
+                : discount(item.product.price, item.product.discount)),
+            totalPrice: item.size?.price ?? item.product.price,
+          },
+        ])
+      );
       setDeletedItems((prev) => [...new Set([...prev, item.id])]);
     } else {
       // Remove from deletedImages
@@ -155,11 +179,11 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
       sessionStorage.getItem("cartItems") || "[]"
     );
     // Update the quantity for the specified item
-    const updatedCartItems = currentCartItems.map((item: any) => {
-      if (item.id === id) {
-        return { ...item, quantity: quantity };
+    const updatedCartItems = currentCartItems.map((i: any) => {
+      if (i.id === id) {
+        return { ...i, quantity: quantity };
       }
-      return item;
+      return i;
     });
 
     // Update the session storage with the new list of items
@@ -220,13 +244,12 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                   <Flex
                     borderBottomWidth={"1px"}
                     key={item.id}
-                    align={"center"}
                     gap={2}
                     pb={4}
                     px={4}
                     flexWrap={{ base: "wrap", sm: "nowrap" }}
                   >
-                    <HStack gap={2} w={"full"} align={"start"}>
+                    <HStack gap={2} w={"80%"} align={"start"}>
                       <Checkbox
                         alignSelf={"center"}
                         defaultChecked={isItemChecked}
@@ -239,6 +262,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                         }
                       />
                       <Image
+                        alignSelf={"center"}
                         borderRadius={"sm"}
                         w={"100px"}
                         aspectRatio={1 / 1}
@@ -269,16 +293,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                             )}
                           </HStack>
                         ) : null}
-                        <Text
-                          display={{ base: "flex", sm: "none" }}
-                          fontSize={{ base: "12px", md: "14px" }}
-                          color={"gray.800"}
-                        >
-                          Rs.
-                          {item.size?.price
-                            ? item.size.price * item.quantity
-                            : item.product.price * item.quantity}
-                        </Text>
+
                         <HStack gap={2}>
                           <IconButton
                             onClick={() => {
@@ -338,17 +353,45 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                     </HStack>
 
                     <HStack
+                      w={"20%"}
                       display={{ base: "none", sm: "flex" }}
-                      justifySelf={"end"}
+                      alignSelf={"end"}
                       justify={"end"}
                       gap={4}
                     >
-                      <Text textColor={"primary.500"}>
-                        Rs.
-                        {item.size?.price
-                          ? item.size.price * item.quantity
-                          : item.product.price * item.quantity}
-                      </Text>
+                      <Stack>
+                        {item.product.discount && (
+                          <Text
+                            fontSize={{
+                              base: "12px",
+                              sm: "14px",
+                              lg: "16px",
+                            }}
+                            fontWeight={500}
+                          >
+                            Rs.
+                            {item.size?.price
+                              ? item.size.price *
+                                (1 - item.product.discount / 100)
+                              : item.product.price *
+                                (1 - item.product.discount / 100)}
+                          </Text>
+                        )}
+                        <Text
+                          fontSize={
+                            item.product.discount
+                              ? { base: "10px", sm: "12px", lg: "14px" }
+                              : { base: "12px", sm: "14px", lg: "16px" }
+                          }
+                          textColor={item.product.discount ? "#939292" : ""}
+                          textDecoration={
+                            item.product.discount ? "line-through" : "none"
+                          }
+                          fontWeight={item.product.discount ? 400 : 500}
+                        >
+                          Rs. {item.size?.price ?? item.product.price}
+                        </Text>
+                      </Stack>
                       <IconButton
                         w={"fit-content"}
                         variant={"ghost"}

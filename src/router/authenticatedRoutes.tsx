@@ -11,7 +11,6 @@ import { lazy } from "react";
 
 const Checkout = lazy(() => import("@/pages/Checkout"));
 const Profile = lazy(() => import("@/pages/Profile"));
-const Cart = lazy(() => import("@/pages/Cart"));
 
 export const authenticatedRoutes = [
   {
@@ -45,10 +44,6 @@ export const authenticatedRoutes = [
           {
             path: "wishlist",
             element: <WishList />,
-          },
-          {
-            path: "my-carts",
-            element: <Cart />,
           },
         ],
       },

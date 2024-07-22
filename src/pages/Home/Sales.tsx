@@ -47,6 +47,7 @@ function Sales() {
               <Masonry gutter="30px">
                 {salesData.products.map((item: any) => (
                   <ItemDisplay
+                    key={item.id}
                     data={item}
                     discountPercent={salesData?.discount_percentage}
                   />

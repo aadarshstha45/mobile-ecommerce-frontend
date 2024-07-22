@@ -18,7 +18,6 @@ const QueryReply = () => {
   const { id } = useParams<{ id: string }>();
   const [perPage, setPerPage] = useState(3);
   const { data, isFetching } = useFetchProductQuery(id!, perPage);
-  console.log(data);
   return (
     <Flex w={{ base: "100%", md: "60%" }} flexDir={"column"} gap={6}>
       {data?.pagination.total > 0 && (

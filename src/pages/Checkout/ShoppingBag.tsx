@@ -2,7 +2,6 @@
 import { useIsPromoCodeValid } from "@/api/functions/Order";
 import NoImage from "@/assets/images/NoImage.png";
 import { TextInput } from "@/components/Form/TextInput";
-import { calculateTotalPrice } from "@/utils/calculateTotalPrice";
 import { IStepProps } from "@/utils/IStepProps";
 import { useOrderStore } from "@/utils/store";
 import {
@@ -14,6 +13,7 @@ import {
   Heading,
   Img,
   SimpleGrid,
+  Stack,
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
@@ -28,6 +28,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   const [isLessThan469] = useMediaQuery("(max-width: 469px)");
   const [totalPrice, setTotalPrice] = useState(0);
   const [discountedPrice, setDiscountedPrice] = useState(0);
+  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [promoCode, setPromoCode] = useState("");
   const [promoErrorMessages, setPromoErrorMessages] = useState<string>("");
@@ -45,10 +46,22 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
     const cartItems = sessionStorage.getItem("cartItems");
     if (cartItems) {
       const items = JSON.parse(cartItems);
+      console.log("Items", items);
       setItems(items);
-      const totalPrice = calculateTotalPrice(items);
+      let totalPrice = 0;
+      items.forEach((item: any) => {
+        totalPrice += item.totalPrice * item.quantity;
+      });
+      let discountedPrice = 0;
+      items.forEach((item: any) => {
+        discountedPrice +=
+          item.discountedPrice > 0
+            ? item.discountedPrice * item.quantity
+            : item.totalPrice * item.quantity;
+      });
       setTotalPrice(totalPrice);
-      setDiscountedPrice(totalPrice);
+      setDiscountedPrice(discountedPrice);
+      setTotalAfterDiscount(discountedPrice);
     }
   }, [location.pathname]);
 
@@ -56,27 +69,56 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
     try {
       const response = await PromoCode.mutateAsync({
         ...data,
-        total_amount: totalPrice,
+        total_amount: discountedPrice > 0 ? discountedPrice : totalPrice,
       });
       if (response.data.valid) {
+        console.log("Promo Code Applied", response.data);
         setPromoCode(data.promo_code);
         const discount_type = response.data.type;
         const discount_rate = parseFloat(response.data.rate);
         const max_discount = parseFloat(response.data.max_discount);
         if (discount_type === "percentage") {
-          const discount = (totalPrice * discount_rate) / 100;
+          const discount =
+            discountedPrice > 0
+              ? (discountedPrice * discount_rate) / 100
+              : (totalPrice * discount_rate) / 100;
+          console.log("Discount", discount);
           if (discount >= max_discount) {
             setDiscount(max_discount);
-            setDiscountedPrice(totalPrice - max_discount);
+            setDiscountedPrice(
+              discountedPrice > 0
+                ? discountedPrice - max_discount
+                : totalPrice - max_discount
+            );
+            setTotalAfterDiscount(
+              discountedPrice > 0
+                ? discountedPrice - max_discount
+                : totalPrice - max_discount
+            );
             return;
           } else {
             setDiscount(discount);
-            setDiscountedPrice(totalPrice - discount);
+            setDiscountedPrice(
+              discountedPrice > 0
+                ? discountedPrice - discount
+                : totalPrice - discount
+            );
+            setTotalAfterDiscount(
+              discountedPrice > 0
+                ? discountedPrice - discount
+                : totalPrice - discount
+            );
+
             return;
           }
         } else {
           setDiscount(discount_rate);
-          setDiscountedPrice(totalPrice - discount_rate);
+
+          setTotalAfterDiscount(
+            discountedPrice > 0
+              ? discountedPrice - discount_rate
+              : totalPrice - discount
+          );
           return;
         }
       } else {
@@ -101,16 +143,17 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           cart_id: item?.id,
           product_id: item?.product?.id,
           quantity: item?.quantity,
+          discount: item.discountedPrice
+            ? item.totalPrice - item.discountedPrice
+            : 0,
           price: item.size ? item.size.price : item.product.price,
           size_id: item?.size?.id,
           color_id: item?.color?.id,
-          total: item.size?.price
-            ? item.size.price * item?.quantity
-            : item.product.price * item?.quantity,
+          total: item.discountedPrice ?? item.totalPrice,
         })),
-        discount_amount: discount,
-        total_amount: totalPrice,
-        promo_code: promoCode,
+        promo_discount: discount,
+        total_amount: discountedPrice ?? totalPrice,
+        promo_code: promoCode ?? null,
       });
       stepProps.nextStep();
     } else {
@@ -124,7 +167,6 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
         <Flex flexDir={"column"} gap={4}>
           {items &&
             items.map((item: any) => {
-              console.log(item);
               return (
                 <Box key={item.id} borderBottom={"1px solid #939292"} py={6}>
                   <Flex
@@ -168,17 +210,23 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                       )}
                     </Flex>
 
-                    <Box>
+                    <Stack gap={0}>
                       <Text
                         fontWeight={600}
                         fontSize={{ base: "12px", md: "14px", xl: "16px" }}
                       >
                         Rs.
-                        {item.size?.price
-                          ? item.size.price * item.quantity
-                          : item.product.price * item.quantity}
+                        {item.discountedPrice > 0
+                          ? item.discountedPrice
+                          : item.totalPrice}
                       </Text>
-                    </Box>
+                      <Text
+                        alignSelf={"end"}
+                        fontSize={{ base: "12px", md: "14px" }}
+                      >
+                        X {item.quantity}
+                      </Text>
+                    </Stack>
                   </Flex>
                 </Box>
               );
@@ -218,6 +266,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           items?.map((item: any) => (
             <HStack key={item.id} justify={"space-between"} py={2}>
               <Text
+                noOfLines={2}
                 fontWeight={500}
                 fontSize={{ base: "14px", md: "16px", xl: "18px" }}
               >
@@ -228,10 +277,10 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                 textColor={"primary.500"}
                 fontSize={{ base: "12px", md: "14px", xl: "16px" }}
               >
-                Rs.
-                {item.size
-                  ? item.size.price * item.quantity
-                  : item.product.price * item.quantity}
+                Rs.{" "}
+                {item.discountedPrice > 0
+                  ? item.discountedPrice * item.quantity
+                  : item.totalPrice * item.quantity}
               </Text>
             </HStack>
           ))}
@@ -246,7 +295,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
         <HStack justify={"space-between"} py={2}>
           <Heading fontSize={"lg"}>Subtotal</Heading>
           <Heading textColor={"primary.500"} fontSize={"lg"}>
-            Rs. {discountedPrice}
+            Rs. {totalAfterDiscount}
           </Heading>
         </HStack>
 

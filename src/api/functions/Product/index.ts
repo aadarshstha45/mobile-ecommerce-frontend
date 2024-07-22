@@ -5,4 +5,8 @@ const useFetchProductById = (id: string) => {
   return useFetch(ProductApi.getProductById(id));
 };
 
-export { useFetchProductById };
+const useFetchRelatedProducts = (id: string) => {
+  return useFetch(ProductApi.getRelatedProducts(id));
+};
+
+export { useFetchProductById, useFetchRelatedProducts };
