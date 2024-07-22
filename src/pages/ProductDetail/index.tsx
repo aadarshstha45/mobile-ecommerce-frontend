@@ -107,7 +107,7 @@ function ProductDetail() {
         const sizes = selectedColor.sizes.map((size: any) => ({
           label: size.size?.name,
           value: parseInt(size.size?.id),
-          price: parseFloat(size?.price ?? data.price).toFixed(2),
+          price: parseFloat(size?.price ?? data.price),
         }));
         if (sizes && sizes.length > 0) {
           setSizeId(sizes[0].value);
@@ -134,7 +134,7 @@ function ProductDetail() {
         const sizes = data.product_properties?.[0]?.sizes?.map((size: any) => ({
           label: size.size?.name,
           value: parseInt(size.size?.id),
-          price: parseFloat(size?.price ?? data.price).toFixed(2),
+          price: parseFloat(size?.price ?? data.price),
         }));
         if (sizes) {
           setSizeId(sizes[0].value);
@@ -419,7 +419,9 @@ function ProductDetail() {
                               }}
                               fontWeight={500}
                             >
-                              Rs.{price && price * (1 - data?.discount / 100)}
+                              Rs.
+                              {price &&
+                                (price * (1 - data?.discount / 100)).toFixed(2)}
                             </Text>
                           )}
                           <Text
@@ -434,7 +436,7 @@ function ProductDetail() {
                             }
                             fontWeight={data?.discount ? 400 : 500}
                           >
-                            Rs. {price}
+                            Rs. {price?.toFixed(2)}
                           </Text>
                         </HStack>
 

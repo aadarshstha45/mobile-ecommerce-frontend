@@ -24,6 +24,8 @@ const InProcess = () => {
     toDate
   );
 
+  console.log("data", data);
+
   const navigate = useNavigate();
 
   const { control, handleSubmit } = useForm({

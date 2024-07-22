@@ -1,5 +1,5 @@
 import { Flex, Spinner } from "@chakra-ui/react";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { appRoutes } from "./router/appRoutes";
 import { authRoutes } from "./router/authRoutes";
@@ -18,6 +18,12 @@ const renderRoutes = (routes: any) => {
 };
 
 const App = () => {
+  useEffect(() => {
+    const isAuthenticated = sessionStorage.getItem("access_token")
+      ? true
+      : false;
+    console.log(isAuthenticated);
+  }, [sessionStorage.getItem("access_token")]);
   return (
     <Suspense
       fallback={

@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <Toaster position="top-right" />
+        <Toaster position="bottom-center" />
         <App />
       </QueryClientProvider>
     </ChakraProvider>

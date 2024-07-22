@@ -1,4 +1,5 @@
 import { useLogout } from "@/api/auth";
+import { isAuthenticated } from "@/api/axiosSetup";
 import { useFetchMenuItems } from "@/api/functions/Category";
 import NavCart from "@/assets/icons/NavCart";
 import SearchIcon from "@/assets/icons/SearchIcon";
@@ -36,13 +37,12 @@ function NavBar({ data }: any) {
   } = useDisclosure();
 
   const navigate = useNavigate();
-  const isAuthenticated = sessionStorage.getItem("access_token") ? true : false;
   const { mutateAsync } = useLogout();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleSignOut = async () => {
     await mutateAsync();
     navigate("/");
-    sessionStorage.clear();
+    localStorage.removeItem("access_token");
     window.location.reload();
   };
 

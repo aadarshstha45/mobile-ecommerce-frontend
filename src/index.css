@@ -99,3 +99,12 @@
     background-position: 0% 50%, 50% 50%, 100% 100%;
   }
 }
+
+.login-user {
+  font-weight: 500;
+  color: #0573ce;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -90,10 +90,12 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
             ...item,
             discountedPrice:
               item.product.discount &&
-              (item.size?.price
-                ? discount(item?.size.price, item.product.discount)
-                : discount(item.product.price, item.product.discount)),
-            totalPrice: item.size?.price ?? item.product.price,
+              parseFloat(
+                item.size?.price
+                  ? discount(item?.size.price, item.product.discount)
+                  : discount(item.product.price, item.product.discount)
+              ),
+            totalPrice: parseFloat(item.size?.price ?? item.product.price),
           },
         ])
       );
@@ -371,10 +373,14 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                           >
                             Rs.
                             {item.size?.price
-                              ? item.size.price *
-                                (1 - item.product.discount / 100)
-                              : item.product.price *
-                                (1 - item.product.discount / 100)}
+                              ? (
+                                  item.size.price *
+                                  (1 - item.product.discount / 100)
+                                ).toFixed(2)
+                              : (
+                                  item.product.price *
+                                  (1 - item.product.discount / 100)
+                                ).toFixed(2)}
                           </Text>
                         )}
                         <Text

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useToast } from "@/utils/toast";
 import {
   InvalidateQueryFilters,
   useMutation,
@@ -13,6 +14,7 @@ const useMutate = (requestData: {
   inValidateEndpoint?: string;
   message?: string;
 }) => {
+  const { successToast, errorToast } = useToast();
   const queryClient = useQueryClient();
   const sendData = (data: any): Promise<AxiosResponse<any>> => {
     return HttpClient.post(requestData.apiEndPoint, data);
@@ -35,7 +37,7 @@ const useMutate = (requestData: {
         localStorage.setItem("access_token", response.data?.access_token);
       }
       if (requestData.message) {
-        toast.success(requestData.message!);
+        successToast(requestData.message!);
       }
     },
     onError: (error: AxiosError) => {
@@ -49,14 +51,14 @@ const useMutate = (requestData: {
         toast.error((dataError as any)?.message);
       }
       if (dataError && statusCode === 422) {
-        toast.error((dataError as any)?.error);
+        errorToast((dataError as any)?.error);
       }
       const fieldErrors = (error?.response?.data as any).errors;
       if (fieldErrors && typeof fieldErrors === "object") {
         Object.keys(fieldErrors).forEach((key) => {
           const errorMessage = fieldErrors[key];
           // Assuming you want to log each error message:
-          toast.error(`${errorMessage}`);
+          errorToast(`${errorMessage}`);
           // Or if you want to show each error message to the user, you might use a showError function:
           // showError(`${key}: ${errorMessage}`);
         });

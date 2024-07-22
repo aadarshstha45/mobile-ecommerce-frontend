@@ -39,9 +39,8 @@ const useMutate = (requestData: {
         });
         // showSuccess(requestData.message);
       }
-      {
-        response.data?.access_token &&
-          sessionStorage.setItem("access_token", response.data?.access_token);
+      if (response.data.access_token) {
+        sessionStorage.setItem("access_token", response.data?.access_token);
       }
     },
 

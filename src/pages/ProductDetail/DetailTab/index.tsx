@@ -14,11 +14,11 @@ interface DetailTabProps {
 const tabList = [
   {
     id: 1,
-    title: "Specifications",
+    title: "Description",
   },
   {
     id: 2,
-    title: "Details",
+    title: "Specifications",
   },
 ];
 

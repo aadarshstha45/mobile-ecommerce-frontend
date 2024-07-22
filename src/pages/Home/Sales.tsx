@@ -1,8 +1,16 @@
 import { useFetchHomeSales } from "@/api/functions/Sales";
 import { ArrowForward } from "@/assets/icons/ArrowForward";
 import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
-import { Box, Container, Flex, HStack, Link, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Link as ChakraLink,
+  Container,
+  Flex,
+  HStack,
+  Text,
+} from "@chakra-ui/react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { Link } from "react-router-dom";
 
 function Sales() {
   const { data: salesData } = useFetchHomeSales();
@@ -31,13 +39,15 @@ function Sales() {
               </Text>
             </HStack>
             <HStack align={"center"} gap={1}>
-              <Link
+              <ChakraLink
+                as={Link}
+                to={"/sales-offer"}
                 fontWeight={600}
                 textColor={"primary.500"}
                 fontSize={{ base: "sm", md: "md" }}
               >
                 See More
-              </Link>
+              </ChakraLink>
               <ArrowForward boxSize={{ base: 4, md: 5 }} />
             </HStack>
           </Flex>

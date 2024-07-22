@@ -1,3 +1,4 @@
+import { useSaveWishlist } from "@/api/functions/Wishlist";
 import { StarIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -8,6 +9,7 @@ import {
   HStack,
   Icon,
   Image,
+  Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -36,6 +38,12 @@ const ItemDisplay = ({
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const wishlist = useSaveWishlist();
+
+  const handleWishList = async (id: string) => {
+    await wishlist.mutateAsync({ product_id: id });
+  };
 
   return (
     <Link
@@ -83,8 +91,16 @@ const ItemDisplay = ({
               justify={"center"}
               align={"center"}
               p={2}
+              onClick={(e) => {
+                e.preventDefault();
+                handleWishList(data.id);
+              }}
             >
-              <Icon as={Heart} />
+              {wishlist.isPending ? (
+                <Spinner size={"xs"} />
+              ) : (
+                <Icon as={Heart} />
+              )}
             </Flex>
           </Stack>
           {data.image ? (

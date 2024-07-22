@@ -17,6 +17,7 @@ const Profile = () => {
   const data = useOutletContext();
   const path = useLocation().pathname;
   const [label, setLabel] = useState<string>("Profile");
+
   return (
     <Flex
       py={{ base: 4, md: 10 }}
