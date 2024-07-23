@@ -19,8 +19,8 @@ import { Link } from "react-router-dom";
 import LazyLoadImage from "../Image";
 
 export const columnBreakpoints = {
-  350: 1,
-  450: 2,
+  0: 1,
+  350: 2,
   850: 3,
   1300: 4,
 };
@@ -67,7 +67,14 @@ const ItemDisplay = ({
           border={"1px solid #D2CFCF"}
           p={0}
         >
-          <Stack zIndex={90} gap={2} pos={"absolute"} right={4} top={4}>
+          <Stack
+            opacity={{ base: 0, md: 1 }}
+            zIndex={90}
+            gap={2}
+            pos={"absolute"}
+            right={4}
+            top={4}
+          >
             <Flex
               border={"1px solid #D2CFCF"}
               borderRadius={"50%"}

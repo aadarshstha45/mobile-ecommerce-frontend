@@ -6,10 +6,7 @@ const THREE_MINUTES = 3 * 60 * 1000;
 export const BaseURL = import.meta.env.VITE_STORAGE_URL;
 export const baseURL = import.meta.env.VITE_BASE_URL;
 
-const getAuthToken = () => {
-  const token = sessionStorage.getItem("access_token");
-  return token ? `Bearer ${token}` : "";
-};
+const getAuthToken = () => sessionStorage.getItem("access_token");
 
 export const isAuthenticated = sessionStorage.getItem("access_token")
   ? true
@@ -38,6 +35,20 @@ HttpClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// HttpClient.interceptors.request.use(async (config) => {
+//   const token = TokenService.getToken()?.token;
+//   console.log("Token axios", token);
+//   if (config && config.headers) {
+//     if (token && config.headers["Authorization"] !== "") {
+//       config.headers["Authorization"] = `Bearer ${token}`;
+//     }
+//     if (config.headers["Authorization"] === "") {
+//       delete config.headers["Authorization"];
+//     }
+//   }
+//   return config;
+// });
 
 /**
  * Pass Integito API Key in Header

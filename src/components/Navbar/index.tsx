@@ -42,7 +42,7 @@ function NavBar({ data }: any) {
   const handleSignOut = async () => {
     await mutateAsync();
     navigate("/");
-    localStorage.removeItem("access_token");
+    sessionStorage.removeItem("access_token");
     window.location.reload();
   };
 

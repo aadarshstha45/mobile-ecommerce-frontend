@@ -26,105 +26,107 @@ const ResetPassword = lazy(() => import("../pages/Auth/ResetPassword"));
 const SetPassword = lazy(() => import("../pages/Auth/SetPassword"));
 const VerifyOTP = lazy(() => import("../pages/Auth/VerifyOTP"));
 
-export const appRoutes = [
-  {
-    path: "/",
-    element: <LayoutWrapper />,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "about",
-        element: <div>About</div>,
-      },
-      {
-        path: ":slug",
-        element: <Category />,
-      },
-      {
-        path: ":category_slug/:slug",
-        element: <Category />,
-      },
-      {
-        path: "product/:category_slug/:sub_category_slug/:id",
-        element: <ProductDetail />,
-      },
-      {
-        path: "/product/:slug/:id",
-        element: <ProductDetail />,
-      },
-      {
-        path: "sales-offer",
-        element: <Sales />,
-      },
-      {
-        path: "checkout",
-        element: isAuthenticated ? (
-          <Checkout />
-        ) : (
-          <Navigate to={`/login?redirect=${window.location.pathname}`} />
-        ),
-      },
-      {
-        path: "profile",
-        element: isAuthenticated ? (
-          <Profile />
-        ) : (
-          <Navigate to={`/login?redirect=${window.location.pathname}`} />
-        ),
-        children: [
-          {
-            index: true,
-            element: <ProfileDetails />,
-          },
-          {
-            path: "saved-address",
-            element: <SavedAddress />,
-          },
-          {
-            path: "my-orders",
-            element: <MyPurchase />,
-          },
-          {
-            path: "account-settings",
-            element: <AccountSettings />,
-          },
-          {
-            path: "wishlist",
-            element: <WishList />,
-          },
-          {
-            path: "*",
-            element: <Navigate to="/profile/" />,
-          },
-        ],
-      },
-      {
-        path: "/login",
-        element: isAuthenticated ? <Navigate to={"/"} /> : <LoginPage />,
-      },
-      {
-        path: "/register",
-        element: isAuthenticated ? <Navigate to={"/"} /> : <RegisterPage />,
-      },
-      {
-        path: "/reset-password",
-        element: <ResetPassword />,
-      },
-      {
-        path: "/set-password",
-        element: <SetPassword />,
-      },
-      {
-        path: "/verify-otp",
-        element: <VerifyOTP />,
-      },
-    ],
-  },
-  {
-    path: "*",
-    element: <Navigate to="/" />,
-  },
-];
+export const getAppRoutes = () => {
+  return [
+    {
+      path: "/",
+      element: <LayoutWrapper />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: "about",
+          element: <div>About</div>,
+        },
+        {
+          path: ":slug",
+          element: <Category />,
+        },
+        {
+          path: ":category_slug/:slug",
+          element: <Category />,
+        },
+        {
+          path: "product/:category_slug/:sub_category_slug/:id",
+          element: <ProductDetail />,
+        },
+        {
+          path: "/product/:slug/:id",
+          element: <ProductDetail />,
+        },
+        {
+          path: "sales-offer",
+          element: <Sales />,
+        },
+        {
+          path: "checkout",
+          element: isAuthenticated ? (
+            <Checkout />
+          ) : (
+            <Navigate to={`/login?redirect=${window.location.pathname}`} />
+          ),
+        },
+        {
+          path: "profile",
+          element: isAuthenticated ? (
+            <Profile />
+          ) : (
+            <Navigate to={`/login?redirect=${window.location.pathname}`} />
+          ),
+          children: [
+            {
+              index: true,
+              element: <ProfileDetails />,
+            },
+            {
+              path: "saved-address",
+              element: <SavedAddress />,
+            },
+            {
+              path: "my-orders",
+              element: <MyPurchase />,
+            },
+            {
+              path: "account-settings",
+              element: <AccountSettings />,
+            },
+            {
+              path: "wishlist",
+              element: <WishList />,
+            },
+            {
+              path: "*",
+              element: <Navigate to="/profile/" />,
+            },
+          ],
+        },
+        {
+          path: "/login",
+          element: isAuthenticated ? <Navigate to={"/"} /> : <LoginPage />,
+        },
+        {
+          path: "/register",
+          element: isAuthenticated ? <Navigate to={"/"} /> : <RegisterPage />,
+        },
+        {
+          path: "/reset-password",
+          element: <ResetPassword />,
+        },
+        {
+          path: "/set-password",
+          element: <SetPassword />,
+        },
+        {
+          path: "/verify-otp",
+          element: <VerifyOTP />,
+        },
+      ],
+    },
+    {
+      path: "*",
+      element: <Navigate to="/" />,
+    },
+  ];
+};

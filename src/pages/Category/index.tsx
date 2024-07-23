@@ -73,7 +73,7 @@ function Category() {
             gap={4}
             flexDir={isLessThan540 ? "column" : "row"}
             justify={isLessThan540 ? "center" : "space-between"}
-            align={isLessThan540 ? "center" : "space-between"}
+            align={isLessThan540 ? "start" : "space-between"}
           >
             <Stack gap={2}>
               <Text
@@ -102,7 +102,7 @@ function Category() {
                   <ResponsiveMasonry
                     columnsCountBreakPoints={columnBreakpoints}
                   >
-                    <Masonry gutter="30px">
+                    <Masonry gutter={isLessThan540 ? "10px" : "20px"}>
                       {data?.data.map((item: any) => (
                         <ItemDisplay
                           key={item.id}

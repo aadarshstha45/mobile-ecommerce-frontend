@@ -58,6 +58,7 @@ function ModalLogin({ isOpen, onClose }: ModalLoginProps) {
       password: "",
     });
     onClose();
+    reset();
     window.location.reload();
   };
 

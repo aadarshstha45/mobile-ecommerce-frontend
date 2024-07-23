@@ -25,6 +25,7 @@ const BreadCrumbs = ({ bg }: BreadCrumbsProps) => {
           as={Link}
           to={currentLink}
           key={crumb}
+          fontSize={{ base: "14px", md: "16px", xl: "18px" }}
         >
           {crumbWithSpaces}
         </BreadcrumbLink>
@@ -34,7 +35,11 @@ const BreadCrumbs = ({ bg }: BreadCrumbsProps) => {
   return (
     <Breadcrumb bg={bg} separator={<ChevronRight size={20} />}>
       <BreadcrumbItem>
-        <BreadcrumbLink as={Link} to={"/"}>
+        <BreadcrumbLink
+          fontSize={{ base: "14px", md: "16px", xl: "18px" }}
+          as={Link}
+          to={"/"}
+        >
           Home
         </BreadcrumbLink>
       </BreadcrumbItem>

@@ -9,7 +9,7 @@ import {
   MenuOptionGroup,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
 import Sidebar, { sidebarLinks } from "./Sidebar";
 
@@ -17,6 +17,10 @@ const Profile = () => {
   const data = useOutletContext();
   const path = useLocation().pathname;
   const [label, setLabel] = useState<string>("Profile");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Flex

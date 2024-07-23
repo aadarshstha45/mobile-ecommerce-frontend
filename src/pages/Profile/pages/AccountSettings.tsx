@@ -3,6 +3,7 @@ import { TextInput } from "@/components/Form";
 import { ChangePasswordSchema } from "@/utils/validation/auth";
 import { Button, Divider, Flex, Text } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const AccountSettings = () => {
@@ -29,6 +30,9 @@ const AccountSettings = () => {
     reset();
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Flex w={"fit-content"} flexDir={"column"} gap={4}>
       <Text fontSize={"xl"}>Account Settings</Text>

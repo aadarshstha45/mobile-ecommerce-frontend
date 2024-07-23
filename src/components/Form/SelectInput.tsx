@@ -83,7 +83,7 @@ const SelectInput = ({
   return (
     <FormControl
       isRequired={isRequired}
-      width={{ base: "full", sm: width ?? "200px" }}
+      width={{ base: width ?? "fit-content", sm: width ?? "200px" }}
       mb={4}
       isReadOnly={isReadOnly}
     >

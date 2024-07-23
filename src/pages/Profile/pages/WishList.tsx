@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { CirclePlusIcon, Trash2Icon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const WishList = () => {
   const [perPage, setPerPage] = useState(5);
@@ -30,6 +30,9 @@ const WishList = () => {
     onOpen();
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const handleDeleteWishList = async () => {
     if (!id) return;
     await deleteWishlist.mutateAsync(id);

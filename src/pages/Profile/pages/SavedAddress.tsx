@@ -71,9 +71,8 @@ const SavedAddress = () => {
   }, [id, data, reset, user]);
 
   useEffect(() => {
-    console.log("data", prevData);
-  }, [prevData]);
-
+    window.scrollTo(0, 0);
+  }, []);
   const {
     isOpen: isFormOpen,
     onOpen: onFormOpen,
