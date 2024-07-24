@@ -1,9 +1,22 @@
 import { CategoryMenuApi } from "@/api/endpoints/Category";
 import { useFetch } from "@/api/methods";
 import { usePaginatedFetch } from "@/api/methods/get";
-
 const useFetchMenuItems = () => {
   return useFetch({ apiEndPoint: CategoryMenuApi.getMenu });
+};
+
+const useFetchCategories = (perPage: number) => {
+  return usePaginatedFetch(CategoryMenuApi.getCategories(perPage));
+};
+
+const useFetchHomeNewArrivals = () => {
+  return useFetch({
+    apiEndPoint: CategoryMenuApi.getHomeNewArrivals,
+  });
+};
+
+const useFetchNewArrivals = (page: number) => {
+  return usePaginatedFetch(CategoryMenuApi.getNewArrivals(page));
 };
 
 const useFetchProductsByCategory = (
@@ -16,4 +29,10 @@ const useFetchProductsByCategory = (
   );
 };
 
-export { useFetchMenuItems, useFetchProductsByCategory };
+export {
+  useFetchCategories,
+  useFetchHomeNewArrivals,
+  useFetchMenuItems,
+  useFetchNewArrivals,
+  useFetchProductsByCategory,
+};

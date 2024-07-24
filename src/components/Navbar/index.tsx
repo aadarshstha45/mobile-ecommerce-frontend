@@ -56,9 +56,9 @@ function NavBar({ data }: any) {
       borderBottom={"1px solid #BEBDBD"}
       as={"nav"}
       w="100%"
-      p={{ base: 4, sm: 6 }}
+      p={{ base: 6, sm: 4 }}
       pos={"fixed"}
-      h={{ base: "80px", md: "100px" }}
+      h={{ base: "70px", md: "100px" }}
       zIndex={99}
     >
       <Container maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}>
@@ -88,7 +88,11 @@ function NavBar({ data }: any) {
               );
             })}
           </HStack>
-          <MobileNav isOpen={isMobileNavOpen} onClose={onMobileNavClose} />
+          <MobileNav
+            isOpen={isMobileNavOpen}
+            onClose={onMobileNavClose}
+            menus={menus}
+          />
           <Icon
             onClick={onMobileNavOpen}
             display={{ base: "block", md: "none" }}

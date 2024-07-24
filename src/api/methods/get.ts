@@ -22,7 +22,7 @@ const useFetch = ({ apiEndPoint, params, enabled }: FetchProps) => {
     queryKey: [apiEndPoint, params],
     queryFn: fetchData,
     select: (response) => response?.data?.data,
-    enabled,
+    enabled: enabled ?? true,
   });
 };
 

@@ -10,7 +10,7 @@ import "swiper/swiper-bundle.css";
 const Sales = lazy(() => import("./Sales"));
 const Customer = lazy(() => import("./Customer"));
 const NewArrivals = lazy(() => import("./NewArrivals"));
-// const Wardrobe = lazy(() => import("./Wardrobe"));
+const Categories = lazy(() => import("./Categories"));
 const Discount = lazy(() => import("./Discount"));
 // const HandPicked = lazy(() => import("./HandPicked"));
 // const Instagram = lazy(() => import("./Instagram"));
@@ -29,13 +29,7 @@ const Home = () => {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
   };
   return (
-    <Flex
-      maxW={"100vw"}
-      overflow={"hidden"}
-      flexDir={"column"}
-      gap={10}
-      pb={20}
-    >
+    <Flex maxW={"100vw"} overflow={"hidden"} flexDir={"column"} gap={10}>
       <Swiper
         className="hero-slider"
         slidesPerView={1}
@@ -63,7 +57,7 @@ const Home = () => {
                 sm: "400px",
                 md: "500px",
                 lg: "600px",
-                xl: "700px",
+                xl: "750px",
               }}
             />
           </SwiperSlide>
@@ -72,6 +66,7 @@ const Home = () => {
 
       <Sales />
       <Customer />
+      <Categories />
       <NewArrivals />
       {/* <Wardrobe
         menWardrobeData={wardrobeData}

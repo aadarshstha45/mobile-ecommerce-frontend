@@ -58,8 +58,8 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
       payment: data.payment,
     });
     setStepData({});
-    sessionStorage.removeItem("cartItems");
-    navigate("/");
+    // sessionStorage.removeItem("cartItems");
+    navigate("/e-sewa");
     setTimeout(() => window.location.reload(), 2000);
   };
 
@@ -166,7 +166,12 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
           Previous
         </Button>
         <Button
-          type={"submit"}
+          type={"button"}
+          onClick={(e) => {
+            onSubmit({ payment: "cod" });
+            e.preventDefault();
+            onSubmit;
+          }}
           colorScheme={"primary"}
           w={"fit-content"}
           borderRadius={"2PX"}

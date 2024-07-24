@@ -32,7 +32,7 @@ const AccountSettings = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [window.location.pathname]);
   return (
     <Flex w={"fit-content"} flexDir={"column"} gap={4}>
       <Text fontSize={"xl"}>Account Settings</Text>

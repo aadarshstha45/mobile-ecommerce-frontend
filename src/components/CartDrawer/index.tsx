@@ -31,6 +31,7 @@ import { discount } from "@/utils/discount";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DeleteAlert from "../Form/DeleteAlert";
 interface CartDrawerProps {
   isOpen: boolean;
@@ -42,7 +43,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const { data, isPending, isFetching } = useFetchCart({
     enabled: isAuthenticated,
   });
-
+  const navigate = useNavigate();
   const [items, setItems] = useState<any[]>([]);
   const [itemIds, setItemIds] = useState<string>("");
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
@@ -156,6 +157,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     setDeletedItems([]);
     setItems([]);
     onClose();
+    navigate("/checkout", { replace: true });
     window.location.reload();
   };
 

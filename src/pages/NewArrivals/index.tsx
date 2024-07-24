@@ -1,49 +1,33 @@
-import { useFetchProductsByCategory } from "@/api/functions/Category";
+import { useFetchNewArrivals } from "@/api/functions/Category";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import SelectInput from "@/components/Form/SelectInput";
 import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
-import { PaginationButton } from "@/components/Pagination";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { Container, Flex, Stack, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
-import { sortOptions } from "./data/data";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { sortOptions } from "../Category/data/data";
 
 type OptionType = {
   label: string;
   value: string;
 };
 
-function Category() {
-  const { category_slug, slug } = useParams<{
-    category_slug: string;
-    slug: string;
-  }>();
+function NewArrivals() {
   const navigate = useNavigate();
   const [isLessThan540] = useMediaQuery("(max-width: 540px)");
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const pageFromUrl = Number(urlParams.get("page")) || 1;
   const sortFromUrl = urlParams.get("sort") || "newest";
-  const [currentPage, setCurrentPage] = useState(1);
+  const [_, setCurrentPage] = useState(1);
   const [sort, setSort] = useState("newest");
   // Ensure slug is not undefined
-  if (!slug) {
-    throw new Error("Slug is required");
-  }
-  const param = category_slug ? { category_slug, slug } : slug!;
 
-  const { data, isPending, isFetching } = useFetchProductsByCategory(
-    pageFromUrl,
-    param,
-    sort
-  );
+  //   const param = category_slug ? { category_slug, slug } : slug!;
+
+  const { data, isPending, isFetching } = useFetchNewArrivals(pageFromUrl);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -122,14 +106,14 @@ function Category() {
                 )}
               </Flex>
             </Flex>
-            {data?.pagination.total_items > 12 && (
+            {/* {data?.pagination.total_items > 12 && (
               <PaginationButton
                 currentPage={data?.pagination?.current_page ?? currentPage}
                 setCurrentPage={setCurrentPage}
                 totalPages={data?.pagination?.total_pages ?? 2}
                 sort={sort}
               />
-            )}
+            )} */}
           </Flex>
         </>
       )}
@@ -137,4 +121,4 @@ function Category() {
   );
 }
 
-export default Category;
+export default NewArrivals;

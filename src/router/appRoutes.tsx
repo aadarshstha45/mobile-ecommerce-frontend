@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import LayoutWrapper from "@/layouts";
+import Esewa from "@/pages/Checkout/Payment/Esewa";
 import {
   AccountSettings,
   MyPurchase,
@@ -14,6 +15,7 @@ const Home = lazy(() => import("@/pages/Home"));
 // const About = lazy(() => import("@/pages/About"));
 const Category = lazy(() => import("@/pages/Category"));
 const Sales = lazy(() => import("@/pages/Sales"));
+const NewArrivals = lazy(() => import("@/pages/NewArrivals"));
 const Checkout = lazy(() => import("@/pages/Checkout"));
 const Profile = lazy(() => import("@/pages/Profile"));
 
@@ -60,6 +62,10 @@ export const getAppRoutes = (isAuthenticated: boolean) => {
           element: <Sales />,
         },
         {
+          path: "new-arrivals",
+          element: <NewArrivals />,
+        },
+        {
           path: "checkout",
           element: isAuthenticated ? (
             <Checkout />
@@ -101,6 +107,7 @@ export const getAppRoutes = (isAuthenticated: boolean) => {
             },
           ],
         },
+        { path: "e-sewa", element: <Esewa /> },
         {
           path: "/login",
           element: isAuthenticated ? <Navigate to={"/"} /> : <LoginPage />,

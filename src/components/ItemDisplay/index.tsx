@@ -145,9 +145,16 @@ const ItemDisplay = ({
             textColor={"white"}
             gap={2}
           >
-            <Box w={"fit-content"} px={1} bg={"primary.500"} fontSize={"12px"}>
-              New
-            </Box>
+            {data?.is_new && (
+              <Box
+                w={"fit-content"}
+                px={1}
+                bg={"primary.500"}
+                fontSize={"12px"}
+              >
+                New
+              </Box>
+            )}
             {discountPercent! > 0 && (
               <Box
                 w={"fit-content"}
