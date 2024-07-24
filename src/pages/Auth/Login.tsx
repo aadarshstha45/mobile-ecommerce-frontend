@@ -53,8 +53,10 @@ function LoginPage() {
   const onSubmit = async (data: any) => {
     await mutateAsync(data);
     const redirect = urlParams.get("redirect");
-    redirect ? navigate(redirect) : navigate("/");
-    window.location.reload();
+    redirect
+      ? navigate(redirect, { replace: true })
+      : navigate("/", { replace: true });
+    // window.location.reload();
   };
 
   return (

@@ -3,16 +3,26 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { HttpClient } from "../axiosSetup";
 
-const useFetch = (apiEndpoint: string, params?: any) => {
+interface FetchProps {
+  apiEndPoint: string;
+  params?: any;
+  enabled?: boolean;
+}
+
+const useFetch = ({ apiEndPoint, params, enabled }: FetchProps) => {
   const fetchData = (): Promise<AxiosResponse<any>> => {
-    return HttpClient.get(apiEndpoint, {
-      params,
-    });
+    return HttpClient.get(
+      apiEndPoint,
+      params && {
+        params,
+      }
+    );
   };
   return useQuery({
-    queryKey: [apiEndpoint, params],
+    queryKey: [apiEndPoint, params],
     queryFn: fetchData,
     select: (response) => response?.data?.data,
+    enabled,
   });
 };
 

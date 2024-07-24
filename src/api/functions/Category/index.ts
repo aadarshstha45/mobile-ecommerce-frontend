@@ -3,7 +3,7 @@ import { useFetch } from "@/api/methods";
 import { usePaginatedFetch } from "@/api/methods/get";
 
 const useFetchMenuItems = () => {
-  return useFetch(CategoryMenuApi.getMenu);
+  return useFetch({ apiEndPoint: CategoryMenuApi.getMenu });
 };
 
 const useFetchProductsByCategory = (

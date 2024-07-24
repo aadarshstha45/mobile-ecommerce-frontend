@@ -1,3 +1,4 @@
+import TokenService from "@/services/service-token";
 import axios from "axios";
 
 const THREE_MINUTES = 3 * 60 * 1000;
@@ -6,11 +7,9 @@ const THREE_MINUTES = 3 * 60 * 1000;
 export const BaseURL = import.meta.env.VITE_STORAGE_URL;
 export const baseURL = import.meta.env.VITE_BASE_URL;
 
-const getAuthToken = () => sessionStorage.getItem("access_token");
+// const getAuthToken = () => sessionStorage.getItem("access_token");
 
-export const isAuthenticated = sessionStorage.getItem("access_token")
-  ? true
-  : false;
+export const isAuthenticated = TokenService.isAuthenticated();
 
 /**
  * Axios HTTP Client
@@ -22,33 +21,32 @@ const HttpClient = axios.create({
 });
 
 // Add a request interceptor to include the authorization header
-HttpClient.interceptors.request.use(
-  async (config) => {
-    const token = getAuthToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    // Do something with request error
-    return Promise.reject(error);
-  }
-);
-
-// HttpClient.interceptors.request.use(async (config) => {
-//   const token = TokenService.getToken()?.token;
-//   console.log("Token axios", token);
-//   if (config && config.headers) {
-//     if (token && config.headers["Authorization"] !== "") {
-//       config.headers["Authorization"] = `Bearer ${token}`;
+// HttpClient.interceptors.request.use(
+//   async (config) => {
+//     const token = getAuthToken();
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
 //     }
-//     if (config.headers["Authorization"] === "") {
-//       delete config.headers["Authorization"];
-//     }
+//     return config;
+//   },
+//   (error) => {
+//     // Do something with request error
+//     return Promise.reject(error);
 //   }
-//   return config;
-// });
+// );
+
+HttpClient.interceptors.request.use(async (config) => {
+  const token = TokenService.getToken()?.token;
+  if (config && config.headers) {
+    if (token && config.headers["Authorization"] !== "") {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    if (config.headers["Authorization"] === "") {
+      delete config.headers["Authorization"];
+    }
+  }
+  return config;
+});
 
 /**
  * Pass Integito API Key in Header

@@ -6,7 +6,6 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 const SalesOffer = () => {
   const { data, isPending } = useFetchSales();
-  console.log("Data", data);
   return (
     <Container
       as={"section"}

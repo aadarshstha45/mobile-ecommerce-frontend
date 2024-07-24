@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isAuthenticated } from "@/api/axiosSetup";
 import { useAddToCart } from "@/api/functions/Cart";
 import { useFetchProductById } from "@/api/functions/Product";
 import { useSaveWishlist } from "@/api/functions/Wishlist";
@@ -7,6 +6,7 @@ import ShoppingCart from "@/assets/icons/ShoppingCart";
 import NoImage from "@/assets/images/NoImage.png";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import RadioBox from "@/components/Form/RadioBox";
+import TokenService from "@/services/service-token";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
@@ -40,7 +40,6 @@ import RelatedProducts from "./RelatedProducts";
 function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { data, isPending } = useFetchProductById(id!);
-  console.log("data", data);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [count, setCount] = useState<number>(1);
   const addToCart = useAddToCart();
@@ -162,8 +161,7 @@ function ProductDetail() {
   }, [sizeId]);
 
   const onSubmit = async (data: any) => {
-    if (isAuthenticated) {
-      console.log("data", data);
+    if (TokenService.isAuthenticated()) {
       await addToCart.mutateAsync({
         ...data,
         quantity: count,
@@ -174,7 +172,7 @@ function ProductDetail() {
   };
 
   const handleWishList = async () => {
-    if (isAuthenticated) {
+    if (TokenService.isAuthenticated()) {
       await addToWishList.mutateAsync({
         product_id: id,
       });

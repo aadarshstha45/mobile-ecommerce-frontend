@@ -1,10 +1,10 @@
-import { useLogout } from "@/api/auth";
-import { isAuthenticated } from "@/api/axiosSetup";
+import { useLogoutUser } from "@/api/auth/users";
 import { useFetchMenuItems } from "@/api/functions/Category";
 import NavCart from "@/assets/icons/NavCart";
 import SearchIcon from "@/assets/icons/SearchIcon";
 import ShoppingCart from "@/assets/icons/ShoppingCart";
 import NoImage from "@/assets/icons/UserIcon/user.png";
+import TokenService from "@/services/service-token";
 import {
   Avatar,
   Button,
@@ -27,6 +27,7 @@ import MobileNav from "./MobileNav";
 import { profileMenuItems } from "./MobileNav/profileMenuItems";
 
 function NavBar({ data }: any) {
+  const isAuthenticated = TokenService.isAuthenticated();
   const path = useLocation().pathname.split("/")[1];
   const { data: menus } = useFetchMenuItems();
 
@@ -37,17 +38,16 @@ function NavBar({ data }: any) {
   } = useDisclosure();
 
   const navigate = useNavigate();
-  const { mutateAsync } = useLogout();
+  const { mutateAsync } = useLogoutUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleSignOut = async () => {
     await mutateAsync();
     navigate("/");
-    sessionStorage.removeItem("access_token");
     window.location.reload();
   };
 
   const handleCartOpen = () => {
-    isAuthenticated ? onOpen() : navigate("/login");
+    TokenService.isAuthenticated() ? onOpen() : navigate("/login");
   };
 
   return (

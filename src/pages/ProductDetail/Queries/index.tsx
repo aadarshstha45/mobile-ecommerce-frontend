@@ -1,7 +1,7 @@
-import { isAuthenticated } from "@/api/axiosSetup";
 import { useSendProductQuery } from "@/api/functions/Query";
 import Question from "@/assets/images/question.png";
 import ModalLogin from "@/pages/Auth/ModalLogin";
+import TokenService from "@/services/service-token";
 import {
   Box,
   Button,
@@ -16,7 +16,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { SendHorizontalIcon } from "lucide-react";
-import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -25,16 +24,7 @@ const Queries = () => {
   const { id } = useParams<{ id: string }>();
   const sendQuery = useSendProductQuery(id!);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      console.log(hash);
-      const targetElement = document.querySelector(hash);
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, []);
+
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       question: "",
@@ -43,7 +33,7 @@ const Queries = () => {
   });
 
   const handleSend = async (data: any) => {
-    if (isAuthenticated) {
+    if (TokenService.isAuthenticated()) {
       await sendQuery.mutateAsync({
         ...data,
         product_id: id,
@@ -77,7 +67,7 @@ const Queries = () => {
                 Our Team will try to address your query regarding this
                 particular product as soon as you enquire about product
               </Text>
-              {isAuthenticated ? (
+              {TokenService.isAuthenticated() ? (
                 <form onSubmit={handleSubmit(handleSend)}>
                   <FormControl mb={4}>
                     <Controller

@@ -1,8 +1,9 @@
 import { Flex, Spinner } from "@chakra-ui/react";
 import { Suspense, useEffect } from "react";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { useAuthentication, useLogoutUser } from "./api/auth/users";
 import { getAppRoutes } from "./router/appRoutes";
-import { authRoutes } from "./router/authRoutes";
+import { LoadingSpinner } from "./utils/LoadingSpinner";
 
 const renderRoutes = (routes: any) => {
   return routes.map((route: any, index: number) => (
@@ -18,13 +19,22 @@ const renderRoutes = (routes: any) => {
 };
 
 const App = () => {
+  const { data: isAuthenticated, isLoading: isAuthLoading } =
+    useAuthentication();
+  const { mutateAsync: logoutUser } = useLogoutUser();
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem("access_token")
-      ? true
-      : false;
-    console.log(isAuthenticated);
-  }, [sessionStorage.getItem("access_token")]);
-  const appRoutes = getAppRoutes();
+    if (typeof isAuthenticated === "boolean" && !isAuthenticated) {
+      localStorage.getItem("token") ? logoutUser() : null;
+    }
+  }, [isAuthenticated]);
+  if (isAuthLoading) {
+    return (
+      <Flex justifyContent={"center"} alignItems="center" height={"100vh"}>
+        <LoadingSpinner />
+      </Flex>
+    );
+  }
+  const appRoutes = getAppRoutes(isAuthenticated!);
   return (
     <Suspense
       fallback={
@@ -45,7 +55,7 @@ const App = () => {
 
           {/* App Routes */}
           <Route path="/" element={<Outlet />}>
-            {authRoutes.map((route, index) => (
+            {appRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}
             {renderRoutes(appRoutes)}

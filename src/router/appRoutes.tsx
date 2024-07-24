@@ -1,5 +1,4 @@
 /* eslint-disable react-refresh/only-export-components */
-import { isAuthenticated } from "@/api/axiosSetup";
 import LayoutWrapper from "@/layouts";
 import {
   AccountSettings,
@@ -26,7 +25,7 @@ const ResetPassword = lazy(() => import("../pages/Auth/ResetPassword"));
 const SetPassword = lazy(() => import("../pages/Auth/SetPassword"));
 const VerifyOTP = lazy(() => import("../pages/Auth/VerifyOTP"));
 
-export const getAppRoutes = () => {
+export const getAppRoutes = (isAuthenticated: boolean) => {
   return [
     {
       path: "/",

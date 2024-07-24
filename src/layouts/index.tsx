@@ -1,13 +1,14 @@
 import { useFetchUser } from "@/api/auth";
-import { isAuthenticated } from "@/api/axiosSetup";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/Navbar";
+import TokenService from "@/services/service-token";
 import { Box, Flex, Spinner } from "@chakra-ui/react";
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
 function LayoutWrapper() {
-  const { data: user } = isAuthenticated ? useFetchUser() : { data: null };
+  const isAuthenticated = TokenService.isAuthenticated();
+  const { data: user } = useFetchUser({ enabled: isAuthenticated });
   return (
     <Flex flexDir={"column"} overflow={"hidden"}>
       <NavBar data={user && user} />

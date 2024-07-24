@@ -94,7 +94,6 @@ export const TextInput = ({
     setIsDebouncing(true);
     setDisplayCheckIcon(true);
 
-    console.log("started");
     try {
       const response = await axios.get(
         `${baseURL}/check-unique-email?email=${email}`

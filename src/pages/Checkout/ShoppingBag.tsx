@@ -46,7 +46,6 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
     const cartItems = sessionStorage.getItem("cartItems");
     if (cartItems) {
       const items = JSON.parse(cartItems);
-      console.log("Items", items);
       setItems(items);
       let totalPrice = 0;
       items.forEach((item: any) => {
@@ -63,7 +62,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
       setDiscountedPrice(discountedPrice);
       setTotalAfterDiscount(discountedPrice);
     }
-  }, [location.pathname]);
+  }, [location.pathname, sessionStorage.getItem("cartItems")]);
 
   const promoSubmit = async (data: any) => {
     try {
@@ -72,7 +71,6 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
         total_amount: discountedPrice > 0 ? discountedPrice : totalPrice,
       });
       if (response.data.valid) {
-        console.log("Promo Code Applied", response.data);
         setPromoCode(data.promo_code);
         const discount_type = response.data.type;
         const discount_rate = parseFloat(response.data.rate);
@@ -82,7 +80,6 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
             discountedPrice > 0
               ? (discountedPrice * discount_rate) / 100
               : (totalPrice * discount_rate) / 100;
-          console.log("Discount", discount);
           if (discount >= max_discount) {
             setDiscount(max_discount);
             setDiscountedPrice(

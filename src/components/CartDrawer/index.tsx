@@ -18,7 +18,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { isAuthenticated } from "@/api/axiosSetup";
 import {
   useDeleteCartItem,
   useDeleteCartItems,
@@ -26,12 +25,12 @@ import {
   useUpdateCartQuantity,
 } from "@/api/functions/Cart";
 import NoImage from "@/assets/images/NoImage.png";
+import TokenService from "@/services/service-token";
 import { calculateTotalPrice } from "@/utils/calculateTotalPrice";
 import { discount } from "@/utils/discount";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import DeleteAlert from "../Form/DeleteAlert";
 interface CartDrawerProps {
   isOpen: boolean;
@@ -39,10 +38,11 @@ interface CartDrawerProps {
 }
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
-  const navigate = useNavigate();
-  const { data, isPending, isFetching } = isAuthenticated
-    ? useFetchCart()
-    : { data: null, isPending: false, isFetching: false };
+  const isAuthenticated = TokenService.isAuthenticated();
+  const { data, isPending, isFetching } = useFetchCart({
+    enabled: isAuthenticated,
+  });
+
   const [items, setItems] = useState<any[]>([]);
   const [itemIds, setItemIds] = useState<string>("");
   const [deletedItems, setDeletedItems] = useState<any[]>([]);
@@ -153,7 +153,6 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
 
   const handleCheckout = () => {
     sessionStorage.setItem("cartItems", JSON.stringify(items));
-    navigate("/checkout");
     setDeletedItems([]);
     setItems([]);
     onClose();

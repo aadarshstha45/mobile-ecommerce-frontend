@@ -2,8 +2,8 @@ import { CartAPI } from "@/api/endpoints/Cart";
 import { useDelete, useFetch, useMutate } from "@/api/methods";
 import useUpdate from "@/api/methods/update";
 
-const useFetchCart = () => {
-  return useFetch(CartAPI.get);
+const useFetchCart = ({ enabled }: { enabled: boolean }) => {
+  return useFetch({ apiEndPoint: CartAPI.get, enabled });
 };
 
 const useAddToCart = () => {

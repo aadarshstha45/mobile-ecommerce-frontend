@@ -16,8 +16,8 @@ const useLogin = () => {
   });
 };
 
-const useFetchUser = () => {
-  return useFetch(user.me);
+const useFetchUser = ({ enabled }: { enabled: boolean }) => {
+  return useFetch({ apiEndPoint: user.me, enabled });
 };
 
 const useUpdateUser = () => {
@@ -60,11 +60,11 @@ const useLogout = () => {
 };
 
 const useEmailCheck = (email: string) => {
-  return useFetch(user.emailCheck(email));
+  return useFetch({ apiEndPoint: user.emailCheck(email) });
 };
 
 const useFetchAddresses = () => {
-  return useFetch(user.getShippingAddress);
+  return useFetch({ apiEndPoint: user.getShippingAddress });
 };
 
 const useAddAddress = () => {

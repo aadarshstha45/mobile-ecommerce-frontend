@@ -2,11 +2,11 @@ import { SalesApi } from "@/api/endpoints/Sales";
 import { useFetch } from "@/api/methods";
 
 const useFetchHomeSales = () => {
-  return useFetch(SalesApi.getHomeSales);
+  return useFetch({ apiEndPoint: SalesApi.getHomeSales });
 };
 
 const useFetchSales = () => {
-  return useFetch(SalesApi.get);
+  return useFetch({ apiEndPoint: SalesApi.get });
 };
 
 export { useFetchHomeSales, useFetchSales };

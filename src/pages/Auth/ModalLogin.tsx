@@ -21,7 +21,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
@@ -45,12 +44,7 @@ function ModalLogin({ isOpen, onClose }: ModalLoginProps) {
     },
     resolver: zodResolver(LoginSchema),
   });
-  useEffect(() => {
-    const token = sessionStorage.getItem("access_token");
-    if (token) {
-      console.log(token);
-    }
-  }, [sessionStorage.getItem("access_token")]);
+
   const onSubmit = async (data: any) => {
     await mutateAsync(data);
     reset({
@@ -59,7 +53,7 @@ function ModalLogin({ isOpen, onClose }: ModalLoginProps) {
     });
     onClose();
     reset();
-    window.location.reload();
+    // window.location.reload();
   };
 
   const handleClose = () => {

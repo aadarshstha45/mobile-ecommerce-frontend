@@ -24,8 +24,6 @@ const InProcess = () => {
     toDate
   );
 
-  console.log("data", data);
-
   const navigate = useNavigate();
 
   const { control, handleSubmit } = useForm({
@@ -50,10 +48,6 @@ const InProcess = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentPage]);
-
-  useEffect(() => {
-    console.log(fromDate);
-  }, [fromDate]);
 
   const handleDateFilter = (data: any) => {
     urlParams.set("page", "1");

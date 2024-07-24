@@ -8,9 +8,7 @@ import { SwiperSlide } from "swiper/react";
 const RelatedProducts = () => {
   const { id } = useParams<{ id: string }>();
   if (!id) return null;
-  console.log("Related Products ID", id);
   const { data } = useFetchRelatedProducts(id);
-  console.log("Related Products", data);
   return (
     data &&
     data.length > 0 && (
