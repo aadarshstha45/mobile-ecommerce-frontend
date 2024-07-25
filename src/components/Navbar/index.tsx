@@ -56,9 +56,9 @@ function NavBar({ data }: any) {
       borderBottom={"1px solid #BEBDBD"}
       as={"nav"}
       w="100%"
-      p={{ base: 6, sm: 4 }}
+      py={{ base: 4, sm: 6 }}
       pos={"fixed"}
-      h={{ base: "70px", md: "100px" }}
+      h={{ base: "90px", md: "100px" }}
       zIndex={99}
     >
       <Container maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}>
@@ -158,7 +158,7 @@ function NavBar({ data }: any) {
                     display={{ base: "none", md: "flex" }}
                     cursor={"pointer"}
                     src={data?.image ? `${data?.image}` : NoImage}
-                    size={{ base: "sm", md: "md" }}
+                    size={"sm"}
                     loading="lazy"
                   />
                 </MenuButton>

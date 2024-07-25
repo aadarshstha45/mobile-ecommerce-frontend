@@ -17,7 +17,11 @@ const useMutate = (requestData: {
   const { successToast, errorToast } = useToast();
   const queryClient = useQueryClient();
   const sendData = (data: any): Promise<AxiosResponse<any>> => {
-    return HttpClient.post(requestData.apiEndPoint, data);
+    return HttpClient.post(requestData.apiEndPoint, data, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   };
 
   return useMutation({

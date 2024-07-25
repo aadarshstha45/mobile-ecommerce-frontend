@@ -25,7 +25,7 @@ function LayoutWrapper() {
           </Flex>
         }
       >
-        <Box mt={{ base: "70px", md: "100px" }}>
+        <Box mt={{ base: "80px", md: "100px" }}>
           <Outlet context={(user && user) || []} />
         </Box>
       </Suspense>

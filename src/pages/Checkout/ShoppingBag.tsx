@@ -10,8 +10,7 @@ import {
   Flex,
   GridItem,
   HStack,
-  Heading,
-  Img,
+  Image,
   SimpleGrid,
   Stack,
   Text,
@@ -173,23 +172,15 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                     flexDir={isLessThan469 ? "column" : "row"}
                     align={isLessThan469 ? "start" : "center"}
                   >
-                    <Box
-                      borderRadius={"10px"}
-                      overflow={"hidden"}
-                      minW={isLessThan469 ? "100%" : "30%"}
-                      w={isLessThan469 ? "100%" : "30%"}
-                      h={"150px"}
-                      border={"1px solid #939292"}
-                    >
-                      <Img
-                        src={item.product.image ?? NoImage}
-                        alt={item.product.name}
-                        objectFit={item.product.image ? "cover" : "contain"}
-                        objectPosition={"center"}
-                        w={"100%"}
-                        h={"100%"}
-                      />
-                    </Box>
+                    <Image
+                      src={item.product.image ?? NoImage}
+                      alt={item.product.name}
+                      objectFit={item.product.image ? "cover" : "contain"}
+                      objectPosition={"center"}
+                      w={{ base: "100px", md: "150px" }}
+                      aspectRatio={1 / 1}
+                    />
+
                     <Flex
                       flexDir={"column"}
                       gap={3}
@@ -235,7 +226,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
         gap={2}
         flexDir={"column"}
         colSpan={1}
-        maxW={{ md: "350px" }}
+        w={{ md: "70%" }}
         justifySelf={{ md: "end" }}
       >
         <form onSubmit={handleSubmit(promoSubmit)}>
@@ -249,10 +240,11 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
             />
             <Button
               type="submit"
-              mt={7}
+              mt={6}
+              isDisabled={promoCode.length === 0}
+              isLoading={PromoCode.isPending}
               fontSize={{ sm: "14px", md: "16px" }}
               fontWeight={400}
-              colorScheme={"primary"}
               borderRadius={"2px"}
             >
               Apply
@@ -270,7 +262,6 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
                 {item.product.name}
               </Text>
               <Text
-                fontWeight={500}
                 textColor={"primary.500"}
                 fontSize={{ base: "12px", md: "14px", xl: "16px" }}
               >
@@ -282,18 +273,35 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
             </HStack>
           ))}
         <HStack justify={"space-between"} py={2}>
-          <Heading fontSize={"lg"}>Discount</Heading>
-          <Heading textColor={"primary.500"} fontSize={"lg"}>
+          <Text
+            noOfLines={2}
+            fontWeight={500}
+            fontSize={{ base: "14px", md: "16px", xl: "18px" }}
+          >
+            Discount
+          </Text>
+          <Text
+            textColor={"primary.500"}
+            fontSize={{ base: "12px", md: "14px", xl: "16px" }}
+          >
             - Rs. {discount}
-          </Heading>
+          </Text>
         </HStack>
 
         <Box w={"full"} h={"1px"} bg={"#939292"} />
         <HStack justify={"space-between"} py={2}>
-          <Heading fontSize={"lg"}>Subtotal</Heading>
-          <Heading textColor={"primary.500"} fontSize={"lg"}>
+          <Text
+            fontWeight={500}
+            fontSize={{ base: "14px", md: "16px", xl: "18px" }}
+          >
+            Subtotal
+          </Text>
+          <Text
+            textColor={"primary.500"}
+            fontSize={{ base: "12px", md: "14px", xl: "16px" }}
+          >
             Rs. {totalAfterDiscount}
-          </Heading>
+          </Text>
         </HStack>
 
         <Button

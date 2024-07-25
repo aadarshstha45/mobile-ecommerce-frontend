@@ -24,4 +24,5 @@ export const ProductApi = {
   getProductsByOccasion: (occasion: string) =>
     `/get-products-by-occasion/${occasion}`,
   getProductsBySeason: (season: string) => `/get-products-by-season/${season}`,
+  addViewAction: "/add-view-action",
 };

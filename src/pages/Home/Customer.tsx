@@ -1,32 +1,42 @@
-import { CheckoutIcon } from "@/assets/icons/Checkout";
-import { CustomerSupport } from "@/assets/icons/CustomerSupport";
-import { DeliveryIcon } from "@/assets/icons/DeliveryIcon";
 import {
   Box,
   Container,
   GridItem,
   HStack,
+  Icon,
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
+import { Headset, ShoppingBag, Truck } from "lucide-react";
 
 const customerData = [
   {
     title: "Delivery",
     description: "Ensures the delivery of the product on time",
-    icon: <DeliveryIcon boxSize={16} />,
+    icon: (
+      <Icon as={Truck} bg={"primary"} stroke={"primary.500"} boxSize={10} />
+    ),
   },
   {
     title: "Customer Support",
     description:
       "Providing immediate assistance to resolve queries and improve the shopping experience",
-    icon: <CustomerSupport boxSize={14} />,
+    icon: (
+      <Icon as={Headset} bg={"primary"} stroke={"primary.500"} boxSize={10} />
+    ),
   },
   {
     title: "Easy Checkout",
     description:
       "Simplifying the purchase process to reduce cart abandonment rates.",
-    icon: <CheckoutIcon boxSize={14} />,
+    icon: (
+      <Icon
+        as={ShoppingBag}
+        bg={"primary"}
+        stroke={"primary.500"}
+        boxSize={10}
+      />
+    ),
   },
 ];
 
@@ -42,7 +52,7 @@ function Customer() {
         gap={{ base: 4, sm: 6, md: 8, lg: 10 }}
       >
         {customerData?.map((data, index) => (
-          <GridItem key={index} h={"100%"} colSpan={1}>
+          <GridItem key={index} colSpan={1}>
             <HStack align={"center"} gap={4}>
               {data.icon}
 

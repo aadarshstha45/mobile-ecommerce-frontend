@@ -1,3 +1,4 @@
+import { useAddViewAction } from "@/api/functions/Product";
 import { useSaveWishlist } from "@/api/functions/Wishlist";
 import { StarIcon } from "@chakra-ui/icons";
 import {
@@ -45,8 +46,15 @@ const ItemDisplay = ({
     await wishlist.mutateAsync({ product_id: id });
   };
 
+  const addViewAction = useAddViewAction();
+
+  const handleAddAction = async (id: string) => {
+    await addViewAction.mutateAsync({ product_id: id });
+  };
+
   return (
     <Link
+      onClick={() => handleAddAction(data.id)}
       to={
         data?.subcategory
           ? `/product/${data?.category?.slug}/${data?.subcategory.slug}/${data.id}`

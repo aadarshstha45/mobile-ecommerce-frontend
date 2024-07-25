@@ -12,4 +12,5 @@ export const user = {
   addShippingAddress: "/shipping-address",
   editShippingAddress: "/shipping-address/:id",
   deleteShippingAddress: "/shipping-address/:id",
+  getMerchant: "/merchant",
 };
