@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import { useRegister } from "@/api/Auth/AuthApi";
 import { useRegister } from "@/api/auth";
-import FacebookIcon from "@/assets/icons/FacebookIcon";
+import { FacebookIcon } from "@/assets/icons/FooterIcons";
 import GoogleIcon from "@/assets/icons/GoogleIcon";
 import RegisterBanner from "@/assets/images/Auth/RegisterImage.png";
 import { TextInput } from "@/components/Form";

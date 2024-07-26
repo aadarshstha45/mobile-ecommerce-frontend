@@ -9,14 +9,12 @@ const useFetchCategories = (perPage: number) => {
   return usePaginatedFetch(CategoryMenuApi.getCategories(perPage));
 };
 
-const useFetchHomeNewArrivals = () => {
-  return useFetch({
-    apiEndPoint: CategoryMenuApi.getHomeNewArrivals,
-  });
+const useFetchHomeNewArrivals = (perPage: number) => {
+  return usePaginatedFetch(CategoryMenuApi.getHomeNewArrivals(perPage));
 };
 
-const useFetchNewArrivals = (page: number) => {
-  return usePaginatedFetch(CategoryMenuApi.getNewArrivals(page));
+const useFetchNewArrivals = (page: number, sort: string) => {
+  return usePaginatedFetch(CategoryMenuApi.getNewArrivals(page, sort));
 };
 
 const useFetchProductsByCategory = (

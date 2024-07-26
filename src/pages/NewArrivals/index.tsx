@@ -27,7 +27,10 @@ function NewArrivals() {
 
   //   const param = category_slug ? { category_slug, slug } : slug!;
 
-  const { data, isPending, isFetching } = useFetchNewArrivals(pageFromUrl);
+  const { data, isPending, isFetching } = useFetchNewArrivals(
+    pageFromUrl,
+    sort
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);

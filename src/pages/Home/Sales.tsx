@@ -3,16 +3,46 @@ import { ArrowForward } from "@/assets/icons/ArrowForward";
 import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
 import {
   Box,
+  Button,
   Link as ChakraLink,
   Container,
   Flex,
   HStack,
+  Icon,
+  Stack,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
+import { CirclePlusIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Link } from "react-router-dom";
 
 function Sales() {
+  const [itemsToShow, setItemsToShow] = useState(8);
+  const scrollPositionRef = useRef(0);
+
+  const handleExpandItems = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Store the current scroll position
+    scrollPositionRef.current = window.scrollY;
+    setItemsToShow(itemsToShow + 4);
+  };
+  useEffect(() => {
+    // Restore the scroll position after state update
+    window.scrollTo(0, scrollPositionRef.current);
+  }, [itemsToShow]);
+  const [isLessThan768] = useMediaQuery("(max-width: 768px)");
+
+  useEffect(() => {
+    if (isLessThan768) {
+      setItemsToShow(4);
+    } else {
+      setItemsToShow(8);
+    }
+  }, [isLessThan768]);
+
   const { data: salesData } = useFetchHomeSales();
   return (
     salesData && (
@@ -54,8 +84,8 @@ function Sales() {
 
           {salesData.products.length > 0 && (
             <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
-              <Masonry gutter="30px">
-                {salesData.products.map((item: any) => (
+              <Masonry gutter={isLessThan768 ? "10px" : "30px"}>
+                {salesData.products.slice(0, itemsToShow).map((item: any) => (
                   <ItemDisplay
                     key={item.id}
                     data={item}
@@ -64,6 +94,23 @@ function Sales() {
                 ))}
               </Masonry>
             </ResponsiveMasonry>
+          )}
+          {itemsToShow < 8 && (
+            <Stack align={"center"} mr={10} justify={"center"}>
+              <Button
+                colorScheme="primary"
+                variant={"unstyled"}
+                w={"fit-content"}
+                onClick={handleExpandItems}
+              >
+                <Icon
+                  _hover={{ color: "primary.600" }}
+                  color={"primary.500"}
+                  as={CirclePlusIcon}
+                  boxSize={6}
+                />
+              </Button>
+            </Stack>
           )}
         </Flex>
       </Container>

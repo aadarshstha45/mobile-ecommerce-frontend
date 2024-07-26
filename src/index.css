@@ -11,6 +11,28 @@
   padding: 0px !important;
   margin: 0px !important;
 }
+.hero-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Ensures the image covers the container */
+}
+@media (max-width: 600px) {
+  .hero-slide img {
+    aspect-ratio: 4 / 3; /* Mobile view */
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1200px) {
+  .hero-slide img {
+    aspect-ratio: 16 / 9; /* Tablet view */
+  }
+}
+
+@media (min-width: 1201px) {
+  .hero-slide img {
+    aspect-ratio: 21 / 9; /* Desktop view */
+  }
+}
 
 .hero-slide {
   padding: 0px !important;

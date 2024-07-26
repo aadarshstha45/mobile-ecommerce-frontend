@@ -434,7 +434,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
             align={"center"}
           >
             <Text fontSize={"lg"} fontWeight={600}>
-              Total😒😒
+              Total
             </Text>
             <Text textColor={"primary.500"} fontSize={"lg"} fontWeight={600}>
               Rs. {totalPrice}

@@ -9,20 +9,21 @@ import {
 
 interface DetailTabProps {
   description?: string;
+  specification?: string;
 }
 
 const tabList = [
   {
     id: 1,
-    title: "Description",
+    title: "Specification",
   },
   {
     id: 2,
-    title: "Specifications",
+    title: "Description",
   },
 ];
 
-const DetailTab = ({ description }: DetailTabProps) => {
+const DetailTab = ({ description, specification }: DetailTabProps) => {
   return (
     <Tabs
       colorScheme="primary"
@@ -51,10 +52,10 @@ const DetailTab = ({ description }: DetailTabProps) => {
       />
       <TabPanels textAlign={"center"}>
         <TabPanel>
-          <p>{description}</p>
+          <p>{specification}</p>
         </TabPanel>
         <TabPanel>
-          <p>two!</p>
+          <p>{description}</p>
         </TabPanel>
       </TabPanels>
     </Tabs>

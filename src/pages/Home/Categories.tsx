@@ -115,7 +115,7 @@ const Categories = () => {
                       <Text
                         noOfLines={1}
                         textAlign={"center"}
-                        fontSize={{ base: "14px", sm: "16px", md: "18px" }}
+                        fontSize={{ base: "14px", sm: "16px", lg: "18px" }}
                         color={"gray.500"}
                       >
                         {category.name}

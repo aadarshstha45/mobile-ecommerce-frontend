@@ -241,7 +241,6 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
             <Button
               type="submit"
               mt={6}
-              isDisabled={promoCode.length === 0}
               isLoading={PromoCode.isPending}
               fontSize={{ sm: "14px", md: "16px" }}
               fontWeight={400}

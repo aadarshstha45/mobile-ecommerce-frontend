@@ -1,8 +1,14 @@
 import { useFetchMerchant } from "@/api/functions";
-import FacebookIcon from "@/assets/icons/FacebookIcon";
+
+import {
+  FacebookIcon,
+  InstagramIcon,
+  TikTokIcon,
+} from "@/assets/icons/FooterIcons";
 import NavCart from "@/assets/icons/NavCart";
 import { Container, Divider, Flex, HStack, Text } from "@chakra-ui/react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { Link } from "react-router-dom";
 import AboutSection from "./AboutSection";
 import CustomerSection from "./CustomerSection";
 import HelpSection from "./HelpSection";
@@ -44,18 +50,22 @@ function Footer() {
               </Text>
               {merchant && (
                 <HStack key={merchant.id} align={"center"}>
-                  <FacebookIcon w={6} h={6} />
+                  <Link to={merchant.facebook}>
+                    <FacebookIcon w={6} h={6} />
+                  </Link>
+                  <InstagramIcon w={6} h={6} />
+                  <TikTokIcon w={6} h={6} />
                 </HStack>
               )}
             </>
           )}
         </Flex>
-        <ResponsiveMasonry columnsCountBreakPoints={{ 0: 3, 959: 4 }}>
+        <ResponsiveMasonry columnsCountBreakPoints={{ 0: 3, 766: 4 }}>
           <Masonry gutter={"10px"}>
             <AboutSection />
             <LinksSection />
             <HelpSection />
-            <CustomerSection />
+            <CustomerSection data={merchant} />
           </Masonry>
         </ResponsiveMasonry>
         <Divider borderColor={"#D9D9D9"} borderWidth={"1px"} mt={10} mb={4} />

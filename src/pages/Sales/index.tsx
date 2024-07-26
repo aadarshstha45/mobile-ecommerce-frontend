@@ -39,6 +39,10 @@ const SalesOffer = () => {
                         key={index}
                         data={item}
                         discountPercent={item.discount ?? ""}
+                        colorOptions={
+                          item.product_properties &&
+                          item.product_properties.color
+                        }
                       />
                     ))}
                   </Masonry>

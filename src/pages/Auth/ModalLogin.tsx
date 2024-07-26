@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useLogin } from "@/api/auth";
-import FacebookIcon from "@/assets/icons/FacebookIcon";
+import { FacebookIcon } from "@/assets/icons/FooterIcons";
 import GoogleIcon from "@/assets/icons/GoogleIcon";
 import { TextInput } from "@/components/Form";
 import { LoginSchema } from "@/utils/validation";

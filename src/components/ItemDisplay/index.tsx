@@ -15,7 +15,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Heart, ShoppingBag } from "lucide-react";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import LazyLoadImage from "../Image";
 
@@ -36,10 +35,6 @@ const ItemDisplay = ({
   colorOptions,
   discountPercent,
 }: ItemDisplayProps) => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const wishlist = useSaveWishlist();
 
   const handleWishList = async (id: string) => {
@@ -51,6 +46,8 @@ const ItemDisplay = ({
   const handleAddAction = async (id: string) => {
     await addViewAction.mutateAsync({ product_id: id });
   };
+
+  console.log(colorOptions);
 
   return (
     <Link
@@ -198,7 +195,7 @@ const ItemDisplay = ({
                     h={"14px"}
                     w={"14px"}
                     borderRadius={"50%"}
-                    bg={color.option}
+                    bg={color.hex_value}
                   />
                 ))}
               </HStack>
@@ -209,10 +206,18 @@ const ItemDisplay = ({
             <Text fontSize={"12px"} fontWeight={500} textColor={"#939292"}>
               {/* {data.rating} ({data.ratingCount}) */}
               {/* Hardcoded values */}
-              4.5 / 20 (200)
+              4.5 (200)
             </Text>
           </HStack>
           <HStack gap={2} mt={2}>
+            {discountPercent && (
+              <Text
+                fontSize={{ base: "12px", sm: "14px", lg: "16px" }}
+                fontWeight={500}
+              >
+                Rs.{data.price * (1 - discountPercent / 100)}
+              </Text>
+            )}
             <Text
               fontSize={
                 discountPercent
@@ -225,14 +230,6 @@ const ItemDisplay = ({
             >
               Rs. {data.price}
             </Text>
-            {discountPercent && (
-              <Text
-                fontSize={{ base: "12px", sm: "14px", lg: "16px" }}
-                fontWeight={500}
-              >
-                Rs.{data.price * (1 - discountPercent / 100)}
-              </Text>
-            )}
           </HStack>
         </CardBody>
       </Card>

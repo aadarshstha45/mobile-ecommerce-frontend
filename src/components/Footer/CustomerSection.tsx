@@ -1,4 +1,5 @@
-import { Flex, Link, Text } from "@chakra-ui/react";
+import { Link as ChakraLink, Flex, Text } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const links = [
   {
@@ -18,7 +19,7 @@ const links = [
   },
 ];
 
-function CustomerSection() {
+function CustomerSection({ data }: any) {
   return (
     <Flex flexDir={"column"} gap={4}>
       <Text
@@ -27,16 +28,36 @@ function CustomerSection() {
       >
         Customer Service
       </Text>
-
+      {data && (
+        <>
+          <ChakraLink
+            as={Link}
+            to={`mailto:${data.email}`}
+            fontSize={{ base: "12px", md: "16px" }}
+            textColor={"#000"}
+          >
+            {data.email}
+          </ChakraLink>
+          <ChakraLink
+            as={Link}
+            to={`mailto:${data.email}`}
+            fontSize={{ base: "12px", md: "16px" }}
+            textColor={"#000"}
+          >
+            {data.email}
+          </ChakraLink>
+        </>
+      )}
       {links.map((link) => (
-        <Link
+        <ChakraLink
           key={link.id}
-          href={link.to}
+          as={Link}
+          to={link.to}
           fontSize={{ base: "12px", md: "16px" }}
           textColor={"#000"}
         >
           {link.label}
-        </Link>
+        </ChakraLink>
       ))}
     </Flex>
   );

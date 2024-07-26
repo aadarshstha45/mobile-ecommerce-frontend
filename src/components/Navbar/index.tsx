@@ -56,9 +56,9 @@ function NavBar({ data }: any) {
       borderBottom={"1px solid #BEBDBD"}
       as={"nav"}
       w="100%"
-      py={{ base: 4, sm: 6 }}
+      py={5}
       pos={"fixed"}
-      h={{ base: "90px", md: "100px" }}
+      h={"90px"}
       zIndex={99}
     >
       <Container maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}>
@@ -101,7 +101,7 @@ function NavBar({ data }: any) {
             as={MenuIcon}
           />
           <Link as={NavLink} to="/" fontSize={{ base: "14px", sm: "16px" }}>
-            <NavCart boxSize={{ base: 6, md: 8 }} />
+            <NavCart boxSize={{ base: 6 }} />
           </Link>
 
           <HStack gap={"30px"}>

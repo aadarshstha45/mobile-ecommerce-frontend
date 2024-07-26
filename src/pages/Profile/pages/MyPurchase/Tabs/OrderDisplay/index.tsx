@@ -136,7 +136,7 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
                   color={"#939292"}
                   fontSize={{ base: "16px", md: "18px", lg: "20px" }}
                 >
-                  Status: {item.payment_status}
+                  payment: {item.payment_status}
                 </Text>
                 <Button colorScheme="primary" size="xs" borderRadius={0}>
                   Cancel

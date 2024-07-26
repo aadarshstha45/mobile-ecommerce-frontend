@@ -52,21 +52,15 @@ const Home = () => {
               objectPosition={"center"}
               transition={"opacity 0.3s ease-in-out"}
               w={"full"}
-              h={{
-                base: "300px",
-                sm: "400px",
-                md: "500px",
-                lg: "600px",
-                xl: "750px",
-              }}
+              aspectRatio={4 / 3}
             />
           </SwiperSlide>
         ))}
       </Swiper>
 
       <Sales />
-      <Customer />
       <Categories />
+      <Customer />
       <NewArrivals />
       {/* <Wardrobe
         menWardrobeData={wardrobeData}

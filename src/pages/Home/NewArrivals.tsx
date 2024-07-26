@@ -1,17 +1,44 @@
 import { useFetchHomeNewArrivals } from "@/api/functions/Category";
 import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
-import { Box, Container, Flex, HStack, Icon, Text } from "@chakra-ui/react";
-import { ArrowRight } from "lucide-react";
-import { useRef } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  HStack,
+  Icon,
+  Spinner,
+  Stack,
+  Text,
+  useMediaQuery,
+} from "@chakra-ui/react";
+import { ArrowRight, CirclePlusIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Link } from "react-router-dom";
 
 function NewArrivals() {
   const targetRef = useRef<HTMLDivElement>(null);
+
   // const isVisible = useIsVisible(targetRef);
-  const { data: newArrivalsData, isPending } = useFetchHomeNewArrivals();
-  console.log(newArrivalsData);
+
+  const [perPage, setPerPage] = useState(8);
+  const [isLessThan768] = useMediaQuery("(max-width: 768px)");
+
+  const {
+    data: newArrivalsData,
+    isPending,
+    isFetching,
+  } = useFetchHomeNewArrivals(perPage);
+
+  useEffect(() => {
+    if (isLessThan768) {
+      setPerPage(4);
+    } else {
+      setPerPage(8);
+    }
+  }, [isLessThan768]);
   return (
     <Container
       as={"section"}
@@ -24,8 +51,8 @@ function NewArrivals() {
           <LoadingSpinner height={"full"} />
         </Flex>
       ) : (
-        newArrivalsData &&
-        newArrivalsData.length > 0 && (
+        newArrivalsData.data &&
+        newArrivalsData.data.length > 0 && (
           <Flex flexDir={"column"} gap={10}>
             <Flex justify={"space-between"} align={"center"}>
               <HStack align={"center"}>
@@ -58,11 +85,32 @@ function NewArrivals() {
             </Flex>
             <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
               <Masonry gutter="30px">
-                {newArrivalsData?.map((data: any) => (
+                {newArrivalsData.data.map((data: any) => (
                   <ItemDisplay key={data.id} data={data} />
                 ))}
               </Masonry>
             </ResponsiveMasonry>
+            {newArrivalsData?.pagination?.per_page < 8 && (
+              <Stack align={"center"} mr={10} justify={"center"}>
+                {isFetching ? (
+                  <Spinner thickness="4px" color="primary.500" />
+                ) : (
+                  <Button
+                    variant={"unstyled"}
+                    w={"fit-content"}
+                    colorScheme="primary"
+                    onClick={() => setPerPage(perPage + 4)}
+                  >
+                    <Icon
+                      _hover={{ color: "primary.600" }}
+                      color={"primary.500"}
+                      as={CirclePlusIcon}
+                      boxSize={6}
+                    />
+                  </Button>
+                )}
+              </Stack>
+            )}
           </Flex>
         )
       )}
