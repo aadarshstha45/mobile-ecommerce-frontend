@@ -1,7 +1,7 @@
 import { useUpdateUser } from "@/api/auth";
 import {
-  DatePicker,
   PhoneInput,
+  ReactDatePicker,
   SelectInput,
   TextInput,
 } from "@/components/Form";
@@ -136,10 +136,9 @@ const ProfileDetails = () => {
             />
           </GridItem>
           <GridItem colSpan={1}>
-            <DatePicker
+            <ReactDatePicker
               isReadOnly={readOnly}
               name="dob"
-              isControlled
               label="Birthday (Optional)"
               control={control}
               errors={errors}

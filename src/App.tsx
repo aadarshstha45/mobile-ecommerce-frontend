@@ -1,10 +1,10 @@
 import { Flex, Spinner } from "@chakra-ui/react";
 import { Suspense, useEffect } from "react";
+import "react-datepicker/dist/react-datepicker.css";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { useAuthentication, useLogoutUser } from "./api/auth/users";
 import { getAppRoutes } from "./router/appRoutes";
 import { LoadingSpinner } from "./utils/LoadingSpinner";
-
 const renderRoutes = (routes: any) => {
   return routes.map((route: any, index: number) => (
     <Route

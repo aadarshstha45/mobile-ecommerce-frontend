@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { baseURL } from "@/api/axiosSetup";
 import { CheckIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   FormControl,
@@ -12,15 +13,13 @@ import {
   ResponsiveValue,
   Spinner,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
-import { Control, Controller, FieldErrors } from "react-hook-form";
-import IconButton from "./IconButton";
-
-import { baseURL } from "@/api/axiosSetup";
 import axios from "axios";
 import { Property } from "csstype";
 import { X } from "lucide-react";
-
+import { useCallback, useEffect, useState } from "react";
+import { Control, Controller, FieldErrors } from "react-hook-form";
+import Datepicker from "react-tailwindcss-datepicker";
+import IconButton from "./IconButton";
 type InputProps = {
   label?: string;
   control: Control<any>;
@@ -38,6 +37,7 @@ type InputProps = {
   backErrors?: any;
   errorMessage?: string;
   [key: string]: any;
+  singleDate?: boolean;
 };
 
 const debounce = (func: (...args: any[]) => void, wait: number) => {
@@ -64,6 +64,7 @@ export const TextInput = ({
   pointerEvents,
   backErrors,
   isReadOnly,
+  singleDate,
   ...rest
 }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -181,6 +182,18 @@ export const TextInput = ({
                 />
               </InputRightElement>
             </InputGroup>
+          ) : type === "date" ? (
+            <Datepicker
+              value={value}
+              onChange={(value) => {
+                onChange(value);
+              }}
+              primaryColor="indigo"
+              asSingle={singleDate ? true : false}
+              placeholder={placeholder}
+              useRange={singleDate ? false : true}
+              inputClassName="border  border-red-300 rounded-2 w-full px-3 py-2 focus:border-2 focus:border-primary-500 focus:outline-none"
+            />
           ) : type === "email" ? (
             <>
               <InputGroup>

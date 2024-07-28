@@ -1,8 +1,15 @@
-import { DatePicker } from "./DatePicker";
+import { ReactDatePicker } from "./DatePicker";
 import IconButton from "./IconButton";
 import PhoneInput from "./PhoneInput";
 import RadioBox from "./RadioBox";
 import SelectInput from "./SelectInput";
 import { TextInput } from "./TextInput";
 
-export { DatePicker, IconButton, PhoneInput, RadioBox, SelectInput, TextInput };
+export {
+  IconButton,
+  PhoneInput,
+  RadioBox,
+  ReactDatePicker,
+  SelectInput,
+  TextInput,
+};

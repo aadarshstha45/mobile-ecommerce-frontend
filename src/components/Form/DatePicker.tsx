@@ -2,12 +2,16 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
   ResponsiveValue,
 } from "@chakra-ui/react";
 import { Property } from "csstype";
 import { CalendarIcon } from "lucide-react";
+import { forwardRef } from "react";
+import DatePicker from "react-datepicker";
 import { Control, Controller, FieldErrors } from "react-hook-form";
-import { SimpleDatePicker } from "simple-chakra-ui-datepicker";
 
 type InputProps = {
   label?: string;
@@ -34,7 +38,37 @@ const formatDateToLocalISOString = (date: Date) => {
   return localDate.toISOString().split("T")[0];
 };
 
-export const DatePicker = ({
+const CustomInput = forwardRef<any, any>((props, ref) => {
+  return (
+    <InputGroup>
+      <Input
+        borderRadius={2}
+        focusBorderColor="primary.500"
+        {...props}
+        ref={ref}
+      />
+      <InputRightElement
+        userSelect="none"
+        pointerEvents="none"
+        children={<CalendarIcon />}
+      />
+    </InputGroup>
+  );
+});
+
+const convert = (selected: any) => {
+  console.log("selected", selected);
+  const day = selected.getDate();
+  const month =
+    selected.getMonth() >= 10
+      ? selected.getMonth() + 1
+      : `0${selected.getMonth() + 1}`;
+  const year = selected.getFullYear();
+
+  return `${year}/${month}/${day}`;
+};
+
+export const ReactDatePicker = ({
   label,
   control,
   name,
@@ -60,43 +94,14 @@ export const DatePicker = ({
         name={name}
         control={control}
         render={({ field: { value, onChange } }) => (
-          <SimpleDatePicker
-            inputProps={{
-              borderRadius: "2px",
-              errorBorderColor: "red.500",
-              border: "1px solid #000",
-              borderColor: isReadOnly ? "gray.300" : "#000",
-              focusBorderColor: isReadOnly ? "gray.300" : "primary.500",
-              _hover: { borderColor: isReadOnly ? "gray.300" : "#000" },
-              isDisabled: isReadOnly,
-              _disabled: {
-                bg: "transparent",
-                cursor: "auto",
-              },
-              value: value ? formatDateToLocalISOString(new Date(value)) : "",
-              onChange: (e) => {
-                const date = new Date(e.target.value);
-                onChange(date);
-              },
-            }}
-            onChange={(date) => {
-              onChange(formatDateToLocalISOString(date!));
-            }}
-            placeholder={placeholder ?? "Select Date"}
-            formatDate={(date) => {
-              return formatDateToLocalISOString(date);
-            }}
-            popoverProps={{
-              colorScheme: "primary",
-              matchWidth: true,
-              strategy: "fixed",
-              boundary: "clippingParents",
-            }}
-            inactiveColor="gray.100"
-            dateBorderRadius={"2px"}
-            icon={<CalendarIcon />}
-            colorSchema="primary"
-            activeColor="primary.500"
+          <DatePicker
+            value={new Date(value).toISOString().split("T")[0]}
+            onChange={onChange}
+            dateFormat="dd/MM/yyyy"
+            showPopperArrow={false}
+            customInput={<CustomInput />}
+            className="form-control"
+            dateFormatCalendar="MMMM yyyy"
           />
         )}
       />

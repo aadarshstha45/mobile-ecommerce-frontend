@@ -1,6 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --swiper-navigation-size: 16px !important;
   --swiper-theme-color: black !important;
+}
+
+.react-datepicker {
+  z-index: 100 !important;
+  width: 100%;
 }
 
 .hero-slider {

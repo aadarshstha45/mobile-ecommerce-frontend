@@ -495,13 +495,13 @@ function ProductDetail() {
                 opacity={1}
                 w={{ base: "full", md: "70%" }}
               />
-              <RelatedProducts />
             </>
           )}
         </Flex>
       </Container>
       <ProductFAQ />
       <Queries />
+      <RelatedProducts />
     </Flex>
   );
 }

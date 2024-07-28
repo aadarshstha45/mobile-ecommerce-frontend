@@ -1,5 +1,5 @@
 import { useFetchOrders } from "@/api/functions/Order";
-import { DatePicker } from "@/components/Form";
+import { ReactDatePicker } from "@/components/Form";
 import { PaginationButton } from "@/components/Pagination";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { Button, Flex, HStack, Stack, Text } from "@chakra-ui/react";
@@ -79,21 +79,9 @@ const InProcess = () => {
           w={{ base: "100%", sm: "auto" }}
           flexDir={{ base: "column", sm: "row" }}
         >
-          <DatePicker
-            width={{ base: "full", sm: "fit-content" }}
-            placeholder="Select From"
-            control={control}
-            isControlled
-            name="date_from"
-          />
+          <ReactDatePicker control={control} name="date_from" />
           <Text>TO</Text>
-          <DatePicker
-            width={{ base: "full", sm: "fit-content" }}
-            placeholder="Select To"
-            isControlled
-            control={control}
-            name="date_to"
-          />
+          <ReactDatePicker control={control} name="date_to" />
           <Button mt={-2} borderRadius={2} type="submit" colorScheme="primary">
             Apply
           </Button>

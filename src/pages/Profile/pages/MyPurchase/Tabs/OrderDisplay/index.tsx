@@ -27,6 +27,7 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
       ) : data && data.length > 0 ? (
         data.map((item: any) => (
           <Card
+            zIndex={0}
             key={item.id}
             shadow={"none"}
             borderRadius={0}

@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+.react-datepicker-popper {
+  z-index: 100 !important;
+}
+
+.react-datepicker__month-container {
+  position: sticky !important;
+  z-index: 100 !important;
+}
