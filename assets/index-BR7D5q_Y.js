@@ -1,1 +1,0 @@
-import{aD as t,aE as i,b4 as a}from"./index--ZeW-1SI.js";const s={post:"/wishlist",get:e=>`/wishlist?per_page=${e}`,delete:"/wishlist/:id}"},n=()=>t({apiEndPoint:s.post,message:"Wishlist saved successfully"}),u=e=>i(s.get(e)),o=()=>a({apiEndPoint:s.delete,inValidateEndpoint:s.get(5),message:"Item removed successfully"});export{u as a,o as b,n as u};
