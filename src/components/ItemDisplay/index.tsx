@@ -28,12 +28,14 @@ interface ItemDisplayProps {
   data: any;
   colorOptions?: any;
   discountPercent?: number;
+  imageWidth?: string;
 }
 
 const ItemDisplay = ({
   data,
   colorOptions,
   discountPercent,
+  imageWidth,
 }: ItemDisplayProps) => {
   const wishlist = useSaveWishlist();
 
@@ -46,8 +48,6 @@ const ItemDisplay = ({
   const handleAddAction = async (id: string) => {
     await addViewAction.mutateAsync({ product_id: id });
   };
-
-  console.log(colorOptions);
 
   return (
     <Link
@@ -127,7 +127,7 @@ const ItemDisplay = ({
                 id={data.id}
                 src={data.image}
                 alt={data.id.toString()}
-                w={"full"}
+                w={imageWidth ?? "full"}
               />
             </Box>
           ) : (

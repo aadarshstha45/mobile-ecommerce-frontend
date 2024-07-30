@@ -6,6 +6,7 @@ import {
   TextInput,
 } from "@/components/Form";
 import { countryOptions } from "@/components/Form/SelectInput";
+import { convertDate } from "@/utils/convertDate";
 import { ProfileSchema } from "@/utils/validation/profile";
 import {
   Button,
@@ -36,7 +37,6 @@ const ProfileDetails = () => {
       name: "",
       email: "",
       phone_number: "",
-      birthday: "",
       country: "",
       city: "",
       street: "",
@@ -80,7 +80,11 @@ const ProfileDetails = () => {
   }, [data, reset]);
 
   const onSubmit = async (data: any) => {
-    await mutateAsync({ ...data, country_code: countryCode });
+    await mutateAsync({
+      ...data,
+      country_code: countryCode,
+      dob: convertDate(data.dob),
+    });
     setReadOnly(true);
   };
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { HttpClient } from "../axiosSetup";
@@ -18,8 +17,9 @@ const useFetch = ({ apiEndPoint, params, enabled }: FetchProps) => {
       }
     );
   };
+
   return useQuery({
-    queryKey: [apiEndPoint, params],
+    queryKey: [apiEndPoint, JSON.stringify(params)],
     queryFn: fetchData,
     select: (response) => response?.data?.data,
     enabled: enabled ?? true,
@@ -32,11 +32,13 @@ const usePaginatedFetch = (apiEndpoint: string, params?: any) => {
       params,
     });
   };
+
   return useQuery({
-    queryKey: [apiEndpoint, params],
+    queryKey: [apiEndpoint, JSON.stringify(params)],
     queryFn: fetchData,
     select: (response) => response?.data,
     placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
   });
 };
 

@@ -17,6 +17,7 @@ import {
   Flex,
   GridItem,
   HStack,
+  Icon,
   IconButton,
   Image,
   SimpleGrid,
@@ -26,10 +27,10 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import { HeartIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { HeartIcon, MoveLeft, MoveRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ModalLogin from "../Auth/ModalLogin";
 import DetailTab from "./DetailTab";
 import ProductFAQ from "./ProductFAQ";
@@ -38,6 +39,21 @@ import Ratings from "./Ratings";
 import RelatedProducts from "./RelatedProducts";
 
 function ProductDetail() {
+  const { pathname } = useLocation();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const scrollNext = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollBy({ left: 150, behavior: "smooth" }); // Adjust the scroll value as needed
+    }
+  };
+
+  const scrollPrev = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollBy({ left: -150, behavior: "smooth" }); // Adjust the scroll value as needed
+    }
+  };
+
   const { id } = useParams<{ id: string }>();
   const { data, isPending } = useFetchProductById(id!);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -66,7 +82,7 @@ function ProductDetail() {
   const [colorImages, setColorImages] = useState<any[]>([]);
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     setPrice(data?.price);
@@ -79,7 +95,7 @@ function ProductDetail() {
   }, [data?.image]);
 
   useEffect(() => {
-    if (data?.product_properties) {
+    if (data?.product_properties && data?.product_properties.length > 0) {
       reset({
         product_id: id,
         size_id: data?.product_properties[0]?.sizes[0]?.size?.id ?? "",
@@ -90,7 +106,7 @@ function ProductDetail() {
   }, [data?.product_properties]);
 
   useEffect(() => {
-    if (data?.product_properties) {
+    if (data?.product_properties && data?.product_properties.length > 0) {
       const colors = data?.product_properties?.map((property: any) => ({
         label: property.color?.name,
         value: property.color?.id,
@@ -143,8 +159,18 @@ function ProductDetail() {
         const images = data.product_properties?.[0]?.images;
         if (images && images.length > 0) {
           setColorImages(images);
+        } else if (data?.product_images && data.product_images.length > 0) {
+          setColorImages(data?.product_images);
+        } else {
+          setColorImages([]);
         }
       }
+    } else if (data?.product_images && data.product_images.length > 0) {
+      setColorImages(data?.product_images);
+    } else {
+      setColorOptions([]);
+      setSizeOptions([]);
+      setColorImages([]);
     }
   }, [data?.product_properties, colorId]);
 
@@ -157,8 +183,14 @@ function ProductDetail() {
       if (selectedSize) {
         setPrice(selectedSize.price);
       }
+    } else {
+      setColorId(data?.product_images);
     }
   }, [sizeId]);
+
+  useEffect(() => {
+    console.log(colorImages);
+  }, [colorImages]);
 
   const onSubmit = async (data: any) => {
     if (TokenService.isAuthenticated()) {
@@ -234,57 +266,89 @@ function ProductDetail() {
                         />
                       </Flex>
                     )}
-
-                    {colorImages && (
-                      <Flex
-                        sx={{
-                          "&::-webkit-scrollbar": {
-                            height: "5px", // Height of the scrollbar
-                            backgroundCol1or: "transparent", // Background color of the scrollbar track
-                            py: 100,
-                          },
-                          "&::-webkit-scrollbar-thumb": {
-                            backgroundColor: "#4A57B3", // Color of the scrollbar thumb
-                            borderRadius: "10px", // Rounded corners for the thumb
-                            border: "3px solid #4A57B3", // Border to make it visible
-                            scrollBehavior: "smooth",
-                          },
-                          "&::-webkit-scrollbar-thumb:hover": {
-                            backgroundColor: "#404E9E", // Color of the thumb on hover
-                          },
-                          "&::-webkit-scrollbar-track": {
-                            borderRadius: "10px", // Rounded corners for the track
-                          },
-                        }}
-                        gap={2}
-                        overflowX={"scroll"}
-                        alignSelf={"start"}
-                      >
-                        {displayImage && (
-                          <Image
-                            w={{ base: "100px", md: "150px" }}
-                            aspectRatio={1 / 1}
-                            onClick={() => setDisplayImage(data?.image)}
-                            src={`${data?.image}`}
-                            objectFit={"cover"}
-                            border={displayImage === data?.image ? "1px" : "0"}
-                            borderColor={"primary.500"}
-                          />
-                        )}
-                        {colorImages.map((image: any) => (
-                          <Image
-                            objectFit={"cover"}
-                            w={{ base: "100px", md: "150px" }}
-                            aspectRatio={1 / 1}
-                            key={image.index}
-                            onClick={() => setDisplayImage(image.image)}
-                            src={`${image.image}`}
-                            border={displayImage === image.image ? "1px" : "0"}
-                            borderColor={"primary.500"}
-                          />
-                        ))}
-                      </Flex>
-                    )}
+                    <Box pos={"relative"}>
+                      {colorImages && (
+                        <Flex
+                          sx={{
+                            "&::-webkit-scrollbar": {
+                              height: "5px", // Height of the scrollbar
+                              backgroundCol1or: "transparent", // Background color of the scrollbar track
+                              py: 100,
+                            },
+                            "&::-webkit-scrollbar-thumb": {
+                              backgroundColor: "#4A57B3", // Color of the scrollbar thumb
+                              borderRadius: "10px", // Rounded corners for the thumb
+                              border: "3px solid #4A57B3", // Border to make it visible
+                              scrollBehavior: "smooth",
+                            },
+                            "&::-webkit-scrollbar-thumb:hover": {
+                              backgroundColor: "#404E9E", // Color of the thumb on hover
+                            },
+                            "&::-webkit-scrollbar-track": {
+                              borderRadius: "10px", // Rounded corners for the track
+                            },
+                          }}
+                          gap={2}
+                          overflowX={"scroll"}
+                          alignSelf={"start"}
+                          ref={containerRef}
+                        >
+                          {displayImage && (
+                            <Image
+                              w={{ base: "100px", md: "150px" }}
+                              aspectRatio={1 / 1}
+                              onClick={() => setDisplayImage(data?.image)}
+                              src={`${data?.image}`}
+                              objectFit={"cover"}
+                              border={
+                                displayImage === data?.image ? "1px" : "0"
+                              }
+                              borderColor={"primary.500"}
+                            />
+                          )}
+                          {colorImages.map((image: any, index: number) => (
+                            <Image
+                              objectFit={"cover"}
+                              w={{ base: "100px", md: "150px" }}
+                              aspectRatio={1 / 1}
+                              key={index}
+                              onClick={() => setDisplayImage(image.image)}
+                              src={`${image.image}`}
+                              border={
+                                displayImage === image.image ? "1px" : "0"
+                              }
+                              borderColor={"primary.500"}
+                            />
+                          ))}
+                          <Button
+                            pos={"absolute"}
+                            left={-3}
+                            top={"40%"}
+                            display={{ base: "none", sm: "block" }}
+                            onClick={scrollPrev}
+                            size={"20px"}
+                            p={"1px"}
+                            borderRadius={"full"}
+                            colorScheme="gray"
+                          >
+                            <Icon as={MoveLeft} boxSize={"20px"} />
+                          </Button>
+                          <Button
+                            pos={"absolute"}
+                            right={-3}
+                            top={"40%"}
+                            display={{ base: "none", sm: "block" }}
+                            onClick={scrollNext}
+                            size={"20px"}
+                            p={"1px"}
+                            borderRadius={"full"}
+                            colorScheme="gray"
+                          >
+                            <Icon as={MoveRight} boxSize={"20px"} />
+                          </Button>
+                        </Flex>
+                      )}
+                    </Box>
                   </Flex>
                 </GridItem>
                 <GridItem colSpan={1}>

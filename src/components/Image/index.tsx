@@ -56,6 +56,7 @@ const LazyLoadImage = ({
         opacity={loadedImages[id] ? 1 : 0}
         transition={"opacity 0.3s ease-in-out"}
         w={w ?? "full"}
+        // h={h}
         aspectRatio={1 / 1}
         objectPosition={"center"}
         {...rest}

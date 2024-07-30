@@ -58,7 +58,7 @@ function NavBar({ data }: any) {
       w="100%"
       py={5}
       pos={"fixed"}
-      h={"90px"}
+      h={"75px"}
       zIndex={99}
     >
       <Container maxW={{ base: "98vw", sm: "95vw", md: "90vw", lg: "85vw" }}>

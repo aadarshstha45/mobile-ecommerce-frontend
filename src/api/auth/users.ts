@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import TokenService from "@/services/service-token";
+import { useToast } from "@/utils/toast";
 import {
   InvalidateQueryFilters,
   useMutation,
@@ -19,7 +20,7 @@ const useMutate = (requestData: {
   message?: string;
 }) => {
   const queryClient = useQueryClient();
-  // const { showSuccess, showError } = useChakraToast();
+  const { successToast, errorToast } = useToast();
   const sendData = (data: any): Promise<AxiosResponse<any>> => {
     return HttpClient.post(requestData.apiEndPoint, data);
   };
@@ -35,10 +36,7 @@ const useMutate = (requestData: {
           );
       }
       if (requestData.message) {
-        toast.success(requestData.message!, {
-          duration: 2000,
-        });
-        // showSuccess(requestData.message);
+        successToast(requestData.message);
       }
       // if (response.data.access_token) {
       //   sessionStorage.setItem("access_token", response.data?.access_token);
@@ -49,10 +47,6 @@ const useMutate = (requestData: {
         };
         TokenService.setToken(tokens);
         queryClient.setQueryData([authTokenKey], () => true);
-      }
-
-      if (requestData.message) {
-        toast.success(requestData.message!);
       }
     },
 
@@ -66,18 +60,13 @@ const useMutate = (requestData: {
         statusCode !== 422 &&
         statusCode !== 500
       ) {
-        // showError(errorMessage);
-        toast.error(errorMessage, {
-          duration: 2000,
-        });
+        errorToast(errorMessage);
       }
       if (dataError && statusCode !== 422) {
         if (statusCode === 500) {
-          toast.error(error?.response?.statusText as string, {
-            duration: 2000,
-          });
+          errorToast(error?.response?.statusText as string);
         } else {
-          // showError((dataError as any)?.message);
+          errorToast((dataError as any)?.message);
           toast.error((dataError as any)?.errors, {
             duration: 2000,
           });

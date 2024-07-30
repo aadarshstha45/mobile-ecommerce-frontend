@@ -32,42 +32,6 @@ type InputProps = {
   [key: string]: any;
 };
 
-const formatDateToLocalISOString = (date: Date) => {
-  const offset = date.getTimezoneOffset();
-  const localDate = new Date(date.getTime() - offset * 60 * 1000);
-  return localDate.toISOString().split("T")[0];
-};
-
-const CustomInput = forwardRef<any, any>((props, ref) => {
-  return (
-    <InputGroup>
-      <Input
-        borderRadius={2}
-        focusBorderColor="primary.500"
-        {...props}
-        ref={ref}
-      />
-      <InputRightElement
-        userSelect="none"
-        pointerEvents="none"
-        children={<CalendarIcon />}
-      />
-    </InputGroup>
-  );
-});
-
-const convert = (selected: any) => {
-  console.log("selected", selected);
-  const day = selected.getDate();
-  const month =
-    selected.getMonth() >= 10
-      ? selected.getMonth() + 1
-      : `0${selected.getMonth() + 1}`;
-  const year = selected.getFullYear();
-
-  return `${year}/${month}/${day}`;
-};
-
 export const ReactDatePicker = ({
   label,
   control,
@@ -79,13 +43,27 @@ export const ReactDatePicker = ({
   width,
   isControlled,
 }: InputProps) => {
+  const CustomInput = forwardRef<any, any>((props, ref) => {
+    return (
+      <InputGroup>
+        <Input
+          borderRadius={2}
+          focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
+          border={"1px solid #000"}
+          _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
+          {...props}
+          ref={ref}
+        />
+        <InputRightElement
+          userSelect="none"
+          pointerEvents="none"
+          children={<CalendarIcon />}
+        />
+      </InputGroup>
+    );
+  });
   return (
-    <FormControl
-      w={width ?? "100%"}
-      mb={4}
-      isReadOnly={isReadOnly}
-      isRequired={isRequired}
-    >
+    <FormControl w={width ?? "100%"} mb={4} isRequired={isRequired}>
       <FormLabel fontSize={{ sm: "14px", md: "16px" }} fontWeight={450}>
         {label}
       </FormLabel>
@@ -95,13 +73,16 @@ export const ReactDatePicker = ({
         control={control}
         render={({ field: { value, onChange } }) => (
           <DatePicker
-            value={new Date(value).toISOString().split("T")[0]}
+            selected={value}
+            value={value}
             onChange={onChange}
-            dateFormat="dd/MM/yyyy"
-            showPopperArrow={false}
+            dateFormat="yyyy-MM-dd"
             customInput={<CustomInput />}
-            className="form-control"
-            dateFormatCalendar="MMMM yyyy"
+            readOnly={isReadOnly}
+            peekNextMonth
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
           />
         )}
       />

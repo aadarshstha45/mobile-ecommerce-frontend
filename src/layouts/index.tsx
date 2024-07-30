@@ -25,7 +25,7 @@ function LayoutWrapper() {
           </Flex>
         }
       >
-        <Box mt={"80px"}>
+        <Box mt={"75px"}>
           <Outlet context={(user && user) || []} />
         </Box>
       </Suspense>
