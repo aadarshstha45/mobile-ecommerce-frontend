@@ -38,7 +38,6 @@ export const ReactDatePicker = ({
   name,
   isReadOnly,
   isRequired,
-  placeholder,
   errors,
   width,
   isControlled,
