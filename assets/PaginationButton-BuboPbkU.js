@@ -1,6 +1,0 @@
-import{w as u,a as v,j as n,at as j,bl as $,P as l,a3 as g}from"./index-6Sn1wWIr.js";import{C as b}from"./chevron-right-L723f4uI.js";/**
- * @license lucide-react v0.395.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */const f=u("ChevronLeft",[["path",{d:"m15 18-6-6 6-6",key:"1wnfg3"}]]),C=({currentPage:o,setCurrentPage:i,totalPages:c,sort:e})=>{const s=v(),r=()=>{const a=o-1;i(a),s(`?page=${a}${e?`&sort=${e}`:""}`)},h=()=>{const a=o+1;i(a),s(`?page=${a}${e?`&sort=${e}`:""}`)},p=a=>{i(a),s(`?page=${a}${e?`&sort=${e}`:""}`)},m=()=>{const a=[],d=Math.max(1,o>1?o-1:1),x=Math.min(c,o+1);for(let t=d;t<=x;t++)a.push(n.jsx(g,{gap:0,onClick:()=>p(t),variant:o===t?"solid":"outline","aria-label":`Page ${t}`,colorScheme:"primary",children:t},t));return a};return n.jsx(j,{py:10,align:"center",justify:"center",children:n.jsxs($,{size:"sm",isAttached:!0,children:[n.jsx(l,{onClick:r,isDisabled:o===1,variant:"outline",colorScheme:"primary","aria-label":"Previous",icon:n.jsx(f,{})}),m(),n.jsx(l,{cursor:"pointer",onClick:h,isDisabled:o===c,variant:"outline",colorScheme:"primary","aria-label":"Next",icon:n.jsx(b,{})})]})})};export{C as P};
