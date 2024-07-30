@@ -49,9 +49,7 @@ const ProfileDetails = () => {
   const [countryCode, setCountryCode] = useState(
     data?.shipping_details?.[0]?.country_code
   );
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+
   useEffect(() => {
     const country_code = data?.shipping_details?.[0]?.country_code;
     if (country_code) {

@@ -7,12 +7,7 @@ import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { Container, Flex, Stack, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { sortOptions } from "./data/data";
 
 type OptionType = {
@@ -46,7 +41,6 @@ function Category() {
   );
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setCurrentPage(pageFromUrl);
   }, [pageFromUrl]);
 
@@ -118,7 +112,7 @@ function Category() {
                     </Masonry>
                   </ResponsiveMasonry>
                 ) : (
-                  <Navigate to={"/"} />
+                  <Text fontSize="xl">No products found</Text>
                 )}
               </Flex>
             </Flex>

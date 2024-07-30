@@ -28,6 +28,7 @@ import { useOutletContext } from "react-router-dom";
 const SavedAddress = () => {
   const user: any = useOutletContext();
   const { data, isPending } = useFetchAddresses();
+  const [country, setCountry] = useState<string>("Nepal");
   const [countryCode, setCountryCode] = useState("+977");
   const [id, setId] = useState<string | null>(null);
   const addAddress = useAddAddress();
@@ -44,6 +45,7 @@ const SavedAddress = () => {
     defaultValues: {
       country: "",
       city: "",
+      address: "",
       street: "",
       landmark: "",
       recipient_name: "",
@@ -70,9 +72,6 @@ const SavedAddress = () => {
     }
   }, [id, data, reset, user]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
   const {
     isOpen: isFormOpen,
     onOpen: onFormOpen,
@@ -89,6 +88,7 @@ const SavedAddress = () => {
     if (prevData) {
       await editAddress.mutateAsync({
         ...data,
+        country,
         country_code: countryCode,
       });
       setId(null);
@@ -96,6 +96,7 @@ const SavedAddress = () => {
     } else {
       await addAddress.mutateAsync({
         ...data,
+        country,
         country_code: countryCode,
       });
     }
@@ -103,6 +104,7 @@ const SavedAddress = () => {
     reset({
       country: "",
       city: "",
+      address: "",
       street: "",
       landmark: "",
       recipient_name: "",
@@ -192,9 +194,9 @@ const SavedAddress = () => {
                         md: "18px",
                       }}
                     >
-                      {address?.street}
-                      {address.street && ","} {address?.city},{" "}
-                      {address?.country}
+                      {address.address && address.address + ","}{" "}
+                      {address?.street && address?.street + ","} {address?.city}
+                      ,{address?.country}
                     </Text>
                   </HStack>
                   <Text
@@ -266,6 +268,12 @@ const SavedAddress = () => {
           isRequired={!readOnly}
           placeholder="Select Country"
           control={control}
+          defaultValue={country}
+          handleChange={(selectedOption: any) => {
+            console.log(selectedOption);
+            setCountry(selectedOption.value);
+            setCountryCode(selectedOption.dial_code);
+          }}
           isReadOnly={readOnly}
           errors={errors}
         />
@@ -275,6 +283,12 @@ const SavedAddress = () => {
           isReadOnly={readOnly}
           name="city"
           isRequired={!readOnly}
+        />
+        <TextInput
+          label="Address"
+          control={control}
+          isReadOnly={readOnly}
+          name="address"
         />
         <TextInput
           label="Street"
@@ -298,6 +312,7 @@ const SavedAddress = () => {
         <PhoneInput
           defaultValue={countryCode}
           handleChange={(selectedOption: any) => {
+            setCountry(selectedOption.name);
             setCountryCode(selectedOption.value);
           }}
           name="phone_number"

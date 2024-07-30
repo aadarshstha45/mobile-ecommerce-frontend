@@ -44,6 +44,7 @@ function Sales() {
   }, [isLessThan768]);
 
   const { data: salesData } = useFetchHomeSales();
+  console.log(salesData);
   return (
     salesData && (
       <Container
@@ -85,13 +86,15 @@ function Sales() {
           {salesData.products.length > 0 && (
             <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
               <Masonry gutter={isLessThan768 ? "10px" : "30px"}>
-                {salesData.products.slice(0, itemsToShow).map((item: any) => (
-                  <ItemDisplay
-                    key={item.id}
-                    data={item}
-                    discountPercent={salesData?.discount_percentage}
-                  />
-                ))}
+                {salesData.products
+                  .slice(0, itemsToShow)
+                  .map((item: any, index: number) => (
+                    <ItemDisplay
+                      key={index}
+                      data={item}
+                      discountPercent={salesData?.discount_percentage}
+                    />
+                  ))}
               </Masonry>
             </ResponsiveMasonry>
           )}

@@ -106,8 +106,9 @@ const ShippingDetails = ({ stepProps }: IStepProps) => {
                                   md: "18px",
                                 }}
                               >
-                                {address?.street}, {address?.city},{" "}
-                                {address?.country}
+                                {address.address && address.address + ","}{" "}
+                                {address?.street && address?.street + ","}{" "}
+                                {address?.city},{address?.country}
                               </Text>
                             </HStack>
                             <Text

@@ -1,6 +1,7 @@
 import { useFetchOrders } from "@/api/functions/Order";
 import { ReactDatePicker } from "@/components/Form";
 import { PaginationButton } from "@/components/Pagination";
+import { convertDate } from "@/utils/convertDate";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { Button, Flex, HStack, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -45,23 +46,19 @@ const InProcess = () => {
     setToDate(dateToUrl);
   }, [dateToUrl]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentPage]);
-
   const handleDateFilter = (data: any) => {
     urlParams.set("page", "1");
     navigate(`${location.pathname}?${urlParams.toString()}`);
     if (data.date_from !== "") {
-      urlParams.set("date_from", data.date_from);
-      setFromDate(data.date_from);
+      urlParams.set("date_from", convertDate(data.date_from));
+      setFromDate(convertDate(data.date_from));
     } else {
       setFromDate(undefined);
       urlParams.delete("date_from");
     }
     if (data.date_to !== "") {
-      urlParams.set("date_to", data.date_to);
-      setToDate(data.date_to);
+      urlParams.set("date_to", convertDate(data.date_to));
+      setToDate(convertDate(data.date_to));
     } else {
       setToDate(undefined);
       urlParams.delete("date_to");

@@ -26,6 +26,7 @@ type SelectProps = {
 
 const options = CountryCodes.map((country) => ({
   value: country.dial_code,
+  name: country.name,
   label: (
     <div style={{ display: "flex", alignItems: "center" }}>
       <ReactCountryFlag

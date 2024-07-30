@@ -25,7 +25,7 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterInput } from "./data";
@@ -37,9 +37,7 @@ function RegisterPage() {
   const { mutateAsync, isPending, error } = useRegister();
 
   const errorMessage = (error?.response?.data as any)?.errors;
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+
   const {
     control,
     formState: { errors },

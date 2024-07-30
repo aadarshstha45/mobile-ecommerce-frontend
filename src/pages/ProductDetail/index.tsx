@@ -40,7 +40,26 @@ import RelatedProducts from "./RelatedProducts";
 
 function ProductDetail() {
   const { pathname } = useLocation();
+  const [displayImage, setDisplayImage] = useState<string>();
+  const [colorImages, setColorImages] = useState<any[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  const checkOverflow = () => {
+    if (containerRef.current) {
+      setIsOverflowing(
+        containerRef.current.scrollWidth > containerRef.current.clientWidth
+      );
+    }
+  };
+
+  useEffect(() => {
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => {
+      window.removeEventListener("resize", checkOverflow);
+    };
+  }, [colorImages]);
 
   const scrollNext = () => {
     if (containerRef.current) {
@@ -78,8 +97,7 @@ function ProductDetail() {
       quantity: count,
     },
   });
-  const [displayImage, setDisplayImage] = useState<string>();
-  const [colorImages, setColorImages] = useState<any[]>([]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -187,10 +205,6 @@ function ProductDetail() {
       setColorId(data?.product_images);
     }
   }, [sizeId]);
-
-  useEffect(() => {
-    console.log(colorImages);
-  }, [colorImages]);
 
   const onSubmit = async (data: any) => {
     if (TokenService.isAuthenticated()) {
@@ -303,6 +317,10 @@ function ProductDetail() {
                               border={
                                 displayImage === data?.image ? "1px" : "0"
                               }
+                              _hover={{
+                                border: "1px",
+                                borderColor: "primary.500",
+                              }}
                               borderColor={"primary.500"}
                             />
                           )}
@@ -317,35 +335,43 @@ function ProductDetail() {
                               border={
                                 displayImage === image.image ? "1px" : "0"
                               }
+                              _hover={{
+                                border: "1px",
+                                borderColor: "primary.500",
+                              }}
                               borderColor={"primary.500"}
                             />
                           ))}
-                          <Button
-                            pos={"absolute"}
-                            left={-3}
-                            top={"40%"}
-                            display={{ base: "none", sm: "block" }}
-                            onClick={scrollPrev}
-                            size={"20px"}
-                            p={"1px"}
-                            borderRadius={"full"}
-                            colorScheme="gray"
-                          >
-                            <Icon as={MoveLeft} boxSize={"20px"} />
-                          </Button>
-                          <Button
-                            pos={"absolute"}
-                            right={-3}
-                            top={"40%"}
-                            display={{ base: "none", sm: "block" }}
-                            onClick={scrollNext}
-                            size={"20px"}
-                            p={"1px"}
-                            borderRadius={"full"}
-                            colorScheme="gray"
-                          >
-                            <Icon as={MoveRight} boxSize={"20px"} />
-                          </Button>
+                          {isOverflowing && (
+                            <>
+                              <Button
+                                pos={"absolute"}
+                                left={-3}
+                                top={"40%"}
+                                display={{ base: "none", sm: "block" }}
+                                onClick={scrollPrev}
+                                size={"20px"}
+                                p={"1px"}
+                                borderRadius={"full"}
+                                colorScheme="gray"
+                              >
+                                <Icon as={MoveLeft} boxSize={"20px"} />
+                              </Button>
+                              <Button
+                                pos={"absolute"}
+                                right={-3}
+                                top={"40%"}
+                                display={{ base: "none", sm: "block" }}
+                                onClick={scrollNext}
+                                size={"20px"}
+                                p={"1px"}
+                                borderRadius={"full"}
+                                colorScheme="gray"
+                              >
+                                <Icon as={MoveRight} boxSize={"20px"} />
+                              </Button>
+                            </>
+                          )}
                         </Flex>
                       )}
                     </Box>
@@ -526,7 +552,7 @@ function ProductDetail() {
                           </WrapItem>
                           <WrapItem>
                             <Button
-                              colorScheme="primary"
+                              colorScheme="gray"
                               w={"fit-content"}
                               borderRadius={0}
                               fontWeight={400}

@@ -19,11 +19,13 @@ interface SelectProps {
   isRequired?: boolean;
   isReadOnly?: boolean;
   value?: string | number;
+  defaultValue?: string;
   errors?: FieldErrors | null;
 }
 
 export const countryOptions = CountryCodes.map((country) => ({
   value: country.name,
+  dial_code: country.dial_code,
   label: (
     <div style={{ display: "flex", alignItems: "center" }}>
       <ReactCountryFlag
@@ -53,6 +55,7 @@ const SelectInput = ({
   isRequired,
   value,
   errors,
+  defaultValue,
 }: SelectProps) => {
   const chakraStyles: ChakraStylesConfig = {
     dropdownIndicator: (prev, { selectProps }) => ({
@@ -100,10 +103,18 @@ const SelectInput = ({
               chakraStyles={chakraStyles}
               options={options}
               focusBorderColor={isReadOnly ? "gray.300" : "#000"}
-              value={options.find((option) => option.value === value) || ""}
-              onChange={(option) => {
-                onChange((option as { value: string })?.value);
-              }}
+              value={
+                defaultValue
+                  ? options.find((option) => option.value === defaultValue)
+                  : options.find((option) => option.value === value)
+              }
+              onChange={
+                handleChange
+                  ? handleChange
+                  : (option) => {
+                      onChange((option as { value: string })?.value);
+                    }
+              }
               selectedOptionColorScheme="primary"
               useBasicStyles
             />

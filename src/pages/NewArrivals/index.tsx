@@ -33,7 +33,6 @@ function NewArrivals() {
   );
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setCurrentPage(pageFromUrl);
   }, [pageFromUrl]);
 

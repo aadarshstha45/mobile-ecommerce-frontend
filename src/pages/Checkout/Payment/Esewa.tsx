@@ -6,15 +6,12 @@ import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 const Esewa = () => {
   const { stepData } = useOrderStore();
-  console.log(stepData);
   const transaction_uuid = uuidv4();
   const esewaFormURL = import.meta.env.VITE_ESEWA_FORM_URL as string;
-  console.log(esewaFormURL);
   const product_code = import.meta.env.VITE_ESEWA_PRODUCT_CODE as string;
   const secret_key = import.meta.env.VITE_ESEWA_SECRET_KEY as string;
   const signature_parameters =
     `total_amount=200,transaction_uuid=${transaction_uuid},product_code=${product_code}` as string;
-  console.log(signature_parameters);
   const hash = CryptoJS.HmacSHA256(signature_parameters, secret_key);
   const { mutateAsync } = useEsewa();
   const { handleSubmit, register } = useForm({
@@ -33,10 +30,7 @@ const Esewa = () => {
     },
   });
   const onSubmit = async (data: any) => {
-    console.log(data);
     await mutateAsync(data);
-    // console.log(response);
-    console.log(data);
   };
 
   return (

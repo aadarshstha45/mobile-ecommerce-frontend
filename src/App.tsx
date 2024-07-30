@@ -5,6 +5,7 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { useAuthentication, useLogoutUser } from "./api/auth/users";
 import { getAppRoutes } from "./router/appRoutes";
 import { LoadingSpinner } from "./utils/LoadingSpinner";
+import ScrollToTop from "./utils/ScrollToTop";
 const renderRoutes = (routes: any) => {
   return routes.map((route: any, index: number) => (
     <Route
@@ -50,6 +51,7 @@ const App = () => {
       }
     >
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           {/* Auth Routes */}
 
