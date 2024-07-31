@@ -64,6 +64,10 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   }, [location.pathname, sessionStorage.getItem("cartItems")]);
 
   const promoSubmit = async (data: any) => {
+    console.log({
+      discountedPrice,
+      total_amount: discountedPrice > 0 ? discountedPrice : totalPrice,
+    });
     try {
       const response = await PromoCode.mutateAsync({
         ...data,
@@ -81,11 +85,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
               : (totalPrice * discount_rate) / 100;
           if (discount >= max_discount) {
             setDiscount(max_discount);
-            setDiscountedPrice(
-              discountedPrice > 0
-                ? discountedPrice - max_discount
-                : totalPrice - max_discount
-            );
+
             setTotalAfterDiscount(
               discountedPrice > 0
                 ? discountedPrice - max_discount
@@ -94,11 +94,6 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
             return;
           } else {
             setDiscount(discount);
-            setDiscountedPrice(
-              discountedPrice > 0
-                ? discountedPrice - discount
-                : totalPrice - discount
-            );
             setTotalAfterDiscount(
               discountedPrice > 0
                 ? discountedPrice - discount
@@ -234,13 +229,11 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
             <TextInput
               name="promo_code"
               control={control}
-              label={"Promo Code"}
               placeholder={"Enter Promo Code"}
               errorMessage={promoErrorMessages}
             />
             <Button
               type="submit"
-              mt={6}
               isLoading={PromoCode.isPending}
               fontSize={{ sm: "14px", md: "16px" }}
               fontWeight={400}

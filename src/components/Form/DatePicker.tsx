@@ -5,10 +5,8 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  ResponsiveValue,
 } from "@chakra-ui/react";
-import { Property } from "csstype";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 import { forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import { Control, Controller, FieldErrors } from "react-hook-form";
@@ -19,17 +17,16 @@ type InputProps = {
   name: string;
   isRequired?: boolean;
   errors?: FieldErrors;
-  leftIcon?: any;
-  leftAddon?: any;
-  rightIcon?: any;
-  message?: string;
-  placeholder?: string;
+  isClearable?: boolean;
   isReadOnly?: boolean;
-  pointerEvents?: ResponsiveValue<Property.PointerEvents>;
-  backErrors?: any;
   width?: any;
   isControlled?: boolean;
   [key: string]: any;
+  ranged?: boolean;
+  startDate?: any;
+  endDate?: any;
+  placeholder?: string;
+  onClear?: () => void;
 };
 
 export const ReactDatePicker = ({
@@ -40,7 +37,13 @@ export const ReactDatePicker = ({
   isRequired,
   errors,
   width,
-  isControlled,
+  handleChange,
+  ranged,
+  startDate,
+  endDate,
+  placeholder,
+  isClearable,
+  onClear,
 }: InputProps) => {
   const CustomInput = forwardRef<any, any>((props, ref) => {
     return (
@@ -53,37 +56,61 @@ export const ReactDatePicker = ({
           {...props}
           ref={ref}
         />
+
         <InputRightElement
           userSelect="none"
-          pointerEvents="none"
-          children={<CalendarIcon />}
+          pointerEvents={isClearable ? "all" : "none"}
+          cursor={isClearable ? "pointer" : "default"}
+          onClick={onClear}
+          bg={"transparent"}
+          children={isClearable ? <X /> : <CalendarIcon />}
         />
       </InputGroup>
     );
   });
+
   return (
     <FormControl w={width ?? "100%"} mb={4} isRequired={isRequired}>
       <FormLabel fontSize={{ sm: "14px", md: "16px" }} fontWeight={450}>
         {label}
       </FormLabel>
-      {isControlled}
       <Controller
         name={name}
         control={control}
-        render={({ field: { value, onChange } }) => (
-          <DatePicker
-            selected={value}
-            value={value}
-            onChange={onChange}
-            dateFormat="yyyy-MM-dd"
-            customInput={<CustomInput />}
-            readOnly={isReadOnly}
-            peekNextMonth
-            showMonthDropdown
-            showYearDropdown
-            dropdownMode="select"
-          />
-        )}
+        render={({ field }) =>
+          !ranged ? (
+            <DatePicker
+              selected={field.value}
+              value={field.value}
+              onChange={field.onChange}
+              dateFormat="yyyy-MM-dd"
+              customInput={<CustomInput />}
+              readOnly={isReadOnly}
+              peekNextMonth
+              showMonthDropdown
+              showYearDropdown
+              placeholderText={placeholder}
+              dropdownMode="select"
+            />
+          ) : (
+            <DatePicker
+              onChange={handleChange}
+              startDate={startDate}
+              endDate={endDate}
+              selectsRange
+              dateFormat="yyyy-MM-dd"
+              customInput={<CustomInput />}
+              readOnly={isReadOnly}
+              peekNextMonth
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              clearButtonTitle="Clear"
+              todayButton="Today"
+              placeholderText={placeholder}
+            />
+          )
+        }
       />
       {errors && errors[name] && (
         <FormHelperText

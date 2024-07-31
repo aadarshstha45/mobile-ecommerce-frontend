@@ -9,7 +9,7 @@ const useSaveWishlist = () => {
   });
 };
 
-const useFetchWishlist = (perPage: number) => {
+const useFetchWishlist = (perPage?: number) => {
   return usePaginatedFetch(WishlistAPI.get(perPage));
 };
 

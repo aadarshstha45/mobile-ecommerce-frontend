@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Image } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import { useState } from "react";
-
-import { Blurhash } from "react-blurhash";
 
 interface LazyLoadImageProps {
   id: number;
@@ -30,21 +28,10 @@ const LazyLoadImage = ({
 
   return (
     <>
-      {!loadedImages[id] && placeholder ? (
-        <Blurhash
-          hash={placeholder}
-          width="100%"
-          height="100%"
-          resolutionX={32}
-          resolutionY={32}
-          punch={1}
-          style={{
-            filter: loadedImages[id] ? "blur(10px)" : "none",
-            transition: "filter 0.5s ease-in-out",
-          }}
-        />
-      ) : (
-        <Box width="full" height="full" bg={"primary.100"} />
+      {!loadedImages[id] && (
+        <Flex w={w ?? "full"} align={"center"} justify={"center"}>
+          Image is loading...
+        </Flex>
       )}
       <Image
         src={src}

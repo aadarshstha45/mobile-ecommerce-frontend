@@ -65,9 +65,15 @@ function NavBar({ data }: any) {
         <Flex align={"center"} justify={"space-between"}>
           <HStack display={{ base: "none", md: "flex" }} gap={"30px"}>
             {menus?.map((menu: any) => {
+              const isActive =
+                location.pathname ===
+                (menu.category_slug
+                  ? `/${menu.category_slug}/${menu.slug}`
+                  : `/${menu.slug}`);
+
               return (
                 <Link
-                  _hover={{ textDecor: "none" }}
+                  _hover={{ textDecor: "none", color: "primary.500" }}
                   as={NavLink}
                   to={
                     menu.category_slug
@@ -75,7 +81,9 @@ function NavBar({ data }: any) {
                       : `${menu.slug}`
                   }
                   key={menu.id}
-                  _activeLink={{ color: "primary.500", fontWeight: 600 }}
+                  _activeLink={
+                    isActive ? { color: "primary.500", fontWeight: 500 } : ""
+                  }
                   fontSize={{
                     base: "14px",
                     sm: "16px",

@@ -90,12 +90,9 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
           {
             ...item,
             discountedPrice:
-              item.product.discount &&
-              parseFloat(
-                item.size?.price
-                  ? discount(item?.size.price, item.product.discount)
-                  : discount(item.product.price, item.product.discount)
-              ),
+              item.product.discount && item.size?.price
+                ? discount(item?.size.price, item.product.discount)
+                : discount(item.product.price, item.product.discount),
             totalPrice: parseFloat(item.size?.price ?? item.product.price),
           },
         ])
@@ -376,11 +373,13 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                             {item.size?.price
                               ? (
                                   item.size.price *
-                                  (1 - item.product.discount / 100)
+                                  (1 - item.product.discount / 100) *
+                                  item.quantity
                                 ).toFixed(2)
                               : (
                                   item.product.price *
-                                  (1 - item.product.discount / 100)
+                                  (1 - item.product.discount / 100) *
+                                  item.quantity
                                 ).toFixed(2)}
                           </Text>
                         )}
@@ -395,8 +394,12 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                             item.product.discount ? "line-through" : "none"
                           }
                           fontWeight={item.product.discount ? 400 : 500}
+                          whiteSpace={"nowrap"}
                         >
-                          Rs. {item.size?.price ?? item.product.price}
+                          Rs.{" "}
+                          {item.size?.price
+                            ? item.size.price * item.quantity
+                            : item.product.price * item.quantity}
                         </Text>
                       </Stack>
                       <IconButton

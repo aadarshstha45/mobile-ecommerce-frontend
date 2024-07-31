@@ -29,6 +29,7 @@ const PaginationButton = ({
   const handlePrevPage = () => {
     const prevPage = currentPage - 1;
     setCurrentPage(prevPage);
+    window.scroll({ top: 0, behavior: "smooth" });
     // navigate(`?${queryParams(prevPage)}`);
     navigate(`?page=${prevPage}${sort ? `&sort=${sort}` : ""}`);
   };
@@ -37,12 +38,14 @@ const PaginationButton = ({
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
     setCurrentPage(nextPage);
+    window.scroll({ top: 0, behavior: "smooth" });
     // navigate(`?${queryParams(nextPage)}`);
     navigate(`?page=${nextPage}${sort ? `&sort=${sort}` : ""}`);
   };
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
+    window.scroll({ top: 0, behavior: "smooth" });
     // navigate(`?${queryParams(page)}`);
     navigate(`?page=${page}${sort ? `&sort=${sort}` : ""}`);
   };

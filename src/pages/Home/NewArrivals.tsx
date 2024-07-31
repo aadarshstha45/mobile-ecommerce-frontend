@@ -86,7 +86,11 @@ function NewArrivals() {
             <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
               <Masonry gutter="30px">
                 {newArrivalsData.data.map((data: any) => (
-                  <ItemDisplay key={data.id} data={data} />
+                  <ItemDisplay
+                    key={data.id}
+                    data={data}
+                    discountPercent={data?.discount}
+                  />
                 ))}
               </Masonry>
             </ResponsiveMasonry>

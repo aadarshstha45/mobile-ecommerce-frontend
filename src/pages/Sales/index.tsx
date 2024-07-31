@@ -34,17 +34,19 @@ const SalesOffer = () => {
                 </Heading>
                 <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
                   <Masonry gutter="30px">
-                    {items.products?.map((item: any, index: number) => (
-                      <ItemDisplay
-                        key={index}
-                        data={item}
-                        discountPercent={item.discount ?? ""}
-                        colorOptions={
-                          item.product_properties &&
-                          item.product_properties.color
-                        }
-                      />
-                    ))}
+                    {items.products
+                      ?.filter((item: any) => item !== null)
+                      .map((item: any, index: number) => (
+                        <ItemDisplay
+                          key={index}
+                          data={item}
+                          discountPercent={item?.discount ?? ""}
+                          colorOptions={
+                            item?.product_properties &&
+                            item?.product_properties.color
+                          }
+                        />
+                      ))}
                   </Masonry>
                 </ResponsiveMasonry>
               </Flex>

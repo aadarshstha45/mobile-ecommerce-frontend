@@ -18,7 +18,6 @@ import { Property } from "csstype";
 import { X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Control, Controller, FieldErrors } from "react-hook-form";
-import Datepicker from "react-tailwindcss-datepicker";
 import IconButton from "./IconButton";
 type InputProps = {
   label?: string;
@@ -135,9 +134,15 @@ export const TextInput = ({
       isRequired={isRequired}
       {...rest}
     >
-      <FormLabel fontSize={{ sm: "14px", md: "16px" }} fontWeight={450}>
-        {label}
-      </FormLabel>
+      {label && (
+        <FormLabel
+          mb={2}
+          fontSize={{ sm: "14px", md: "16px" }}
+          fontWeight={450}
+        >
+          {label}
+        </FormLabel>
+      )}
       <Controller
         name={name}
         control={control}
@@ -182,18 +187,6 @@ export const TextInput = ({
                 />
               </InputRightElement>
             </InputGroup>
-          ) : type === "date" ? (
-            <Datepicker
-              value={value}
-              onChange={(value) => {
-                onChange(value);
-              }}
-              primaryColor="indigo"
-              asSingle={singleDate ? true : false}
-              placeholder={placeholder}
-              useRange={singleDate ? false : true}
-              inputClassName="border  border-red-300 rounded-2 w-full px-3 py-2 focus:border-2 focus:border-primary-500 focus:outline-none"
-            />
           ) : type === "email" ? (
             <>
               <InputGroup>
@@ -286,7 +279,6 @@ export const TextInput = ({
                 }
                 placeholder={placeholder}
                 type={type}
-                mt={label ? 0 : 5}
                 onChange={(e) => onChange(handleInputChange(e.target.value))}
               />
               {rightIcon && (

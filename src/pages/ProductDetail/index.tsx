@@ -20,6 +20,11 @@ import {
   Icon,
   IconButton,
   Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
   SimpleGrid,
   Stack,
   Text,
@@ -27,9 +32,10 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import { HeartIcon, MoveLeft, MoveRight } from "lucide-react";
+import { HeartIcon, MoveLeft, MoveRight, PlayIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import ReactPlayer from "react-player";
 import { useLocation, useParams } from "react-router-dom";
 import ModalLogin from "../Auth/ModalLogin";
 import DetailTab from "./DetailTab";
@@ -76,6 +82,11 @@ function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { data, isPending } = useFetchProductById(id!);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isVideoOpen,
+    onOpen: onVideoOpen,
+    onClose: onVideoClose,
+  } = useDisclosure();
   const [count, setCount] = useState<number>(1);
   const addToCart = useAddToCart();
   const addToWishList = useSaveWishlist();
@@ -227,6 +238,31 @@ function ProductDetail() {
     }
   };
 
+  // const handleBuy = async (data: any) => {
+  //   console.log(data);
+  //   sessionStorage.setItem(
+  //     "cartItems",
+  //     JSON.stringify([
+  //       {
+  //         discountedPrice:
+  //           data.discount && data.product_properties.size?.price
+  //             ? discount(data.product_properties.size?.price, data.discount)
+  //             : discount(data.price, data.discount),
+  //         totalPrice: data.product_properties.size?.price ?? data.price,
+  //         discount: data.discount,
+  //         quantity: count,
+  //         product: {
+  //           id: data.id,
+  //           name: data.name,
+  //           image: data.image,
+  //           price: data.price,
+  //           discount: data.discount,
+  //         },
+  //       },
+  //     ])
+  //   );
+  // };
+
   return (
     <Flex flexDir={"column"}>
       <Box p={1} bg={"#F0F0F0"}>
@@ -280,6 +316,31 @@ function ProductDetail() {
                         />
                       </Flex>
                     )}
+                    <Modal
+                      isOpen={isVideoOpen}
+                      onClose={onVideoClose}
+                      isCentered
+                    >
+                      <ModalOverlay />
+                      <ModalContent p={0}>
+                        <ModalCloseButton
+                          size={"sm"}
+                          bg="primary.500"
+                          textColor={"white"}
+                          zIndex={99}
+                          borderRadius={"50%"}
+                        />
+                        <ModalBody p={0}>
+                          <ReactPlayer
+                            url={data?.video}
+                            controls
+                            width={"100%"}
+                            height={"100%"}
+                            playing
+                          />
+                        </ModalBody>
+                      </ModalContent>
+                    </Modal>
                     <Box pos={"relative"}>
                       {colorImages && (
                         <Flex
@@ -307,6 +368,40 @@ function ProductDetail() {
                           alignSelf={"start"}
                           ref={containerRef}
                         >
+                          {data?.video && (
+                            <Flex
+                              w={{ base: "100px", md: "150px" }}
+                              onClick={onVideoOpen}
+                              flexShrink={0}
+                              pos={"relative"}
+                              cursor={"pointer"}
+                            >
+                              <Image
+                                w={"full"}
+                                aspectRatio={1 / 1}
+                                onClick={() => setDisplayImage(data?.image)}
+                                src={`${data?.image}`}
+                                objectFit={"cover"}
+                                _hover={{
+                                  border: "1px",
+                                  borderColor: "primary.500",
+                                }}
+                                borderColor={"primary.500"}
+                              />
+                              <Icon
+                                as={PlayIcon}
+                                pos={"absolute"}
+                                top={"40%"}
+                                left={"40%"}
+                                bg={"primary.500"}
+                                textColor={"white"}
+                                p={1}
+                                pointerEvents={"none"}
+                                borderRadius={"50%"}
+                                boxSize={{ base: 6, md: 8 }}
+                              />
+                            </Flex>
+                          )}
                           {displayImage && (
                             <Image
                               w={{ base: "100px", md: "150px" }}
@@ -330,7 +425,9 @@ function ProductDetail() {
                               w={{ base: "100px", md: "150px" }}
                               aspectRatio={1 / 1}
                               key={index}
-                              onClick={() => setDisplayImage(image.image)}
+                              onClick={() => {
+                                setDisplayImage(image.image);
+                              }}
                               src={`${image.image}`}
                               border={
                                 displayImage === image.image ? "1px" : "0"
@@ -527,56 +624,66 @@ function ProductDetail() {
                             Rs. {price?.toFixed(2)}
                           </Text>
                         </HStack>
-
-                        <Wrap gap={4}>
-                          <WrapItem>
-                            <Button
-                              colorScheme="primary"
-                              w={"fit-content"}
-                              borderRadius={0}
-                              fontWeight={400}
-                              fontSize={{
-                                base: "12px",
-                                md: "14px",
-                                lg: "16px",
-                              }}
-                              size={"sm"}
-                              rightIcon={
-                                <ShoppingCart stroke={"white"} boxSize={5} />
-                              }
-                              isLoading={addToCart.isPending}
-                              type={"submit"}
-                            >
-                              Add to Cart
-                            </Button>
-                          </WrapItem>
-                          <WrapItem>
-                            <Button
-                              colorScheme="gray"
-                              w={"fit-content"}
-                              borderRadius={0}
-                              fontWeight={400}
-                              fontSize={{
-                                base: "12px",
-                                md: "14px",
-                                lg: "16px",
-                              }}
-                              size={"sm"}
-                              rightIcon={<HeartIcon />}
-                              variant={"outline"}
-                              isLoading={addToWishList.isPending}
-                              onClick={handleWishList}
-                            >
-                              Add to WishList
-                            </Button>
-                          </WrapItem>
-                        </Wrap>
+                        <Stack gap={4}>
+                          {/* <Button
+                            onClick={() => handleBuy(data)}
+                            w={"fit-content"}
+                          >
+                            Buy Now
+                          </Button> */}
+                          <Wrap gap={4}>
+                            <WrapItem>
+                              <Button
+                                colorScheme="primary"
+                                w={"fit-content"}
+                                borderRadius={0}
+                                fontWeight={400}
+                                fontSize={{
+                                  base: "12px",
+                                  md: "14px",
+                                  lg: "16px",
+                                }}
+                                size={"sm"}
+                                rightIcon={
+                                  <ShoppingCart stroke={"white"} boxSize={5} />
+                                }
+                                isLoading={addToCart.isPending}
+                                type={"submit"}
+                              >
+                                Add to Cart
+                              </Button>
+                            </WrapItem>
+                            <WrapItem>
+                              <Button
+                                colorScheme="gray"
+                                w={"fit-content"}
+                                borderRadius={0}
+                                fontWeight={400}
+                                fontSize={{
+                                  base: "12px",
+                                  md: "14px",
+                                  lg: "16px",
+                                }}
+                                size={"sm"}
+                                rightIcon={<HeartIcon />}
+                                variant={"outline"}
+                                isLoading={addToWishList.isPending}
+                                onClick={handleWishList}
+                              >
+                                Add to WishList
+                              </Button>
+                            </WrapItem>
+                          </Wrap>
+                        </Stack>
                       </Stack>
                     </form>
                   </Flex>
                 </GridItem>
               </SimpleGrid>
-              <DetailTab description={data?.description} />
+              <DetailTab
+                description={data?.description}
+                specification={data?.product_specifications}
+              />
               <Divider opacity={1} borderColor={"gray.300"} />
               <Ratings />
               <Divider

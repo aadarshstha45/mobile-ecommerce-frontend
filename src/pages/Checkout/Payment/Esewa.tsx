@@ -1,13 +1,12 @@
 import { useEsewa } from "@/api";
-import { useOrderStore } from "@/utils/store";
 import { Button, Input } from "@chakra-ui/react";
 import CryptoJS from "crypto-js";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 const Esewa = () => {
-  const { stepData } = useOrderStore();
+  // const { stepData } = useOrderStore();
   const transaction_uuid = uuidv4();
-  const esewaFormURL = import.meta.env.VITE_ESEWA_FORM_URL as string;
+  // const esewaFormURL = import.meta.env.VITE_ESEWA_FORM_URL as string;
   const product_code = import.meta.env.VITE_ESEWA_PRODUCT_CODE as string;
   const secret_key = import.meta.env.VITE_ESEWA_SECRET_KEY as string;
   const signature_parameters =

@@ -88,6 +88,7 @@ function Sales() {
               <Masonry gutter={isLessThan768 ? "10px" : "30px"}>
                 {salesData.products
                   .slice(0, itemsToShow)
+                  .filter((item: any) => item !== null)
                   .map((item: any, index: number) => (
                     <ItemDisplay
                       key={index}
