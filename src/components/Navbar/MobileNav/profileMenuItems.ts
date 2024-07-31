@@ -1,4 +1,4 @@
-import { HeartIcon, PackageCheck, UserIcon } from "lucide-react";
+import { HeartIcon, PackageCheck, StarIcon, UserIcon } from "lucide-react";
 
 export const profileMenuItems = [
   {
@@ -15,5 +15,10 @@ export const profileMenuItems = [
     label: "My WishList",
     to: "/profile/wishlist",
     icon: HeartIcon,
+  },
+  {
+    label: "My Reviews",
+    to: "/profile/my-reviews",
+    icon: StarIcon,
   },
 ];

@@ -12,6 +12,7 @@ import {
   InputRightElement,
   ResponsiveValue,
   Spinner,
+  Textarea,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Property } from "csstype";
@@ -253,6 +254,25 @@ export const TextInput = ({
                 </FormHelperText>
               )}
             </>
+          ) : type === "textarea" ? (
+            <Textarea
+              focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
+              _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
+              borderRadius={"2px"}
+              errorBorderColor={"red"}
+              border={"1px solid #000"}
+              value={value}
+              cursor={isReadOnly ? "default" : "auto"}
+              borderColor={
+                isReadOnly
+                  ? "gray.300"
+                  : errors && errors[name]
+                  ? "red.500"
+                  : "#000"
+              }
+              placeholder={placeholder}
+              onChange={onChange}
+            />
           ) : (
             <InputGroup>
               {leftIcon && (

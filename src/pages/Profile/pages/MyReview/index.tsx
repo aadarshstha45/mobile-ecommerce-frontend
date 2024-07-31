@@ -6,6 +6,7 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
+import Reviewed from "./Reviewed";
 import ToBeReviewed from "./ToBeReviewed";
 
 const MyReview = () => {
@@ -25,7 +26,9 @@ const MyReview = () => {
         <TabPanel p={0}>
           <ToBeReviewed />
         </TabPanel>
-        <TabPanel p={0}>2</TabPanel>
+        <TabPanel p={0}>
+          <Reviewed />
+        </TabPanel>
       </TabPanels>
     </Tabs>
   );

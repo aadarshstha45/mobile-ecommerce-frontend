@@ -10,6 +10,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface ReviewFormProps {
@@ -19,7 +20,8 @@ interface ReviewFormProps {
 }
 
 const ReviewForm = ({ onClose, isOpen, productId }: ReviewFormProps) => {
-  const { control, handleSubmit } = useForm({
+  console.log(productId);
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       product_id: productId,
       rating: 4,
@@ -27,6 +29,11 @@ const ReviewForm = ({ onClose, isOpen, productId }: ReviewFormProps) => {
     },
   });
 
+  useEffect(() => {
+    if (productId !== null) {
+      setValue("product_id", productId);
+    }
+  }, [productId, setValue]);
   const { mutateAsync, isPending } = useAddReview();
 
   const onSubmit = async (data: any) => {
@@ -43,7 +50,12 @@ const ReviewForm = ({ onClose, isOpen, productId }: ReviewFormProps) => {
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)} id="review-form">
             <TextInput control={control} name="rating" label="Rating" />
-            <TextInput control={control} name="review" label="Review" />
+            <TextInput
+              type="textarea"
+              control={control}
+              name="review"
+              label="Review"
+            />
           </form>
         </ModalBody>
         <ModalFooter gap={1}>

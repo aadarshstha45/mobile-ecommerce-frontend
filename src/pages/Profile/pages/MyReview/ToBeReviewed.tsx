@@ -9,10 +9,13 @@ import {
   Tbody,
   Td,
   Text,
+  Th,
+  Thead,
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import ReviewForm from "./ReviewForm";
 
 const ToBeReviewed = () => {
@@ -21,27 +24,46 @@ const ToBeReviewed = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleOpen = (id: number) => {
+    console.log(id);
     setProductId(id);
     onOpen();
   };
 
+  const handleClose = () => {
+    setProductId(null);
+    onClose();
+  };
+
   return (
     <>
-      <ReviewForm onClose={onClose} isOpen={isOpen} productId={productId} />
+      <ReviewForm onClose={handleClose} isOpen={isOpen} productId={productId} />
       {isPending ? (
         <LoadingSpinner />
       ) : data && data.length > 0 ? (
         <TableContainer>
           <Table colorScheme="primary">
+            <Thead>
+              <Th>Product</Th>
+              <Th></Th>
+              <Th>Review</Th>
+            </Thead>
             <Tbody>
               {data.map((order: any, index: number) => (
                 <Tr key={index}>
                   <Td>
-                    <Flex gap={4}>
+                    <Flex
+                      gap={4}
+                      as={Link}
+                      to={
+                        order.subcategory
+                          ? `/products/${order.category?.slug}/${order.subcategory?.slug}/${order.id}`
+                          : `/products/${order.category?.slug}/${order.id}`
+                      }
+                    >
                       <Image
                         src={order.image}
                         alt={order.name}
-                        w={"100px"}
+                        w={{ base: "100px", md: "150px" }}
                         aspectRatio={1 / 1}
                       />
                       <Text fontSize={{ base: "14px", md: "16px", lg: "18px" }}>
