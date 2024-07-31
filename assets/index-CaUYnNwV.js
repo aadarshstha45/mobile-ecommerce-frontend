@@ -1,0 +1,1 @@
+import{ax as t,ay as i,bc as a}from"./index-BTNegxn6.js";const e={post:"/wishlist",get:s=>`/wishlist${s?`?per_page=${s}`:""}`,delete:"/wishlist/:id}"},n=()=>t({apiEndPoint:e.post,message:"Wishlist saved successfully"}),u=s=>i(e.get(s)),o=()=>a({apiEndPoint:e.delete,inValidateEndpoint:e.get(5),message:"Item removed successfully"});export{u as a,o as b,n as u};
