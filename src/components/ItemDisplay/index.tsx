@@ -1,5 +1,9 @@
 import { useAddViewAction } from "@/api/functions/Product";
-import { useFetchWishlist, useSaveWishlist } from "@/api/functions/Wishlist";
+import {
+  useDeleteWishlist,
+  useFetchWishlist,
+  useSaveWishlist,
+} from "@/api/functions/Wishlist";
 import ModalLogin from "@/pages/Auth/ModalLogin";
 import TokenService from "@/services/service-token";
 import { StarIcon } from "@chakra-ui/icons";
@@ -45,15 +49,19 @@ const ItemDisplay = ({
   const { data: wishData } = useFetchWishlist();
   const [isInWishList, setIsInWishList] = useState(false);
   const wishlist = useSaveWishlist();
+  const removeWishlist = useDeleteWishlist();
+  const addViewAction = useAddViewAction();
+
   const handleWishList = async (id: string) => {
     if (TokenService.isAuthenticated()) {
-      await wishlist.mutateAsync({ product_id: id });
+      isInWishList
+        ? await removeWishlist.mutateAsync(id)
+        : await wishlist.mutateAsync({ product_id: id });
     } else {
       onOpen();
     }
   };
 
-  const addViewAction = useAddViewAction();
   useEffect(() => {
     if (wishData?.data && wishData?.data.length > 0) {
       setIsInWishList(wishData.data.some((item: any) => item.id === data.id));
@@ -126,7 +134,7 @@ const ItemDisplay = ({
                     handleWishList(data.id);
                   }}
                 >
-                  {wishlist.isPending ? (
+                  {wishlist.isPending || removeWishlist.isPending ? (
                     <Spinner size={"xs"} />
                   ) : (
                     <Icon

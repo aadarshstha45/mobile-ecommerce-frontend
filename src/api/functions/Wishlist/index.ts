@@ -5,12 +5,17 @@ import { usePaginatedFetch } from "@/api/methods/get";
 const useSaveWishlist = () => {
   return useMutate({
     apiEndPoint: WishlistAPI.post,
+    inValidateEndpoint: WishlistAPI.get(),
     message: "Wishlist saved successfully",
   });
 };
 
 const useFetchWishlist = (perPage?: number) => {
-  return usePaginatedFetch(WishlistAPI.get(perPage));
+  if (perPage) {
+    return usePaginatedFetch(WishlistAPI.get(perPage));
+  } else {
+    return usePaginatedFetch(WishlistAPI.get());
+  }
 };
 
 const useDeleteWishlist = () => {

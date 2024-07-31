@@ -16,7 +16,6 @@ import {
 import { Coins, CreditCard } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { BiLogoPaypal } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
 
 const paymentOptions = [
   {
@@ -50,7 +49,7 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
       payment: "cod",
     },
   });
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
     await addOrder.mutateAsync({
@@ -58,8 +57,8 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
       payment: data.payment,
     });
     setStepData({});
-    // sessionStorage.removeItem("cartItems");
-    navigate("/e-sewa");
+    sessionStorage.removeItem("cartItems");
+    // navigate("/e-sewa");
     setTimeout(() => window.location.reload(), 2000);
   };
 

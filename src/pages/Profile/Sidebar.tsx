@@ -40,6 +40,11 @@ export const sidebarLinks = [
   },
   {
     id: 5,
+    label: "My Reviews",
+    to: "my-reviews",
+  },
+  {
+    id: 6,
     label: "Account Settings",
     to: "account-settings",
   },

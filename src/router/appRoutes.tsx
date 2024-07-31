@@ -21,11 +21,12 @@ const Profile = lazy(() => import("@/pages/Profile"));
 
 const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 
-const LoginPage = lazy(() => import("../pages/Auth/Login"));
-const RegisterPage = lazy(() => import("../pages/Auth/Register"));
-const ResetPassword = lazy(() => import("../pages/Auth/ResetPassword"));
-const SetPassword = lazy(() => import("../pages/Auth/SetPassword"));
-const VerifyOTP = lazy(() => import("../pages/Auth/VerifyOTP"));
+const LoginPage = lazy(() => import("@/pages/Auth/Login"));
+const RegisterPage = lazy(() => import("@/pages/Auth/Register"));
+const ResetPassword = lazy(() => import("@/pages/Auth/ResetPassword"));
+const SetPassword = lazy(() => import("@/pages/Auth/SetPassword"));
+const VerifyOTP = lazy(() => import("@/pages/Auth/VerifyOTP"));
+const MyReview = lazy(() => import("@/pages/Profile/pages/MyReview"));
 
 export const getAppRoutes = (isAuthenticated: boolean) => {
   return [
@@ -100,6 +101,10 @@ export const getAppRoutes = (isAuthenticated: boolean) => {
             {
               path: "wishlist",
               element: <WishList />,
+            },
+            {
+              path: "my-reviews",
+              element: <MyReview />,
             },
             {
               path: "*",

@@ -42,6 +42,7 @@ function NavBar({ data }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleSignOut = async () => {
     await mutateAsync();
+    sessionStorage.clear();
     navigate("/");
     window.location.reload();
   };
