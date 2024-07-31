@@ -1,1 +1,0 @@
-import{b7 as e}from"./index-BTNegxn6.js";const s={getHomeSales:"/get-sales-offer-products",get:"/get-all-sales-offer"},a=()=>e({apiEndPoint:s.getHomeSales}),o=()=>e({apiEndPoint:s.get});export{a,o as u};

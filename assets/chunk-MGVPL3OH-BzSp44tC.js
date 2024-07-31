@@ -1,0 +1,1 @@
+import{u as r}from"./chunk-T2WCTPDH-DmwVBTTn.js";import{l as e,j as o,o as h}from"./index-CpGNqzAf.js";var u=e((s,a)=>{const t=r();return o.jsx(h.thead,{...s,ref:a,__css:t.thead})}),d=e(({isNumeric:s,...a},t)=>{const c=r();return o.jsx(h.th,{...a,ref:t,__css:c.th,"data-is-numeric":s})});export{u as T,d as a};
