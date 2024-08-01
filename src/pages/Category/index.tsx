@@ -107,6 +107,9 @@ function Category() {
                           key={item.id}
                           data={item}
                           discountPercent={item?.discount}
+                          colorOptions={
+                            item?.product_properties && item.product_properties
+                          }
                         />
                       ))}
                     </Masonry>

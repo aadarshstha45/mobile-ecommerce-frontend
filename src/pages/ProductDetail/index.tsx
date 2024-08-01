@@ -302,13 +302,6 @@ function ProductDetail() {
                         width={{ base: "250px", md: "70%" }}
                       />
                     ) : (
-                      // <Image
-                      //   w={{ base: "250px", md: "70%" }}
-                      //   aspectRatio={1 / 1}
-                      //   src={`${displayImage}`}
-                      //   objectFit={"cover"}
-                      //   objectPosition={"center"}
-                      // />
                       <Flex
                         aspectRatio={1 / 1}
                         align={"center"}
@@ -691,7 +684,7 @@ function ProductDetail() {
                 specification={data?.product_specifications}
               />
               <Divider opacity={1} borderColor={"gray.300"} />
-              <Ratings />
+              <Ratings id={parseInt(id)} />
               <Divider
                 alignSelf={"center"}
                 borderColor={"gray.300"}

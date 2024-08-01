@@ -2,20 +2,13 @@
 import { Box, Image } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 
-interface WidthProps {
-  base?: string | number;
-  sm?: string | number;
-  md?: string | number;
-  lg?: string | number;
-}
-
 interface MagnifierProps {
   src: string;
   alt?: string;
   width?: any;
 }
 
-const Magnifier: React.FC<MagnifierProps> = ({ src, alt, width }) => {
+const Magnifier = ({ src, alt, width }: MagnifierProps) => {
   const [originX, setOriginX] = useState(0);
   const [originY, setOriginY] = useState(0);
   const imageRef = useRef<HTMLImageElement>(null);

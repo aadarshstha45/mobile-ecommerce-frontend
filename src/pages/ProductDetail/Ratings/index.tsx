@@ -1,3 +1,4 @@
+import { useFetchRatings } from "@/api/functions/Review";
 import { StarIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -9,35 +10,17 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const ratingsData = [
-  {
-    id: 1,
-    rating: 5,
-    total: 134,
-  },
-  {
-    id: 2,
-    rating: 4,
-    total: 100,
-  },
-  {
-    id: 3,
-    rating: 3,
-    total: 20,
-  },
-  {
-    id: 4,
-    rating: 2,
-    total: 21,
-  },
-  {
-    id: 5,
-    rating: 1,
-    total: 50,
-  },
-];
+interface RatingsProps {
+  id: number | undefined;
+}
 
-const Ratings = () => {
+const Ratings = ({ id }: RatingsProps) => {
+  console.log("id", id);
+  if (!id) return;
+  const { data: ratingsData } = useFetchRatings(id);
+
+  console.log("ratingsData", ratingsData);
+
   return (
     <Flex justify={"center"} align={"center"} flexDir={"column"} gap={4}>
       <Heading color={"primary.500"} size={"lg"}>
@@ -51,31 +34,37 @@ const Ratings = () => {
       >
         <GridItem colSpan={1} w={"full"} borderRight={{ md: "1px #e5e5e5" }}>
           <Flex flexDir={"column"} gap={2}>
-            {ratingsData?.map((item) => (
-              <Flex key={item.id} align={"center"} gap={2}>
-                <Box textAlign={"center"} w={"30px"}>
-                  <Text>{item.rating}</Text>
-                </Box>
-                <StarIcon color={"yellow.400"} />
-                <Progress
-                  w={200}
-                  size={"sm"}
-                  value={
-                    item.rating === 5
-                      ? 100
-                      : item.rating === 4
-                      ? 80
-                      : item.rating === 3
-                      ? 60
-                      : item.rating === 2
-                      ? 40
-                      : 20
-                  }
-                  colorScheme="yellow"
-                />
-                <Text color={"gray.500"}>{item.total}</Text>
-              </Flex>
-            ))}
+            {Array(5)
+              .fill(0)
+              .map((_, index) => {
+                const rating = 5 - index; // Start from 5 stars down to 1 star
+                const ratingCount = ratingsData.data.ratings[rating] || 0;
+                return (
+                  <Flex key={rating} align={"center"} gap={2}>
+                    <Box textAlign={"center"} w={"30px"}>
+                      <Text>{rating}</Text>
+                    </Box>
+                    <StarIcon color={"yellow.400"} />
+                    <Progress
+                      w={200}
+                      size={"sm"}
+                      value={
+                        rating === 5
+                          ? 100
+                          : rating === 4
+                          ? 80
+                          : rating === 3
+                          ? 60
+                          : rating === 2
+                          ? 40
+                          : 20
+                      }
+                      colorScheme="yellow"
+                    />
+                    <Text color={"gray.500"}>{ratingCount}</Text>
+                  </Flex>
+                );
+              })}
           </Flex>
         </GridItem>
 
@@ -89,11 +78,13 @@ const Ratings = () => {
           >
             <Flex align={"center"} justify={"center"} gap={2}>
               <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight={600}>
-                4.5
+                {ratingsData?.data?.average_rating}
               </Text>
               <StarIcon color={"yellow.400"} />
             </Flex>
-            <Text color={"gray.500"}>134 ratings</Text>
+            <Text color={"gray.500"}>
+              {ratingsData?.data?.total_reviews} review(s)
+            </Text>
           </Flex>
         </GridItem>
       </SimpleGrid>

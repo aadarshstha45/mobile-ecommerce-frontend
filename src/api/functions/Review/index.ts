@@ -1,5 +1,6 @@
 import { ReviewAPI } from "@/api/endpoints/Review";
 import { useFetch, useMutate } from "@/api/methods";
+import { usePaginatedFetch } from "@/api/methods/get";
 
 const useAddReview = () => {
   return useMutate({
@@ -21,4 +22,13 @@ const useFetchReviewed = () => {
   });
 };
 
-export { useAddReview, useFetchReviewed, useFetchToBeReviewed };
+const useFetchRatings = (id: number) => {
+  return usePaginatedFetch(ReviewAPI.getRatings(id));
+};
+
+export {
+  useAddReview,
+  useFetchRatings,
+  useFetchReviewed,
+  useFetchToBeReviewed,
+};

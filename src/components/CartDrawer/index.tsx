@@ -220,7 +220,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
           {deletedItems.length > 0 && (
             <Button
               size={"xs"}
-              alignSelf={"end"}
+              justifySelf={"end"}
               leftIcon={<Trash2 size={18} />}
               colorScheme="red"
               borderRadius={0}

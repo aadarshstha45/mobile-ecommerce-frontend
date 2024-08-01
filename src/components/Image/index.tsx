@@ -23,7 +23,6 @@ const LazyLoadImage = ({
 }: LazyLoadImageProps) => {
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
   const handleImageLoad = (id: number) => {
-    console.log("Image loaded", id);
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
   };
 
