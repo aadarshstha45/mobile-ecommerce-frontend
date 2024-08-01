@@ -1,4 +1,5 @@
-import { Flex, Link, Text } from "@chakra-ui/react";
+import { Link as ChakraLink, Flex, Text } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const links = [
   {
@@ -34,15 +35,16 @@ function LinksSection() {
       </Text>
 
       {links.map((link) => (
-        <Link
+        <ChakraLink
+          as={Link}
           key={link.id}
-          href={link.to}
+          to={link.to}
           fontSize={{ base: "12px", md: "16px" }}
           fontWeight={500}
           textColor={"#000"}
         >
           {link.label}
-        </Link>
+        </ChakraLink>
       ))}
     </Flex>
   );

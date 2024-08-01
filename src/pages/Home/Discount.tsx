@@ -12,6 +12,7 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 function Discount() {
   const [isLessThan1275] = useMediaQuery("(max-width: 1275px)");
@@ -47,6 +48,8 @@ function Discount() {
                 harmful rays that comes off from almighty sun.
               </Text>
               <Button
+                as={Link}
+                to={"/shop"}
                 w={"fit-content"}
                 borderRadius={0}
                 bg={"#FFF852"}

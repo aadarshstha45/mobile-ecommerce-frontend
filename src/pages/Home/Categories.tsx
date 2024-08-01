@@ -11,13 +11,11 @@ import {
   Container,
   Flex,
   HStack,
-  Icon,
   Image,
   Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { CirclePlusIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { NavLink } from "react-router-dom";
@@ -132,17 +130,16 @@ const Categories = () => {
                   <Spinner thickness="4px" color="primary.500" />
                 ) : (
                   <Button
-                    variant={"unstyled"}
                     w={"fit-content"}
-                    colorScheme="primary"
+                    size={"xs"}
+                    variant={"unstyled"}
                     onClick={() => setPerPage(perPage + 8)}
+                    _hover={{
+                      textDecoration: "underline",
+                    }}
+                    textColor={"primary.500"}
                   >
-                    <Icon
-                      _hover={{ color: "primary.600" }}
-                      color={"primary.500"}
-                      as={CirclePlusIcon}
-                      boxSize={6}
-                    />
+                    View More
                   </Button>
                 )}
               </Stack>

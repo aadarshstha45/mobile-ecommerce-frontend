@@ -8,12 +8,10 @@ import {
   Container,
   Flex,
   HStack,
-  Icon,
   Stack,
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { CirclePlusIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Link } from "react-router-dom";
@@ -102,17 +100,16 @@ function Sales() {
           {itemsToShow < 8 && (
             <Stack align={"center"} mr={10} justify={"center"}>
               <Button
-                colorScheme="primary"
+                size={"xs"}
                 variant={"unstyled"}
                 w={"fit-content"}
                 onClick={handleExpandItems}
+                textColor={"primary.500"}
+                _hover={{
+                  textDecoration: "underline",
+                }}
               >
-                <Icon
-                  _hover={{ color: "primary.600" }}
-                  color={"primary.500"}
-                  as={CirclePlusIcon}
-                  boxSize={6}
-                />
+                View More
               </Button>
             </Stack>
           )}

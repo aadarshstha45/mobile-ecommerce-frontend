@@ -7,6 +7,7 @@ import NoImage from "@/assets/images/NoImage.png";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import RadioBox from "@/components/Form/RadioBox";
 import TokenService from "@/services/service-token";
+import Magnifier from "@/utils/ImageMagnify";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
@@ -295,14 +296,19 @@ function ProductDetail() {
                     gap={10}
                   >
                     {displayImage ? (
-                      <Image
-                        w={{ base: "250px", md: "70%" }}
-                        aspectRatio={1 / 1}
-                        src={`${displayImage}`}
-                        objectFit={"cover"}
-                        objectPosition={"center"}
+                      <Magnifier
+                        src={displayImage}
+                        alt={data?.name}
+                        width={{ base: "250px", md: "70%" }}
                       />
                     ) : (
+                      // <Image
+                      //   w={{ base: "250px", md: "70%" }}
+                      //   aspectRatio={1 / 1}
+                      //   src={`${displayImage}`}
+                      //   objectFit={"cover"}
+                      //   objectPosition={"center"}
+                      // />
                       <Flex
                         aspectRatio={1 / 1}
                         align={"center"}

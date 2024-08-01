@@ -13,7 +13,7 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { ArrowRight, CirclePlusIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Link } from "react-router-dom";
@@ -84,7 +84,7 @@ function NewArrivals() {
               </Link>
             </Flex>
             <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
-              <Masonry gutter="30px">
+              <Masonry gutter={isLessThan768 ? "10px" : "30px"}>
                 {newArrivalsData.data.map((data: any) => (
                   <ItemDisplay
                     key={data.id}
@@ -102,15 +102,13 @@ function NewArrivals() {
                   <Button
                     variant={"unstyled"}
                     w={"fit-content"}
-                    colorScheme="primary"
                     onClick={() => setPerPage(perPage + 4)}
+                    textColor={"primary.500"}
+                    _hover={{
+                      textDecoration: "underline",
+                    }}
                   >
-                    <Icon
-                      _hover={{ color: "primary.600" }}
-                      color={"primary.500"}
-                      as={CirclePlusIcon}
-                      boxSize={6}
-                    />
+                    View More
                   </Button>
                 )}
               </Stack>
