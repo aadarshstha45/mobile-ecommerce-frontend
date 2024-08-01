@@ -1,0 +1,6 @@
+import{v as x,a as u,j as i,ar as b,bJ as j,O as c,a2 as $}from"./index-BIlyCiJs.js";import{C as g}from"./chevron-right-BKtAO-9Q.js";/**
+ * @license lucide-react v0.395.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const f=x("ChevronLeft",[["path",{d:"m15 18-6-6 6-6",key:"1wnfg3"}]]),y=({currentPage:a,setCurrentPage:s,totalPages:r,sort:n})=>{const e=u(),l=()=>{const o=a-1;s(o),window.scroll({top:0,behavior:"smooth"}),e(`?page=${o}${n?`&sort=${n}`:""}`)},h=()=>{const o=a+1;s(o),window.scroll({top:0,behavior:"smooth"}),e(`?page=${o}${n?`&sort=${n}`:""}`)},p=o=>{s(o),window.scroll({top:0,behavior:"smooth"}),e(`?page=${o}${n?`&sort=${n}`:""}`)},m=()=>{const o=[],d=Math.max(1,a>1?a-1:1),v=Math.min(r,a+1);for(let t=d;t<=v;t++)o.push(i.jsx($,{gap:0,onClick:()=>p(t),variant:a===t?"solid":"outline","aria-label":`Page ${t}`,colorScheme:"primary",children:t},t));return o};return i.jsx(b,{py:10,align:"center",justify:"center",children:i.jsxs(j,{size:"sm",isAttached:!0,children:[i.jsx(c,{onClick:l,isDisabled:a===1,variant:"outline",colorScheme:"primary","aria-label":"Previous",icon:i.jsx(f,{})}),m(),i.jsx(c,{cursor:"pointer",onClick:h,isDisabled:a===r,variant:"outline",colorScheme:"primary","aria-label":"Next",icon:i.jsx(g,{})})]})})};export{y as P};
