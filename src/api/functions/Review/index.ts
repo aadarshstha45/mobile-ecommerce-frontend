@@ -22,7 +22,7 @@ const useFetchReviewed = () => {
   });
 };
 
-const useFetchRatings = (id: number) => {
+const useFetchRatings = (id: string) => {
   return usePaginatedFetch(ReviewAPI.getRatings(id));
 };
 

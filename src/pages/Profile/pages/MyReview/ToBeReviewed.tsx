@@ -24,7 +24,6 @@ const ToBeReviewed = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleOpen = (id: number) => {
-    console.log(id);
     setProductId(id);
     onOpen();
   };

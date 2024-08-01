@@ -37,7 +37,6 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
 
   const handleOrderOpen = (item: any) => {
-    console.log(item);
     onOpen();
     setSelectedOrder(item);
   };

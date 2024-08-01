@@ -34,7 +34,7 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 import { HeartIcon, MoveLeft, MoveRight, PlayIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactPlayer from "react-player";
 import { useLocation, useParams } from "react-router-dom";
@@ -51,7 +51,10 @@ function ProductDetail() {
   const [colorImages, setColorImages] = useState<any[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
-
+  const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
+  const handleImageLoad = (id: number) => {
+    setLoadedImages((prev) => ({ ...prev, [id]: true }));
+  };
   const checkOverflow = () => {
     if (containerRef.current) {
       setIsOverflowing(
@@ -60,12 +63,30 @@ function ProductDetail() {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // Check overflow initially after the component mounts
     checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-    return () => {
-      window.removeEventListener("resize", checkOverflow);
+  }, []); // Re-run effect when colorImages changes
+
+  useEffect(() => {
+    const handleResize = () => {
+      checkOverflow();
     };
+
+    // Add resize event listener
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the resize event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Add a small delay to ensure the DOM has fully updated
+    const timeout = setTimeout(checkOverflow, 100);
+
+    return () => clearTimeout(timeout);
   }, [colorImages]);
 
   const scrollNext = () => {
@@ -79,7 +100,6 @@ function ProductDetail() {
       containerRef.current.scrollBy({ left: -150, behavior: "smooth" }); // Adjust the scroll value as needed
     }
   };
-
   const { id } = useParams<{ id: string }>();
   const { data, isPending } = useFetchProductById(id!);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -321,7 +341,7 @@ function ProductDetail() {
                       isCentered
                     >
                       <ModalOverlay />
-                      <ModalContent p={0}>
+                      <ModalContent maxH={"94vh"} p={0}>
                         <ModalCloseButton
                           size={"sm"}
                           bg="primary.500"
@@ -424,6 +444,9 @@ function ProductDetail() {
                               w={{ base: "100px", md: "150px" }}
                               aspectRatio={1 / 1}
                               key={index}
+                              loading="lazy"
+                              onLoad={() => handleImageLoad(index)} // Call handleImageLoad with INDEX when the image is loaded
+                              opacity={loadedImages[index] ? 1 : 0}
                               onClick={() => {
                                 setDisplayImage(image.image);
                               }}
@@ -684,7 +707,7 @@ function ProductDetail() {
                 specification={data?.product_specifications}
               />
               <Divider opacity={1} borderColor={"gray.300"} />
-              <Ratings id={parseInt(id)} />
+              <Ratings id={id} />
               <Divider
                 alignSelf={"center"}
                 borderColor={"gray.300"}

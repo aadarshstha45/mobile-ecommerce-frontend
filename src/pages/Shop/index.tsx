@@ -38,14 +38,12 @@ const Shop = () => {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isPending } =
     useFetchAllProducts(sort);
 
-  console.log(data);
   useEffect(() => {
     setSort(sortFromUrl);
   }, [sortFromUrl]);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
-      console.log("fetching next page");
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage]);

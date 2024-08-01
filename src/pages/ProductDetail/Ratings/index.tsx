@@ -1,4 +1,5 @@
 import { useFetchRatings } from "@/api/functions/Review";
+import { LoadingSvg } from "@/assets/LoadingIcon";
 import { StarIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -11,15 +12,16 @@ import {
 } from "@chakra-ui/react";
 
 interface RatingsProps {
-  id: number | undefined;
+  id: string | undefined;
 }
 
 const Ratings = ({ id }: RatingsProps) => {
-  console.log("id", id);
   if (!id) return;
   const { data: ratingsData } = useFetchRatings(id);
 
-  console.log("ratingsData", ratingsData);
+  if (!ratingsData || ratingsData.data?.length == 0) {
+    return <LoadingSvg p={10} />;
+  }
 
   return (
     <Flex justify={"center"} align={"center"} flexDir={"column"} gap={4}>
@@ -38,7 +40,8 @@ const Ratings = ({ id }: RatingsProps) => {
               .fill(0)
               .map((_, index) => {
                 const rating = 5 - index; // Start from 5 stars down to 1 star
-                const ratingCount = ratingsData.data.ratings[rating] || 0;
+                const ratingCount =
+                  (ratingsData.data && ratingsData.data.ratings[rating]) || 0;
                 return (
                   <Flex key={rating} align={"center"} gap={2}>
                     <Box textAlign={"center"} w={"30px"}>

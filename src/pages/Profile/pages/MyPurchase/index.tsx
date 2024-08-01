@@ -42,7 +42,6 @@ const MyPurchase = () => {
     },
   });
   const onChange = (dates: any) => {
-    console.log(dates);
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);

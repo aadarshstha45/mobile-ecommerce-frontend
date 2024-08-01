@@ -61,7 +61,6 @@ const AddressForm = ({ isOpen, onClose }: AddressFormProps) => {
         isRequired
         defaultValue={country}
         handleChange={(selectedOption: any) => {
-          console.log(selectedOption);
           setCountry(selectedOption.value);
           setCountryCode(selectedOption.dial_code);
         }}

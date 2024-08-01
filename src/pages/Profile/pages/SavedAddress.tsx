@@ -270,7 +270,6 @@ const SavedAddress = () => {
           control={control}
           defaultValue={country}
           handleChange={(selectedOption: any) => {
-            console.log(selectedOption);
             setCountry(selectedOption.value);
             setCountryCode(selectedOption.dial_code);
           }}

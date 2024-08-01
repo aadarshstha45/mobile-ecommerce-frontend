@@ -38,7 +38,6 @@ const tabList = [
 ];
 
 const DetailTab = ({ description, specification }: DetailTabProps) => {
-  console.log(specification);
   return (
     <Tabs
       colorScheme="primary"

@@ -20,7 +20,6 @@ interface ReviewFormProps {
 }
 
 const ReviewForm = ({ onClose, isOpen, productId }: ReviewFormProps) => {
-  console.log(productId);
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       product_id: productId,

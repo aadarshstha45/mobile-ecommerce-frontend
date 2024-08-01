@@ -62,7 +62,7 @@ const Magnifier = ({ src, alt, width }: MagnifierProps) => {
         objectFit={"cover"}
         objectPosition={"center"}
         w={"full"}
-        h={"full"}
+        aspectRatio={1}
       />
     </Box>
   );

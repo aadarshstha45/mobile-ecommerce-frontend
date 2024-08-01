@@ -64,10 +64,6 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   }, [location.pathname, sessionStorage.getItem("cartItems")]);
 
   const promoSubmit = async (data: any) => {
-    console.log({
-      discountedPrice,
-      total_amount: discountedPrice > 0 ? discountedPrice : totalPrice,
-    });
     try {
       const response = await PromoCode.mutateAsync({
         ...data,

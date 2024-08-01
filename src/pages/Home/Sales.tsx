@@ -42,7 +42,6 @@ function Sales() {
   }, [isLessThan768]);
 
   const { data: salesData } = useFetchHomeSales();
-  console.log(salesData);
   return (
     salesData && (
       <Container
