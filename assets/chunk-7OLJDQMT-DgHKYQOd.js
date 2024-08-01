@@ -1,1 +1,0 @@
-import{l as i,am as t,ae as m,j as r,o as c,m as o}from"./index-BIlyCiJs.js";var d=i(function(a,s){const e=t("Heading",a),{className:l,...n}=m(a);return r.jsx(c.h2,{ref:s,className:o("chakra-heading",a.className),...n,__css:e})});d.displayName="Heading";export{d as H};
