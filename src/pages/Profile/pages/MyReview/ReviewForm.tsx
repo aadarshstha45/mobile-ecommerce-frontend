@@ -42,7 +42,7 @@ const ReviewForm = ({ onClose, isOpen, productId }: ReviewFormProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInTop">
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />

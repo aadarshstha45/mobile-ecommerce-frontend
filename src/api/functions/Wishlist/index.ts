@@ -21,7 +21,7 @@ const useFetchWishlist = (perPage?: number) => {
 const useDeleteWishlist = () => {
   return useDelete({
     apiEndPoint: WishlistAPI.delete,
-    inValidateEndpoint: WishlistAPI.get(5),
+    inValidateEndpoint: WishlistAPI.get(),
     message: "Item removed successfully",
   });
 };

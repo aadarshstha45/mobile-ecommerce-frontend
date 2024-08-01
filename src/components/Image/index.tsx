@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Flex, Image } from "@chakra-ui/react";
+import { LoadingSvg } from "@/assets/LoadingIcon";
+import { AspectRatio, Box, Image } from "@chakra-ui/react";
 import { useState } from "react";
-
 interface LazyLoadImageProps {
   id: number;
   src: string;
@@ -28,10 +28,15 @@ const LazyLoadImage = ({
 
   return (
     <>
-      {!loadedImages[id] && (
-        <Flex w={w ?? "full"} align={"center"} justify={"center"}>
-          Image is loading...
-        </Flex>
+      {!loadedImages[id] && placeholder && (
+        <AspectRatio
+          justifyContent={"center"}
+          alignItems={"center"}
+          w={"full"}
+          ratio={[1]}
+        >
+          <LoadingSvg p={20} />
+        </AspectRatio>
       )}
       <Image
         src={src}

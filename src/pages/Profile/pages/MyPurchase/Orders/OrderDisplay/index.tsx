@@ -65,7 +65,13 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
             mb={4}
             onClick={() => handleOrderOpen(item)}
           >
-            <CardHeader as={Flex} justify={"space-between"} align={"center"}>
+            <CardHeader
+              as={Flex}
+              justify={"space-between"}
+              align={"center"}
+              flexWrap={"wrap"}
+              gap={6}
+            >
               <Stack>
                 <Text fontSize={{ base: "sm", md: "md" }}>
                   Order Id: #{item.order_number}

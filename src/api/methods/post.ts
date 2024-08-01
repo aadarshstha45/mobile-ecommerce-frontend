@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useToast } from "@/utils/toast";
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import { HttpClient } from "../axiosSetup";
@@ -21,14 +17,12 @@ const useMutate = (requestData: {
   };
 
   return useMutation({
-    mutationKey: [requestData.apiEndPoint],
     mutationFn: sendData,
     onSuccess: (response) => {
-      {
-        requestData.inValidateEndpoint &&
-          queryClient.invalidateQueries(
-            requestData.inValidateEndpoint! as InvalidateQueryFilters
-          );
+      if (requestData.inValidateEndpoint) {
+        queryClient.invalidateQueries({
+          queryKey: [requestData.inValidateEndpoint],
+        });
       }
 
       {

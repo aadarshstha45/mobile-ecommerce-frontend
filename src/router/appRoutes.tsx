@@ -27,6 +27,7 @@ const ResetPassword = lazy(() => import("@/pages/Auth/ResetPassword"));
 const SetPassword = lazy(() => import("@/pages/Auth/SetPassword"));
 const VerifyOTP = lazy(() => import("@/pages/Auth/VerifyOTP"));
 const MyReview = lazy(() => import("@/pages/Profile/pages/MyReview"));
+const Shop = lazy(() => import("@/pages/Shop"));
 
 export const getAppRoutes = (isAuthenticated: boolean) => {
   return [
@@ -65,6 +66,10 @@ export const getAppRoutes = (isAuthenticated: boolean) => {
         {
           path: "new-arrivals",
           element: <NewArrivals />,
+        },
+        {
+          path: "shop",
+          element: <Shop />,
         },
         {
           path: "checkout",

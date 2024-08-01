@@ -89,6 +89,10 @@ export const filterOptions = [
 
 export const sortOptions = [
   {
+    value: "",
+    label: "Best Match",
+  },
+  {
     value: "newest",
     label: "Newest",
   },

@@ -24,6 +24,9 @@ import {
 import { Heart, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
+import NoPicture from "@/assets/images/NoPicture.png";
+
 import LazyLoadImage from "../Image";
 
 export const columnBreakpoints = {
@@ -161,12 +164,12 @@ const ItemDisplay = ({
                   />
                 </Box>
               ) : (
-                <Flex w={"full"} h={"full"} bg={"#D9D9D9"}>
+                <Flex w={"full"} h={"full"} p={20} bg={"#D9D9D9"}>
                   <Image
                     w={"full"}
                     aspectRatio={1 / 1}
-                    src={"https://bit.ly/naruto-sage"}
-                    alt="naruto"
+                    src={NoPicture}
+                    alt="No Picture"
                     objectFit="cover"
                   />
                 </Flex>

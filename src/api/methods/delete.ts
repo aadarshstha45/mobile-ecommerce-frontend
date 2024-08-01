@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import { HttpClient } from "../axiosSetup";
@@ -22,9 +18,11 @@ const useDelete = (requestData: {
     mutationKey: [requestData.apiEndPoint],
     mutationFn: (id: string) => deleteData(id),
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        requestData.inValidateEndpoint! as InvalidateQueryFilters
-      );
+      if (requestData.inValidateEndpoint) {
+        queryClient.invalidateQueries({
+          queryKey: [requestData.inValidateEndpoint],
+        });
+      }
       toast.success(requestData.message!);
     },
     onError: (error: AxiosError) => {

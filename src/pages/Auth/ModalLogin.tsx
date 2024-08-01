@@ -65,7 +65,7 @@ function ModalLogin({ isOpen, onClose }: ModalLoginProps) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose}>
+    <Modal isOpen={isOpen} onClose={handleClose} motionPreset="slideInTop">
       <ModalOverlay />
       <ModalContent as={"form"} onSubmit={handleSubmit(onSubmit)}>
         <ModalHeader textAlign={"center"}>Login</ModalHeader>

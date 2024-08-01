@@ -34,11 +34,10 @@ const usePaginatedFetch = (apiEndpoint: string, params?: any) => {
   };
 
   return useQuery({
-    queryKey: [apiEndpoint, JSON.stringify(params)],
+    queryKey: [apiEndpoint],
     queryFn: fetchData,
     select: (response) => response?.data,
     placeholderData: keepPreviousData,
-    refetchOnWindowFocus: false,
   });
 };
 

@@ -25,9 +25,9 @@ function Category() {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const pageFromUrl = Number(urlParams.get("page")) || 1;
-  const sortFromUrl = urlParams.get("sort") || "newest";
+  const sortFromUrl = urlParams.get("sort") || "";
   const [currentPage, setCurrentPage] = useState(1);
-  const [sort, setSort] = useState("newest");
+  const [sort, setSort] = useState("");
   // Ensure slug is not undefined
   if (!slug) {
     throw new Error("Slug is required");
