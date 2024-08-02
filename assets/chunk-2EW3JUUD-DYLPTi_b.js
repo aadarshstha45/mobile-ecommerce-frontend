@@ -1,1 +1,0 @@
-import{u as c}from"./chunk-YQO7BFFX-C-Y5cD9s.js";import{t as d,j as o,x as m,v as n}from"./index-DQ2lrmGm.js";var u=d(function(a,r){const{className:s,...e}=a,t=c();return o.jsx(m.div,{ref:r,className:n("chakra-card__header",s),__css:t.header,...e})});export{u as C};
