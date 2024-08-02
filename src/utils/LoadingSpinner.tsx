@@ -9,7 +9,8 @@ export const LoadingSpinner = ({ height }: LoadingSpinnerProps) => {
     <Flex
       justifyContent={"center"}
       alignItems="center"
-      height={height ?? "100vh"}
+      height={height ?? window.innerHeight}
+      w={"full"}
     >
       <Spinner
         thickness="5px"

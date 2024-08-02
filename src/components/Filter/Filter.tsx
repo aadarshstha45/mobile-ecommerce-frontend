@@ -5,24 +5,23 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  CheckboxGroup,
 } from "@chakra-ui/react";
 
-type ColorSizeProps = {
+type FilterProps = {
   title: string;
   children?: React.ReactNode;
-  onChange?: (values: string[]) => void;
+  defaultExpanded?: boolean;
 };
 
-function ColorSize({ title, children, onChange }: ColorSizeProps) {
+function Filter({ title, children, defaultExpanded }: FilterProps) {
   return (
-    <Accordion allowToggle>
-      <AccordionItem>
+    <Accordion allowToggle defaultIndex={defaultExpanded ? [0] : undefined}>
+      <AccordionItem minW={"100%"}>
         {({ isExpanded }) => (
           <>
             <h2>
-              <AccordionButton>
-                <Box as="span" flex="1" textAlign="left">
+              <AccordionButton w={"100%"}>
+                <Box as="span" flex={1} textAlign="left">
                   {title}
                 </Box>
                 {isExpanded ? (
@@ -32,10 +31,8 @@ function ColorSize({ title, children, onChange }: ColorSizeProps) {
                 )}
               </AccordionButton>
             </h2>
-            <AccordionPanel display={"flex"} flexDir={"column"} pb={4}>
-              <CheckboxGroup onChange={onChange} colorScheme="primary">
-                {children}
-              </CheckboxGroup>
+            <AccordionPanel display={"flex"} flexDir={"column"} gap={2} pb={4}>
+              {children}
             </AccordionPanel>
           </>
         )}
@@ -44,4 +41,4 @@ function ColorSize({ title, children, onChange }: ColorSizeProps) {
   );
 }
 
-export default ColorSize;
+export default Filter;

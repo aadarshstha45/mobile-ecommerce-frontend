@@ -3,20 +3,36 @@ import { ProductApi } from "@/api/endpoints/Product";
 import { useFetch, useMutate } from "@/api/methods";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const fetchAllProducts = ({ sort, page }: { sort: string; page: number }) => {
-  return HttpClient.get(ProductApi.getProducts({ sort, page }));
+const fetchAllProducts = ({
+  sort,
+  page,
+  sizes,
+  colors,
+}: {
+  sort: string;
+  page: number;
+  sizes: string;
+  colors: string;
+}) => {
+  return HttpClient.get(ProductApi.getProducts({ sort, page, sizes, colors }));
 };
 
-const useFetchAllProducts = (sort: string) => {
+const useFetchAllProducts = (sort: string, sizes: string, colors: string) => {
   return useInfiniteQuery({
-    queryKey: ["products", { sort }],
+    queryKey: ["products", { sort, sizes, colors }],
     queryFn: async ({ pageParam = 1 }: { pageParam: number }) => {
-      const data = await fetchAllProducts({ page: pageParam, sort: sort });
+      const data = await fetchAllProducts({
+        page: pageParam,
+        sort,
+        sizes,
+        colors,
+      });
       return data.data;
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) =>
       lastPage?.data?.length === 0 ? undefined : pages.length + 1,
+    refetchOnWindowFocus: false,
   });
 };
 

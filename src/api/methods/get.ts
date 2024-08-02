@@ -38,6 +38,7 @@ const usePaginatedFetch = (apiEndpoint: string, params?: any) => {
     queryFn: fetchData,
     select: (response) => response?.data,
     placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
   });
 };
 

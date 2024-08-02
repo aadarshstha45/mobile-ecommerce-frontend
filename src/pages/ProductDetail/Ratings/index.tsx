@@ -3,11 +3,14 @@ import { LoadingSvg } from "@/assets/LoadingIcon";
 import { StarIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Divider,
   Flex,
   GridItem,
   Heading,
+  HStack,
   Progress,
   SimpleGrid,
+  Stack,
   Text,
 } from "@chakra-ui/react";
 
@@ -91,6 +94,68 @@ const Ratings = ({ id }: RatingsProps) => {
           </Flex>
         </GridItem>
       </SimpleGrid>
+      <Divider
+        alignSelf={"center"}
+        borderColor={"gray.300"}
+        opacity={1}
+        w={{ base: "full", md: "70%" }}
+      />
+      <Flex w={{ base: "full", md: "70%" }} flexDir={"column"} gap={4}>
+        <Text
+          fontSize={{ base: "16px", md: "18px", xl: "20px" }}
+          fontWeight={600}
+          w={{ base: "full", md: "70%" }}
+        >
+          Customer Reviews
+        </Text>
+        <Divider alignSelf={"center"} borderColor={"gray.300"} opacity={1} />
+        {ratingsData.data.reviews.length > 0 ? (
+          ratingsData.data.reviews.map((review: any) => (
+            <HStack
+              borderBottom={"0.5px solid"}
+              borderBottomColor={"#898787"}
+              key={review.id}
+              gap={4}
+              align={"start"}
+              pb={6}
+            >
+              <Flex
+                p={"5px"}
+                gap={1}
+                border={"0.5px solid"}
+                borderColor={"#939292"}
+                borderRadius={"6px"}
+              >
+                <Text>{review.rating}</Text>
+                <StarIcon mt={0.5} color={"yellow.400"} />
+              </Flex>
+              <Stack w={"full"}>
+                <HStack justify={"space-between"}>
+                  <HStack gap={4} align={"start"}>
+                    <Text fontSize={{ base: "14px", md: "16px", xl: "18px" }}>
+                      {review.user}
+                    </Text>
+                  </HStack>
+                  <Text
+                    fontSize={{ base: "10px", md: "12px", xl: "14px" }}
+                    color={"#939292"}
+                  >
+                    {review.date}
+                  </Text>
+                </HStack>
+                <Text
+                  fontSize={{ base: "14px", md: "16px", xl: "18px" }}
+                  color={"#939292"}
+                >
+                  {review.review}
+                </Text>
+              </Stack>
+            </HStack>
+          ))
+        ) : (
+          <Text>No reviews yet</Text>
+        )}
+      </Flex>
     </Flex>
   );
 };

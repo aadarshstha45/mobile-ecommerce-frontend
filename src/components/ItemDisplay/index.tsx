@@ -76,6 +76,7 @@ const ItemDisplay = ({
   };
 
   if (!data) return null;
+
   return (
     <>
       <ModalLogin isOpen={isOpen} onClose={onClose} />
@@ -169,7 +170,7 @@ const ItemDisplay = ({
                   />
                 </Box>
               ) : (
-                <Flex w={"full"} h={"full"} p={20} bg={"#D9D9D9"}>
+                <Flex w={"full"} h={"full"} p={"20%"} bg={"#D9D9D9"}>
                   <Image
                     w={"full"}
                     aspectRatio={1 / 1}

@@ -708,12 +708,6 @@ function ProductDetail() {
               />
               <Divider opacity={1} borderColor={"gray.300"} />
               <Ratings id={id} />
-              <Divider
-                alignSelf={"center"}
-                borderColor={"gray.300"}
-                opacity={1}
-                w={{ base: "full", md: "70%" }}
-              />
             </>
           )}
         </Flex>

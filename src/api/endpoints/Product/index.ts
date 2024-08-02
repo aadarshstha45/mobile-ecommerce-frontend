@@ -1,6 +1,18 @@
 export const ProductApi = {
-  getProducts: ({ page, sort }: { page: number; sort: string }) =>
-    `shop?page=${page} ${sort && `&sort=${sort}`}`,
+  getProducts: ({
+    page,
+    sort,
+    sizes,
+    colors,
+  }: {
+    page: number;
+    sort: string;
+    sizes: string;
+    colors: string;
+  }) =>
+    `shop?page=${page} ${sort && `&sort=${sort}`} ${
+      sizes && `&sizes=${sizes}`
+    } ${colors && `&colors=${colors}`}`,
   getProductById: (id: string) => `get-product-details/${id}`,
   getRelatedProducts: (id: string) => `get-related-products/${id}`,
   getProductsByCategory: (id: number) => `get-products-by-category/${id}`,

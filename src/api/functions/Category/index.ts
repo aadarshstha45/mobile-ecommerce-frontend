@@ -13,24 +13,43 @@ const useFetchHomeNewArrivals = (perPage: number) => {
   return usePaginatedFetch(CategoryMenuApi.getHomeNewArrivals(perPage));
 };
 
-const useFetchNewArrivals = (page: number, sort: string) => {
-  return usePaginatedFetch(CategoryMenuApi.getNewArrivals(page, sort));
+const useFetchNewArrivals = (
+  page: number,
+  sort: string,
+  sizes: string,
+  colors: string
+) => {
+  return usePaginatedFetch(
+    CategoryMenuApi.getNewArrivals(page, sort, sizes, colors)
+  );
 };
 
 const useFetchProductsByCategory = (
   page: number,
   param: { category_slug?: string; slug: string } | string,
-  sort: string
+  sort: string,
+  sizes: string,
+  colors: string
 ) => {
   return usePaginatedFetch(
-    CategoryMenuApi.getProductsByCategory(page, param, sort)
+    CategoryMenuApi.getProductsByCategory(page, param, sort, sizes, colors)
   );
+};
+
+const useFetchSizes = () => {
+  return useFetch({ apiEndPoint: CategoryMenuApi.getSizes });
+};
+
+const useFetchColors = () => {
+  return useFetch({ apiEndPoint: CategoryMenuApi.getColors });
 };
 
 export {
   useFetchCategories,
+  useFetchColors,
   useFetchHomeNewArrivals,
   useFetchMenuItems,
   useFetchNewArrivals,
   useFetchProductsByCategory,
+  useFetchSizes,
 };
