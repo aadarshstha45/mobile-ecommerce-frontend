@@ -14,8 +14,8 @@ const links = [
   },
   {
     id: 3,
-    label: "Special Offer",
-    to: "/special-offer",
+    label: "Sales Offer",
+    to: "/sales-offer",
   },
   {
     id: 4,

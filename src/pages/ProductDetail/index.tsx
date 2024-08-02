@@ -712,7 +712,7 @@ function ProductDetail() {
           )}
         </Flex>
       </Container>
-      <ProductFAQ />
+      <ProductFAQ productId={id} />
       <Queries />
       <RelatedProducts />
     </Flex>

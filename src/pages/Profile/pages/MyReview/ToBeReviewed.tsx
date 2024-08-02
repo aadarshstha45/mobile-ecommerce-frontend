@@ -21,7 +21,6 @@ import ReviewForm from "./ReviewForm";
 const ToBeReviewed = () => {
   const { data, isPending } = useFetchToBeReviewed();
   const [productId, setProductId] = useState<number | null>(null);
-  const [selectedRating, setSelectedRating] = useState(-1);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleOpen = (id: number) => {

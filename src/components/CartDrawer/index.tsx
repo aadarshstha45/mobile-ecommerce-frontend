@@ -201,7 +201,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
       size="lg"
     >
       <DrawerOverlay />
-      <DrawerContent pos={"relative"}>
+      <DrawerContent maxH={window.innerHeight} pos={"relative"}>
         {isFetching ||
           (isPending && (
             <Flex

@@ -39,7 +39,7 @@
 
 @media (min-width: 1201px) {
   .hero-slide img {
-    aspect-ratio: 21 / 9; /* Desktop view */
+    aspect-ratio: 25 / 9; /* Desktop view */
   }
 }
 

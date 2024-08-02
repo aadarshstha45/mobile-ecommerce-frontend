@@ -37,7 +37,7 @@ const LazyLoadImage = ({
           h={"100%"}
           ratio={[1]}
         >
-          <LoadingSvg p={20} />
+          <LoadingSvg p={"20%"} />
         </AspectRatio>
       )}
       <Image

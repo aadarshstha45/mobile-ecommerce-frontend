@@ -1,4 +1,5 @@
-import { useFecthProductFaqs } from "@/api/functions/Product";
+import { useFetchProductFaqs } from "@/api/functions/Product";
+import { LoadingSvg } from "@/assets/LoadingIcon";
 import {
   Accordion,
   AccordionButton,
@@ -13,13 +14,13 @@ import {
 } from "@chakra-ui/react";
 
 interface ProductFAQProps {
-  productId: string | null;
+  productId: string | undefined;
 }
 
 const ProductFAQ = ({ productId }: ProductFAQProps) => {
   if (!productId) return null;
 
-  const { data: FAQData, isPending } = useFecthProductFaqs(productId);
+  const { data: FAQData, isPending } = useFetchProductFaqs(productId);
   return (
     FAQData.length > 0 && (
       <Flex bg={"#EFEFEF"}>
@@ -44,27 +45,31 @@ const ProductFAQ = ({ productId }: ProductFAQProps) => {
                 particular product as soon as you enquire about product
               </Text>
             </Stack>
-            <Accordion w={{ base: "100%", md: "60%" }} allowToggle>
-              {FAQData.map((faq: any) => (
-                <AccordionItem border={"none"} key={faq.id}>
-                  <AccordionButton
-                    py={{ base: "20px", md: "15px" }}
-                    textAlign={"center"}
-                    borderBottom={"1px solid #D9D9D9"}
-                  >
-                    <Flex w={"full"} justify={"space-between"}>
-                      <Text fontSize={"20px"}>{faq.question}</Text>
-                      <AccordionIcon
-                        w={{ base: 6, md: 8 }}
-                        h={{ base: 6, md: 8 }}
-                      />
-                    </Flex>
-                  </AccordionButton>
+            {isPending ? (
+              <LoadingSvg />
+            ) : (
+              <Accordion w={{ base: "100%", md: "60%" }} allowToggle>
+                {FAQData.map((faq: any) => (
+                  <AccordionItem border={"none"} key={faq.id}>
+                    <AccordionButton
+                      py={{ base: "20px", md: "15px" }}
+                      textAlign={"center"}
+                      borderBottom={"1px solid #D9D9D9"}
+                    >
+                      <Flex w={"full"} justify={"space-between"}>
+                        <Text fontSize={"20px"}>{faq.question}</Text>
+                        <AccordionIcon
+                          w={{ base: 6, md: 8 }}
+                          h={{ base: 6, md: 8 }}
+                        />
+                      </Flex>
+                    </AccordionButton>
 
-                  <AccordionPanel>{faq.answer}</AccordionPanel>
-                </AccordionItem>
-              ))}
-            </Accordion>
+                    <AccordionPanel>{faq.answer}</AccordionPanel>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            )}
           </Flex>
         </Container>
       </Flex>
