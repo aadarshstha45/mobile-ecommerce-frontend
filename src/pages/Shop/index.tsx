@@ -38,18 +38,12 @@ const Shop = () => {
   const sortFromUrl = urlParams.get("sort") || "";
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const {
-    data,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage,
-    isPending,
-    isFetching,
-  } = useFetchAllProducts(
-    sort,
-    JSON.stringify(selectedSizes),
-    JSON.stringify(selectedColors)
-  );
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isPending } =
+    useFetchAllProducts(
+      sort,
+      JSON.stringify(selectedSizes),
+      JSON.stringify(selectedColors)
+    );
 
   useEffect(() => {
     setSort(sortFromUrl);

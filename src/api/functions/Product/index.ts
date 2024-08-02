@@ -48,8 +48,13 @@ const useAddViewAction = () => {
   return useMutate({ apiEndPoint: ProductApi.addViewAction });
 };
 
+const useFecthProductFaqs = (id: string) => {
+  return useFetch({ apiEndPoint: ProductApi.getFaqs(id) });
+};
+
 export {
   useAddViewAction,
+  useFecthProductFaqs,
   useFetchAllProducts,
   useFetchProductById,
   useFetchRelatedProducts,

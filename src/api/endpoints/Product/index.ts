@@ -13,6 +13,7 @@ export const ProductApi = {
     `shop?page=${page} ${sort && `&sort=${sort}`} ${
       sizes && `&sizes=${sizes}`
     } ${colors && `&colors=${colors}`}`,
+  getFaqs: (productId: string) => `get-faqs?product_id=${productId}`,
   getProductById: (id: string) => `get-product-details/${id}`,
   getRelatedProducts: (id: string) => `get-related-products/${id}`,
   getProductsByCategory: (id: number) => `get-products-by-category/${id}`,

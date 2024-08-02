@@ -21,6 +21,7 @@ import ReviewForm from "./ReviewForm";
 const ToBeReviewed = () => {
   const { data, isPending } = useFetchToBeReviewed();
   const [productId, setProductId] = useState<number | null>(null);
+  const [selectedRating, setSelectedRating] = useState(-1);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleOpen = (id: number) => {
@@ -42,9 +43,11 @@ const ToBeReviewed = () => {
         <TableContainer>
           <Table colorScheme="primary">
             <Thead>
-              <Th>Product</Th>
-              <Th></Th>
-              <Th>Review</Th>
+              <Tr>
+                <Th>Product</Th>
+                <Th></Th>
+                <Th>Review</Th>
+              </Tr>
             </Thead>
             <Tbody>
               {data.map((order: any, index: number) => (

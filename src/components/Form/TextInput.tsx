@@ -318,7 +318,7 @@ export const TextInput = ({
         </FormHelperText>
       )}
       {errorMessages && (
-        <FormHelperText color={"red.400"} fontSize="xs" fontStyle={"italic"}>
+        <FormHelperText color={"red.400"} fontStyle={"italic"}>
           {errorMessages}
         </FormHelperText>
       )}

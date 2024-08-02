@@ -22,9 +22,11 @@ const Reviewed = () => {
     <TableContainer>
       <Table colorScheme="primary">
         <Thead>
-          <Th>Product</Th>
-          <Th>Rating</Th>
-          <Th>Review</Th>
+          <Tr>
+            <Th>Product</Th>
+            <Th>Rating</Th>
+            <Th>Review</Th>
+          </Tr>
         </Thead>
         <Tbody>
           {data.map((review: any, index: number) => (

@@ -1,7 +1,13 @@
 import { useAddReview } from "@/api/functions/Review";
 import { TextInput } from "@/components/Form";
+import { ReviewSchema } from "@/utils/validation/review";
+import { StarIcon } from "@chakra-ui/icons";
 import {
   Button,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -9,9 +15,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Radio,
+  RadioGroup,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 interface ReviewFormProps {
   onClose: () => void;
@@ -20,12 +29,20 @@ interface ReviewFormProps {
 }
 
 const ReviewForm = ({ onClose, isOpen, productId }: ReviewFormProps) => {
-  const { control, handleSubmit, setValue } = useForm({
+  const [hoveredIndex, setHoveredIndex] = useState(-1);
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       product_id: productId,
-      rating: 4,
-      review: "Hello",
+      rating: 0,
+      review: "",
     },
+    resolver: zodResolver(ReviewSchema),
   });
 
   useEffect(() => {
@@ -40,34 +57,97 @@ const ReviewForm = ({ onClose, isOpen, productId }: ReviewFormProps) => {
     onClose();
   };
 
+  const handleClose = () => {
+    onClose();
+    reset();
+    setHoveredIndex(-1);
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInTop">
+    <Modal isOpen={isOpen} onClose={handleClose} motionPreset="slideInTop">
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />
         <ModalHeader>Add Review</ModalHeader>
         <ModalBody>
-          <form onSubmit={handleSubmit(onSubmit)} id="review-form">
-            <TextInput control={control} name="rating" label="Rating" />
+          <form onSubmit={handleSubmit(onSubmit)} id="review-form" noValidate>
+            <FormControl mb={4}>
+              <FormLabel
+                mb={2}
+                fontSize={{ sm: "14px", md: "16px" }}
+                fontWeight={450}
+              >
+                Rating
+              </FormLabel>
+              <Controller
+                name="rating"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <RadioGroup
+                    value={value.toString()}
+                    onChange={onChange}
+                    onMouseLeave={() => setHoveredIndex(-1)}
+                  >
+                    <HStack gap={0}>
+                      {[...Array(5)].map((_, index) => (
+                        <FormLabel
+                          htmlFor={`rating_${index}`}
+                          key={index}
+                          onMouseEnter={() => setHoveredIndex(index + 1)}
+                          onClick={() => onChange(index + 1)}
+                          cursor="pointer"
+                        >
+                          <StarIcon
+                            w={6}
+                            h={6}
+                            color={
+                              index < (hoveredIndex >= 0 ? hoveredIndex : value)
+                                ? "yellow.400"
+                                : "gray.300"
+                            }
+                          />
+                          <Radio
+                            display="none"
+                            id={`rating_${index}`}
+                            value={(index + 1).toString()}
+                          />
+                        </FormLabel>
+                      ))}
+                    </HStack>
+                  </RadioGroup>
+                )}
+              />
+              {errors.rating && (
+                <FormHelperText
+                  color="red.400"
+                  fontSize={{ base: "14px", md: "16px" }}
+                  fontStyle={"italic"}
+                >
+                  {errors.rating.message}
+                </FormHelperText>
+              )}
+            </FormControl>
             <TextInput
+              errors={errors}
               type="textarea"
               control={control}
               name="review"
               label="Review"
+              isRequired
             />
           </form>
         </ModalBody>
         <ModalFooter gap={1}>
           <Button
-            size={"sm"}
+            size="sm"
             colorScheme="gray"
-            variant={"outline"}
-            onClick={onClose}
+            variant="outline"
+            onClick={handleClose}
           >
             Cancel
           </Button>
           <Button
-            size={"sm"}
+            size="sm"
             form="review-form"
             type="submit"
             isLoading={isPending}
