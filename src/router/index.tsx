@@ -28,6 +28,7 @@ const SetPassword = lazy(() => import("@/pages/Auth/SetPassword"));
 const VerifyOTP = lazy(() => import("@/pages/Auth/VerifyOTP"));
 const MyReview = lazy(() => import("@/pages/Profile/pages/MyReview"));
 const Shop = lazy(() => import("@/pages/Shop"));
+const ThankYou = lazy(() => import("@/pages/Checkout/ThankYou"));
 
 export const getAppRoutes = (isAuthenticated: boolean) => {
   return [
@@ -78,6 +79,10 @@ export const getAppRoutes = (isAuthenticated: boolean) => {
           ) : (
             <Navigate to={`/login?redirect=${window.location.pathname}`} />
           ),
+        },
+        {
+          path: "thank-you",
+          element: <ThankYou />,
         },
         {
           path: "profile",

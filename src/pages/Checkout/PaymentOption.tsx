@@ -16,6 +16,7 @@ import {
 import { Coins, CreditCard } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { BiLogoPaypal } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 const paymentOptions = [
   {
@@ -49,17 +50,22 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
       payment: "cod",
     },
   });
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
-    await addOrder.mutateAsync({
+    const response = await addOrder.mutateAsync({
       ...stepData,
       payment: data.payment,
     });
-    setStepData({});
-    sessionStorage.removeItem("cartItems");
-    // navigate("/e-sewa");
-    setTimeout(() => window.location.reload(), 2000);
+    console.log(response);
+    if (response.status === 201) {
+      setStepData({});
+      sessionStorage.removeItem("cartItems");
+      navigate("/thank-you", {
+        replace: true,
+        state: response.data ?? {},
+      });
+    }
   };
 
   return (
@@ -158,7 +164,6 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
         <Button
           colorScheme={"primary"}
           w={"fit-content"}
-          borderRadius={"2px"}
           onClick={stepProps.prevStep}
           size={"sm"}
         >
@@ -173,7 +178,6 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
           }}
           colorScheme={"primary"}
           w={"fit-content"}
-          borderRadius={"2PX"}
           size={"sm"}
           isLoading={addOrder.isPending}
         >

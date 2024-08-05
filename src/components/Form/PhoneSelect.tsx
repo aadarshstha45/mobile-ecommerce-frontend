@@ -58,13 +58,11 @@ const PhoneSelect = ({
             chakraStyles={{
               control: (provided, state) => ({
                 ...provided,
-                border: "1px solid",
-                borderRadius: "2px",
                 borderColor: state.isFocused
                   ? "#4A57B3"
                   : isReadOnly
                   ? "gray.300"
-                  : "#000",
+                  : "gray.300",
                 "&:hover": {
                   borderColor: isReadOnly ? "gray.300" : "#000",
                 },

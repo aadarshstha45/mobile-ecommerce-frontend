@@ -49,10 +49,9 @@ export const ReactDatePicker = ({
     return (
       <InputGroup>
         <Input
-          borderRadius={2}
           focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
-          border={"1px solid #000"}
-          _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
+          _hover={{ borderColor: isReadOnly ? "gray.300" : "gray.400" }}
+          borderColor={"gray.300"}
           {...props}
           ref={ref}
         />

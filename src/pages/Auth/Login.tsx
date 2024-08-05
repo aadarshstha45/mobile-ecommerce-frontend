@@ -151,7 +151,6 @@ function LoginPage() {
                     w={"100%"}
                     mt={8}
                     size={{ base: "sm", md: "md" }}
-                    borderRadius={0}
                     isLoading={isPending}
                   >
                     Log In

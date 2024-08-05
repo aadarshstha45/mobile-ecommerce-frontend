@@ -55,15 +55,13 @@ const PhoneInput = ({
   const chakraStyles: ChakraStylesConfig = {
     control: (provided, state) => ({
       ...provided,
-      border: "1px solid",
-      borderRadius: "2px",
       borderColor: state.isFocused
         ? "#4A57B3"
         : isReadOnly
         ? "gray.300"
-        : "#000",
+        : "gray.300",
       "&:hover": {
-        borderColor: isReadOnly ? "gray.300" : "#000",
+        borderColor: isReadOnly ? "gray.300" : "gray.400",
       },
       py: "10px",
       width: { base: "full", sm: "120px" },
@@ -120,12 +118,11 @@ const PhoneInput = ({
               type="number"
               w={"full"}
               focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
-              _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
-              borderRadius={"2px"}
+              _hover={{ borderColor: isReadOnly ? "gray.300" : "gray.400" }}
               errorBorderColor="red.500"
               border={"1px solid"}
               borderColor={
-                isReadOnly ? "gray.300" : errors[name] ? "red.500" : "#000"
+                isReadOnly ? "gray.300" : errors[name] ? "red.500" : "gray.300"
               }
               value={value}
               onChange={onChange}

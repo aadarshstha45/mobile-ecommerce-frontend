@@ -4,6 +4,7 @@ import { useFetchProductById } from "@/api/functions/Product";
 import { useSaveWishlist } from "@/api/functions/Wishlist";
 import ShoppingCart from "@/assets/icons/ShoppingCart";
 import NoImage from "@/assets/images/NoImage.png";
+import Thumbnail from "@/assets/images/Thumbnail.jpg";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import RadioBox from "@/components/Form/RadioBox";
 import TokenService from "@/services/service-token";
@@ -398,8 +399,7 @@ function ProductDetail() {
                               <Image
                                 w={"full"}
                                 aspectRatio={1 / 1}
-                                onClick={() => setDisplayImage(data?.image)}
-                                src={`${data?.image}`}
+                                src={Thumbnail}
                                 objectFit={"cover"}
                                 _hover={{
                                   border: "1px",

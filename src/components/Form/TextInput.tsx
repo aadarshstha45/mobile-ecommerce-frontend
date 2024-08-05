@@ -159,8 +159,7 @@ export const TextInput = ({
               <Input
                 type={showPassword ? "text" : "password"}
                 focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
-                _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
-                borderRadius={"2px"}
+                _hover={{ borderColor: "gray.400" }}
                 errorBorderColor="red.500"
                 border={"1px solid"}
                 borderColor={
@@ -169,7 +168,7 @@ export const TextInput = ({
                     : (errors && errors[name]) ||
                       (backErrors && backErrors[name])
                     ? "red.500"
-                    : "#000"
+                    : "gray.300"
                 }
                 placeholder={placeholder}
                 onChange={(e) => onChange(handleInputChange(e.target.value))}
@@ -200,10 +199,8 @@ export const TextInput = ({
                 )}
                 <Input
                   focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
-                  _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
-                  borderRadius={"2px"}
+                  _hover={{ borderColor: "gray.400" }}
                   errorBorderColor="red.500"
-                  border={"1px solid #000"}
                   value={value}
                   placeholder={placeholder}
                   type={"email"}
@@ -284,10 +281,8 @@ export const TextInput = ({
               )}
               <Input
                 focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
-                _hover={{ borderColor: isReadOnly ? "gray.300" : "#000" }}
-                borderRadius={"2px"}
+                _hover={{ borderColor: "gray.400" }}
                 errorBorderColor={"red"}
-                border={"1px solid #000"}
                 value={value}
                 cursor={isReadOnly ? "default" : "auto"}
                 borderColor={
@@ -295,7 +290,7 @@ export const TextInput = ({
                     ? "gray.300"
                     : errors && errors[name]
                     ? "red.500"
-                    : "#000"
+                    : "gray.300"
                 }
                 placeholder={placeholder}
                 type={type}

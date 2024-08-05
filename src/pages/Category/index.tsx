@@ -146,7 +146,7 @@ function Category() {
           ) : data && data.data?.length > 0 ? (
             <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
               <Masonry gutter={isLessThan540 ? "10px" : "20px"}>
-                {data?.data.map((item: any) => (
+                {data?.data.map((item) => (
                   <ItemDisplay
                     key={item.id}
                     data={item}
@@ -161,7 +161,7 @@ function Category() {
           ) : (
             <Text fontSize="xl">No products found</Text>
           )}
-          {data?.pagination.total_items > 12 && (
+          {data?.pagination && data?.pagination.total_items > 12 && (
             <PaginationButton
               currentPage={data?.pagination?.current_page ?? currentPage}
               setCurrentPage={setCurrentPage}

@@ -69,15 +69,15 @@ const MyPurchase = () => {
         </>
       </Flex>
       <Tabs isLazy colorScheme="primary" variant={"unstyled"}>
-        <TabList overflowX={"auto"}>
+        <TabList whiteSpace={"nowrap"} overflowX={"auto"} overflowY={"hidden"}>
           {TabItems.map((tab, index) => (
             <Tab
               key={index}
               _selected={{
-                textColor: "white",
-                bg: "primary.500",
-                borderRadius: 2,
+                borderBottomColor: "primary.500",
               }}
+              borderBottom={"5px solid"}
+              borderBottomColor={"primary.50"}
               fontSize={{ base: "sm", md: "md", xl: "lg" }}
               whiteSpace={"nowrap"}
             >

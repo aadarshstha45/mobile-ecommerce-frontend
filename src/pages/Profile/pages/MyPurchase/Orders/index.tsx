@@ -26,6 +26,8 @@ const Orders = ({ fromDate, toDate, status }: OrderProps) => {
     toDate!
   );
 
+  console.log(data);
+
   useEffect(() => {
     setCurrentPage(pageFromUrl);
   }, [pageFromUrl]);
@@ -36,7 +38,10 @@ const Orders = ({ fromDate, toDate, status }: OrderProps) => {
       {isFetching ? (
         <LoadingSpinner />
       ) : (
-        <OrderDisplay data={data?.data} isPending={isPending} />
+        <OrderDisplay
+          data={data ?? { data: [], message: "" }}
+          isPending={isPending}
+        />
       )}
       <PaginationButton
         currentPage={data?.pagination?.current_page ?? currentPage}

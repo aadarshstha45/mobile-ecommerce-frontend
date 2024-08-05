@@ -37,7 +37,7 @@ const MobileNav = ({ isOpen, onClose, menus }: MobileNavProps) => {
       onClose={onClose}
       size={{ base: "full", sm: "sm" }}
     >
-      <DrawerContent>
+      <DrawerContent maxH={window.innerHeight}>
         <DrawerCloseButton />
         <DrawerHeader borderBottom={"1px solid #939292"}>
           Clothing Store

@@ -154,7 +154,6 @@ const ShippingDetails = ({ stepProps }: IStepProps) => {
           <Button
             colorScheme={"primary"}
             w={"fit-content"}
-            borderRadius={"2px"}
             onClick={handlePrevPage}
             size={"sm"}
           >
@@ -163,7 +162,6 @@ const ShippingDetails = ({ stepProps }: IStepProps) => {
           <Button
             colorScheme={"primary"}
             w={"fit-content"}
-            borderRadius={"2PX"}
             size={"sm"}
             type="submit"
             form="shipping-details-form"

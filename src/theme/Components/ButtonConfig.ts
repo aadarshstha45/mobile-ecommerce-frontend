@@ -1,13 +1,11 @@
 import { defineStyle, defineStyleConfig } from "@chakra-ui/react";
 
 const solid = defineStyle({
-  borderRadius: 2,
-  fontWeight: 500,
+  fontWeight: 400,
 });
 
 const outline = defineStyle({
-  borderRadius: 2,
-  fontWeight: 500,
+  fontWeight: 400,
 });
 
 export const ButtonConfig = defineStyleConfig({

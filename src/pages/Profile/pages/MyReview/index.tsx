@@ -14,15 +14,15 @@ const TabItems = [
 const MyReview = () => {
   return (
     <Tabs isLazy position="relative" variant="unstyled">
-      <TabList>
+      <TabList whiteSpace={"nowrap"} overflowX={"auto"} overflowY={"hidden"}>
         {TabItems.map((tab, index) => (
           <Tab
-            key={index}
             _selected={{
-              textColor: "white",
-              bg: "primary.500",
-              borderRadius: 2,
+              borderBottomColor: "primary.500",
             }}
+            borderBottom={"4px solid"}
+            borderBottomColor={"primary.50"}
+            key={index}
             fontSize={{ base: "sm", md: "md", xl: "lg" }}
           >
             {tab.name}

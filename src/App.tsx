@@ -3,7 +3,7 @@ import { Suspense, useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { useAuthentication, useLogoutUser } from "./api/auth/users";
-import { getAppRoutes } from "./router/appRoutes";
+import { getAppRoutes } from "./router";
 import { LoadingSpinner } from "./utils/LoadingSpinner";
 import ScrollToTop from "./utils/ScrollToTop";
 const renderRoutes = (routes: any) => {

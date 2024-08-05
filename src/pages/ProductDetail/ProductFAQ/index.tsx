@@ -22,6 +22,7 @@ const ProductFAQ = ({ productId }: ProductFAQProps) => {
 
   const { data: FAQData, isPending } = useFetchProductFaqs(productId);
   return (
+    FAQData &&
     FAQData.length > 0 && (
       <Flex bg={"#EFEFEF"}>
         <Container

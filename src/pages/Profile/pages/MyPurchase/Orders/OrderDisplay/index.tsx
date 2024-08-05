@@ -1,3 +1,5 @@
+import { Datum } from "@/api/functions/Order/response";
+import { RootInterface } from "@/api/response";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import {
   Card,
@@ -27,7 +29,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 interface OrderDisplayProps {
-  data: any;
+  data: RootInterface<Datum[]>;
   isPending?: boolean;
 }
 
@@ -46,12 +48,14 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
     onClose();
   };
 
+  console.log(data);
+
   return (
     <>
       {isPending ? (
         <LoadingSpinner height={window.innerHeight / 2} />
-      ) : data && data.length > 0 ? (
-        data.map((item: any) => (
+      ) : (
+        data.data.map((item: any) => (
           <Card
             cursor={"pointer"}
             zIndex={0}
@@ -90,8 +94,6 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
             </CardHeader>
           </Card>
         ))
-      ) : (
-        <Text>No data found</Text>
       )}
       {selectedOrder && (
         <Modal
@@ -112,7 +114,7 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
               <TableContainer>
                 <Table>
                   <Thead>
-                    <Tr>
+                    <Tr bg={"gray.50"}>
                       <Th>S.N.</Th>
                       <Th>Product Name</Th>
                       <Th>Quantity</Th>

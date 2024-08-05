@@ -233,7 +233,6 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
               isLoading={PromoCode.isPending}
               fontSize={{ sm: "14px", md: "16px" }}
               fontWeight={400}
-              borderRadius={"2px"}
             >
               Apply
             </Button>
@@ -292,12 +291,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
           </Text>
         </HStack>
 
-        <Button
-          onClick={handleNextPage}
-          colorScheme={"primary"}
-          borderRadius={"2px"}
-          mt={4}
-        >
+        <Button onClick={handleNextPage} colorScheme={"primary"} mt={4}>
           Checkout
         </Button>
       </GridItem>

@@ -71,16 +71,22 @@ const SelectInput = ({
         ? "gray.300"
         : errors && errors[name]
         ? "red.500"
-        : "#000",
+        : "gray.300",
       "&:hover": {
         borderColor: isReadOnly ? "gray.300" : "#000",
       },
-      borderRadius: "2px",
+      fontSize: "16px",
     }),
 
     menu: (styles: any) => ({
       ...styles,
       zIndex: 9999,
+      fontSize: "12px",
+    }),
+    option: (styles: any, { isSelected }) => ({
+      ...styles,
+
+      fontSize: "16px",
     }),
   };
   return (
@@ -124,6 +130,9 @@ const SelectInput = ({
         <Select
           defaultValue={options.find((option) => option.value === value)}
           chakraStyles={chakraStyles}
+          styles={{
+            menuPortal: (base) => ({ ...base, fontSize: "12px" }),
+          }}
           placeholder={placeholder}
           options={options}
           onChange={handleChange}
