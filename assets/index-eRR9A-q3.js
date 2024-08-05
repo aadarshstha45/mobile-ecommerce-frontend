@@ -1,1 +1,0 @@
-import{u as e}from"./index-Cz7Rk_E5.js";const s={getHomeSales:"get-sales-offer-products",get:"get-all-sales-offer"},a=()=>e({apiEndPoint:s.getHomeSales}),o=()=>e({apiEndPoint:s.get});export{a,o as u};
