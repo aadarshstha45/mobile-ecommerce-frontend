@@ -1,3 +1,4 @@
+import { useForgotPassword } from "@/api/auth/password";
 import ResetBanner from "@/assets/images/Auth/ResetBanner.png";
 import { TextInput } from "@/components/Form/TextInput";
 import {
@@ -7,14 +8,26 @@ import {
   Container,
   Flex,
   GridItem,
-  Heading,
   Image,
   SimpleGrid,
+  Text,
 } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BiArrowBack } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import * as z from "zod";
+
+const schema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Email is required to reset password" })
+    .email(),
+});
+
 function ResetPassword() {
+  const { mutateAsync, isPending, error } = useForgotPassword();
+
   const {
     control,
     formState: { errors },
@@ -23,7 +36,17 @@ function ResetPassword() {
     defaultValues: {
       email: "",
     },
+    resolver: zodResolver(schema),
   });
+
+  const onSubmit = async (data: any) => {
+    await mutateAsync(data);
+  };
+
+  console.log("error", error);
+
+  const fieldError = (error?.response?.data as any)?.errors;
+
   return (
     <Flex
       bg={{ base: "#f2f2f2", md: "" }}
@@ -54,29 +77,23 @@ function ResetPassword() {
               alignSelf={"center"}
               colSpan={1}
             >
-              <form
-                onSubmit={handleSubmit((data) => console.log(data))}
-                noValidate
-              >
+              <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <Flex
                   p={{ base: 4, sm: "40px 10px" }}
                   flexDir={"column"}
                   justify={"center"}
                   align={"center"}
+                  gap={4}
                 >
-                  <Heading
+                  <Text
                     fontSize={{
                       base: "16px",
-                      sm: "18px",
-                      md: "20px",
-                      lg: "22px",
-                      xl: "24px",
+                      md: "18px",
+                      xl: "20px",
                     }}
-                    textAlign={"center"}
-                    mb={8}
                   >
-                    Reset Password
-                  </Heading>
+                    Enter your email to reset your password
+                  </Text>
 
                   <TextInput
                     errors={errors}
@@ -84,19 +101,19 @@ function ResetPassword() {
                     name={"email"}
                     control={control}
                     isRequired
+                    backErrors={fieldError}
                   />
 
                   <Button
                     type="submit"
                     colorScheme="primary"
                     w={"100%"}
-                    mt={8}
-                    borderRadius={0}
                     size={{ base: "sm", md: "md" }}
+                    isLoading={isPending}
                   >
                     Reset Password
                   </Button>
-                  <Flex gap={2} mt={6} align={"center"} as={Link} to={"/login"}>
+                  <Flex gap={2} align={"center"} as={Link} to={"/login"}>
                     <BiArrowBack />
                     Go back
                   </Flex>

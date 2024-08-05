@@ -1,5 +1,7 @@
+import { baseURL } from "@/api/axiosSetup";
 import PasswordBanner from "@/assets/images/Auth/PasswordBanner.png";
 import { TextInput } from "@/components/Form/TextInput";
+import { useToast } from "@/utils/toast";
 import {
   Box,
   Button,
@@ -11,20 +13,89 @@ import {
   Image,
   SimpleGrid,
 } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { BiArrowBack } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import * as z from "zod";
+
+const schema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" }),
+    password_confirmation: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" }),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    message: "Passwords did not match",
+    path: ["confirm_password"], // This specifies where the error should be attached
+  });
+
+type SetPasswordProps = z.infer<typeof schema> & { email: string } & {
+  token: string;
+};
+
+const defaultValues = {
+  password: "",
+  password_confirmation: "",
+};
+
 function SetPassword() {
+  const { successToast, errorToast } = useToast();
+
+  const { mutateAsync, isPending, error } = useMutation<
+    any,
+    any,
+    SetPasswordProps
+  >({
+    mutationKey: ["forgot-password"],
+    mutationFn: async (data) => {
+      const response = await axios.post(`${baseURL}reset-password`, data);
+      return response;
+    },
+    onError: (error) => {
+      const errors = error?.response?.data.errors;
+      console.log("Errors from the server", errors);
+      if (!Array.isArray(errors)) {
+        errorToast(errors);
+      }
+    },
+  });
+
+  const fieldError = (error?.response?.data as any)?.errors;
+
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const navigate = useNavigate();
   const {
     control,
     formState: { errors },
     handleSubmit,
   } = useForm({
-    defaultValues: {
-      password: "",
-      confirmPassword: "",
-    },
+    defaultValues: defaultValues,
+    resolver: zodResolver(schema),
   });
+
+  const onSubmit = async (data: typeof defaultValues) => {
+    const token = urlParams.get("token");
+    const email = urlParams.get("email");
+    if (!token || !email) {
+      return;
+    }
+    const response = await mutateAsync({ ...data, email, token });
+    console.log(response);
+
+    if (response.status === 200) {
+      successToast("Password reset successful. Login to continue");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    }
+  };
   return (
     <Flex
       bg={{ base: "#f2f2f2", md: "" }}
@@ -55,10 +126,7 @@ function SetPassword() {
               alignSelf={"center"}
               colSpan={1}
             >
-              <form
-                onSubmit={handleSubmit((data) => console.log(data))}
-                noValidate
-              >
+              <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <Flex
                   p={{ base: 4, sm: "40px 10px" }}
                   flexDir={"column"}
@@ -81,16 +149,20 @@ function SetPassword() {
 
                   <TextInput
                     errors={errors}
+                    type="password"
                     label="Password"
                     name={"password"}
                     control={control}
+                    backErrors={fieldError}
                     isRequired
                   />
                   <TextInput
                     errors={errors}
+                    type="password"
                     label="Confirm Password"
-                    name={"confirmPassword"}
+                    name={"password_confirmation"}
                     control={control}
+                    backErrors={fieldError}
                     isRequired
                   />
 
@@ -98,9 +170,8 @@ function SetPassword() {
                     type="submit"
                     colorScheme="primary"
                     w={"100%"}
-                    mt={8}
                     size={{ base: "sm", md: "md" }}
-                    borderRadius={0}
+                    isLoading={isPending}
                   >
                     Reset Password
                   </Button>

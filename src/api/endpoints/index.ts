@@ -6,11 +6,12 @@ export const user = {
   changePassword: "change-password",
   update: "profile-update",
   updateImage: "change-profile-picture",
-  emailCheck: (email: string) => `check-unique-email?email=${email}`,
+  emailCheck: (email: string) => `/check-unique-email?email=${email}`,
   updatePassword: "update-password",
   getShippingAddress: "shipping-address",
   addShippingAddress: "shipping-address",
   editShippingAddress: "shipping-address/:id",
   deleteShippingAddress: "shipping-address/:id",
   getMerchant: "merchant",
+  forgotPassword: "forgot-password",
 };

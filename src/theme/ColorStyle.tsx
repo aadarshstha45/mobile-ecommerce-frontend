@@ -1,6 +1,6 @@
 export const ColorStyles = {
   primary: {
-    50: "#A0A7D2",
+    50: "#BABFDC",
     100: "#8D96C8",
     200: "#7A84BE",
     300: "#6862B4",

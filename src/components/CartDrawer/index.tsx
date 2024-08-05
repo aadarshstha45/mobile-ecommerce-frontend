@@ -40,7 +40,7 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const isAuthenticated = TokenService.isAuthenticated();
-  const { data, isPending, isFetching } = useFetchCart({
+  const { data, isPending, isRefetching } = useFetchCart({
     enabled: isAuthenticated,
   });
   const navigate = useNavigate();
@@ -202,14 +202,15 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     >
       <DrawerOverlay />
       <DrawerContent maxH={window.innerHeight} pos={"relative"}>
-        {isFetching ||
+        {isRefetching ||
           (isPending && (
             <Flex
               pos={"absolute"}
               w={"100%"}
+              h={"100%"}
               justify={"center"}
-              bg={"rgba(0,0,0,0.1)"}
-              zIndex={10}
+              bg={"rgba(0,0,0,0.8)"}
+              zIndex={9999999}
             >
               <LoadingSpinner />
             </Flex>
@@ -218,18 +219,20 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
         <DrawerHeader borderBottomWidth={"1px"}>My Cart</DrawerHeader>
         <DrawerBody px={1}>
           {deletedItems.length > 0 && (
-            <Button
-              size={"xs"}
-              justifySelf={"end"}
-              leftIcon={<Trash2 size={18} />}
-              colorScheme="red"
-              borderRadius={0}
-              py={4}
-              mb={4}
-              onClick={() => handleDeleteModalOpen("")}
-            >
-              Delete
-            </Button>
+            <Stack justify={"end"} px={6}>
+              <Button
+                size={"sm"}
+                alignSelf={"flex-end"}
+                justifySelf={"flex-end"}
+                leftIcon={<Trash2 size={18} />}
+                colorScheme="red"
+                fontSize={"sm"}
+                mt={4}
+                onClick={() => handleDeleteModalOpen("")}
+              >
+                Delete
+              </Button>
+            </Stack>
           )}
 
           {data && data?.length > 0 ? (

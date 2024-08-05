@@ -97,7 +97,7 @@ export const TextInput = ({
 
     try {
       const response = await axios.get(
-        `${baseURL}/check-unique-email?email=${email}`
+        `${baseURL}check-unique-email?email=${email}`
       );
       if (response?.data === true) {
         setEmailExists(true);
@@ -198,6 +198,13 @@ export const TextInput = ({
                   />
                 )}
                 <Input
+                  borderColor={
+                    isReadOnly
+                      ? "gray.300"
+                      : backError && backError[name]
+                      ? "red.500"
+                      : "gray.300"
+                  }
                   focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
                   _hover={{ borderColor: "gray.400" }}
                   errorBorderColor="red.500"

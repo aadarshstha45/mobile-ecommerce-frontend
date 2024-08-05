@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import TokenService from "@/services/service-token";
 import { useToast } from "@/utils/toast";
-import {
-  InvalidateQueryFilters,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import { HttpClient } from "../axiosSetup";
@@ -31,9 +26,9 @@ const useMutate = (requestData: {
     onSuccess: (response) => {
       {
         requestData.inValidateEndpoint &&
-          queryClient.invalidateQueries(
-            requestData.inValidateEndpoint! as InvalidateQueryFilters
-          );
+          queryClient.invalidateQueries({
+            queryKey: [requestData.inValidateEndpoint],
+          });
       }
       if (requestData.message) {
         successToast(requestData.message);
@@ -53,22 +48,25 @@ const useMutate = (requestData: {
     onError: (error: AxiosError) => {
       const statusCode = error?.response?.status;
       const errorMessage = error?.message;
-      const dataError = error?.response?.data;
-      if (
-        errorMessage &&
-        statusCode !== 401 &&
-        statusCode !== 422 &&
-        statusCode !== 500
-      ) {
+      const dataError = error?.response?.data as {
+        errors?: Record<string, string[]>;
+      };
+
+      console.log("error", dataError);
+
+      if (errorMessage && ![401, 422, 500].includes(statusCode!)) {
         errorToast(errorMessage);
       }
-      if (dataError && statusCode !== 422) {
+
+      if (dataError?.errors) {
         if (statusCode === 500) {
-          errorToast(error?.response?.statusText as string);
+          errorToast(error?.response?.statusText ?? "Internal Server Error");
         } else {
-          errorToast((dataError as any)?.message);
-          toast.error((dataError as any)?.errors, {
-            duration: 2000,
+          Object.values(dataError.errors).forEach((errorArray) => {
+            if (errorArray.length > 0) {
+              const firstError = errorArray[0];
+              return firstError;
+            }
           });
         }
       }
