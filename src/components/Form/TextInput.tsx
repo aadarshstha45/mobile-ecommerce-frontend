@@ -160,7 +160,6 @@ export const TextInput = ({
                 type={showPassword ? "text" : "password"}
                 focusBorderColor={isReadOnly ? "gray.300" : "primary.500"}
                 _hover={{ borderColor: "gray.400" }}
-                errorBorderColor="red.500"
                 border={"1px solid"}
                 borderColor={
                   isReadOnly
@@ -175,6 +174,7 @@ export const TextInput = ({
                 value={value}
                 autoComplete="off"
                 required={isRequired}
+                flexGrow={0}
               />
               <InputRightElement px={2} bg={"transparent"}>
                 <IconButton

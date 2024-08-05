@@ -43,11 +43,13 @@ const Orders = ({ fromDate, toDate, status }: OrderProps) => {
           isPending={isPending}
         />
       )}
-      <PaginationButton
-        currentPage={data?.pagination?.current_page ?? currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPages={data?.pagination?.total_pages ?? 10}
-      />
+      {data?.pagination && data.pagination.total_pages > 1 && (
+        <PaginationButton
+          currentPage={data?.pagination?.current_page ?? currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={data?.pagination?.total_pages ?? 10}
+        />
+      )}
     </Flex>
   );
 };

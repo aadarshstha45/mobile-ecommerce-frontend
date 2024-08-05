@@ -1,9 +1,8 @@
 import { useChangePassword } from "@/api/auth";
 import { TextInput } from "@/components/Form";
 import { ChangePasswordSchema } from "@/utils/validation/auth";
-import { Button, Divider, Flex, HStack, Icon, Text } from "@chakra-ui/react";
+import { Button, Divider, Flex, Text } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 const AccountSettings = () => {
@@ -77,20 +76,6 @@ const AccountSettings = () => {
           Change Password
         </Button>
       </form>
-
-      <HStack gap={2}>
-        <Flex
-          border={"0.5px solid"}
-          p={4}
-          borderRadius={5}
-          gap={4}
-          justify={"space-between"}
-          align={"center"}
-        >
-          <Icon as={User} />
-          <Text>Forgot Password</Text>
-        </Flex>
-      </HStack>
     </Flex>
   );
 };

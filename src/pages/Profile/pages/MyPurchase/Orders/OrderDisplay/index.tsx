@@ -48,13 +48,11 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
     onClose();
   };
 
-  console.log(data);
-
   return (
     <>
       {isPending ? (
         <LoadingSpinner height={window.innerHeight / 2} />
-      ) : (
+      ) : data.data.length > 0 ? (
         data.data.map((item: any) => (
           <Card
             cursor={"pointer"}
@@ -94,6 +92,14 @@ const OrderDisplay = ({ data, isPending }: OrderDisplayProps) => {
             </CardHeader>
           </Card>
         ))
+      ) : (
+        <Flex
+          justifyContent={"center"}
+          alignItems={"center"}
+          height={window.innerHeight / 4}
+        >
+          <Text fontSize={"lg"}>No Orders Found</Text>
+        </Flex>
       )}
       {selectedOrder && (
         <Modal

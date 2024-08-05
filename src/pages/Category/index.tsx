@@ -1,6 +1,7 @@
 import { useFetchProductsByCategory } from "@/api/functions/Category";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { CategoryFilter, ColorSizeFilter } from "@/components/Filter";
+import PriceRange from "@/components/Filter/PriceRange";
 import SelectInput from "@/components/Form/SelectInput";
 import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
 import { PaginationButton } from "@/components/Pagination";
@@ -38,7 +39,7 @@ function Category() {
 
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-
+  const [priceRange, setPriceRange] = useState<number[]>([0, 0]);
   const { data, isPending, isFetching } = useFetchProductsByCategory(
     pageFromUrl,
     param,
@@ -54,6 +55,13 @@ function Category() {
   useEffect(() => {
     setSort(sortFromUrl);
   }, [sortFromUrl]);
+
+  useEffect(() => {
+    console.log({
+      min: priceRange[0],
+      max: priceRange[1],
+    });
+  }, [priceRange]);
 
   const handleSelectChange = (selectedOption: OptionType) => {
     setSort(selectedOption.value);
@@ -134,6 +142,11 @@ function Category() {
         >
           <Flex flexDir={"column"} gap={4} w={"full"}>
             <CategoryFilter />
+            <PriceRange
+              name="price"
+              priceRange={priceRange}
+              onChangeEnd={(val) => setPriceRange(val)}
+            />
             <ColorSizeFilter
               handleSizeSelect={handleSizeSelect}
               handleColorSelect={handleColorSelect}

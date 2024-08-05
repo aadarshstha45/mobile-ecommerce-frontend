@@ -49,10 +49,17 @@ const useMutate = (requestData: {
       const statusCode = error?.response?.status;
       const errorMessage = error?.message;
       const dataError = error?.response?.data as {
-        errors?: Record<string, string[]>;
+        errors?: string | Record<string, string[]>;
       };
 
       console.log("error", dataError);
+
+      if (dataError?.errors && !Array.isArray(dataError.errors)) {
+        const errors = dataError.errors;
+        if (typeof errors === "string") {
+          errorToast(errors);
+        }
+      }
 
       if (errorMessage && ![401, 422, 500].includes(statusCode!)) {
         errorToast(errorMessage);
