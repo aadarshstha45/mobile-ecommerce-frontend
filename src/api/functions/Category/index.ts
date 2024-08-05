@@ -1,9 +1,6 @@
 import { CategoryMenuApi } from "@/api/endpoints/Category";
 import { useFetch } from "@/api/methods";
 import { usePaginatedFetch } from "@/api/methods/get";
-import { Datum } from "./response";
-
-import { RootInterface } from "@/api/response";
 
 const useFetchMenuItems = () => {
   return useFetch({ apiEndPoint: CategoryMenuApi.getMenu });
@@ -35,7 +32,7 @@ const useFetchProductsByCategory = (
   sizes: string,
   colors: string
 ) => {
-  return usePaginatedFetch<RootInterface<Datum[]>>(
+  return usePaginatedFetch(
     CategoryMenuApi.getProductsByCategory(page, param, sort, sizes, colors)
   );
 };

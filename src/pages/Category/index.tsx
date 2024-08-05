@@ -146,7 +146,7 @@ function Category() {
           ) : data && data.data?.length > 0 ? (
             <ResponsiveMasonry columnsCountBreakPoints={columnBreakpoints}>
               <Masonry gutter={isLessThan540 ? "10px" : "20px"}>
-                {data?.data.map((item) => (
+                {data?.data.map((item: any) => (
                   <ItemDisplay
                     key={item.id}
                     data={item}

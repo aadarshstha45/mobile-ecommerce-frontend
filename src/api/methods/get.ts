@@ -26,11 +26,8 @@ const useFetch = ({ apiEndPoint, params, enabled }: FetchProps) => {
   });
 };
 
-const usePaginatedFetch = <T>(
-  apiEndpoint: string,
-  params?: string | number
-) => {
-  const fetchData = (): Promise<AxiosResponse<T>> => {
+const usePaginatedFetch = (apiEndpoint: string, params?: string | number) => {
+  const fetchData = (): Promise<AxiosResponse<any>> => {
     return HttpClient.get(apiEndpoint, {
       params,
     });

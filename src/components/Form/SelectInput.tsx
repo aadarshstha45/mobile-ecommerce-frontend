@@ -83,9 +83,8 @@ const SelectInput = ({
       zIndex: 9999,
       fontSize: "12px",
     }),
-    option: (styles: any, { isSelected }) => ({
+    option: (styles) => ({
       ...styles,
-
       fontSize: "16px",
     }),
   };

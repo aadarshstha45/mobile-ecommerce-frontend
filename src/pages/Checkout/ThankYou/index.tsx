@@ -96,14 +96,14 @@ const ThankYou = () => {
                 <Tr>
                   <Td colSpan={3}></Td>
                   <Td>Discount</Td>
-                  <Td>Rs. {data.discount_amount ?? 0}</Td>
+                  <Td>Rs. {data.data.discount_amount ?? 0}</Td>
                   <Td></Td>
                 </Tr>
                 <Tr>
                   <Td colSpan={3}></Td>
                   <Td>Grand Total</Td>
                   <Td></Td>
-                  <Td>Rs. {data.total_amount}</Td>
+                  <Td>Rs. {data.data.total_amount}</Td>
                 </Tr>
               </Tfoot>
             </Table>

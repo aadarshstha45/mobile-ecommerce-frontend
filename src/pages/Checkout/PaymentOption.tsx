@@ -61,10 +61,15 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
     if (response.status === 201) {
       setStepData({});
       sessionStorage.removeItem("cartItems");
+
       navigate("/thank-you", {
         replace: true,
         state: response.data ?? {},
+        preventScrollReset: true,
       });
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     }
   };
 
