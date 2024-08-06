@@ -105,7 +105,7 @@ const ItemDisplay = ({
             >
               <Stack
                 opacity={{ base: 0, md: 1 }}
-                zIndex={90}
+                zIndex={8}
                 gap={2}
                 pos={"absolute"}
                 right={4}

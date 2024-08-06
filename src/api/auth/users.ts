@@ -52,8 +52,6 @@ const useMutate = (requestData: {
         errors?: string | Record<string, string[]>;
       };
 
-      console.log("error", dataError);
-
       if (dataError?.errors && !Array.isArray(dataError.errors)) {
         const errors = dataError.errors;
         if (typeof errors === "string") {

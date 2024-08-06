@@ -59,7 +59,6 @@ function SetPassword() {
     },
     onError: (error) => {
       const errors = error?.response?.data.errors;
-      console.log("Errors from the server", errors);
       if (!Array.isArray(errors)) {
         errorToast(errors);
       }

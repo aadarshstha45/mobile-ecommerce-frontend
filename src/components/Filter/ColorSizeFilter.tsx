@@ -27,6 +27,7 @@ const ColorSizeFilter = ({
         <Filter title={"Colors"}>
           {colors.map((color: any) => (
             <Checkbox
+              px={2}
               colorScheme="primary"
               onChange={(e) => handleColorSelect(e, color.id)}
               key={color.id}
@@ -41,6 +42,7 @@ const ColorSizeFilter = ({
         <Filter title={"Sizes"}>
           {sizes.map((size: any) => (
             <Checkbox
+              px={2}
               colorScheme="primary"
               onChange={(e) => handleSizeSelect(e, size.id)}
               key={size.id}

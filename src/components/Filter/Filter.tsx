@@ -31,7 +31,13 @@ function Filter({ title, children, defaultExpanded }: FilterProps) {
                 )}
               </AccordionButton>
             </h2>
-            <AccordionPanel display={"flex"} flexDir={"column"} gap={2} pb={4}>
+            <AccordionPanel
+              display={"flex"}
+              flexDir={"column"}
+              gap={2}
+              p={0}
+              pb={4}
+            >
               {children}
             </AccordionPanel>
           </>

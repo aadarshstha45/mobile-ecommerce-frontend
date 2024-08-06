@@ -21,7 +21,6 @@ import { Link, useLocation } from "react-router-dom";
 const ThankYou = () => {
   const data = useLocation().state;
 
-  console.log(data);
 
   if (!data) {
     return (

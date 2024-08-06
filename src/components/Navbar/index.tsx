@@ -7,6 +7,7 @@ import NoImage from "@/assets/icons/UserIcon/user.png";
 import TokenService from "@/services/service-token";
 import {
   Avatar,
+  Box,
   Button,
   ButtonGroup,
   Container,
@@ -18,9 +19,11 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { LogOutIcon, Menu as MenuIcon } from "lucide-react";
+import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import CartDrawer from "../CartDrawer";
 import MobileNav from "./MobileNav";
@@ -28,6 +31,7 @@ import { profileMenuItems } from "./MobileNav/profileMenuItems";
 
 function NavBar({ data }: any) {
   const isAuthenticated = TokenService.isAuthenticated();
+  const [cartItemCount, setCartItemCount] = useState<number | null>(null);
   const path = useLocation().pathname.split("/")[1];
   const { data: menus } = useFetchMenuItems();
 
@@ -50,7 +54,6 @@ function NavBar({ data }: any) {
   const handleCartOpen = () => {
     TokenService.isAuthenticated() ? onOpen() : navigate("/login");
   };
-
   return (
     <Flex
       bg={path ? "white" : "#BEBDBD"}
@@ -218,15 +221,36 @@ function NavBar({ data }: any) {
               </Menu>
             )}
             {isAuthenticated && (
-              <ShoppingCart
-                onClick={handleCartOpen}
-                cursor={"pointer"}
-                boxSize={{ base: 5, sm: 6 }}
-              />
+              <Box pos={"relative"} onClick={handleCartOpen} cursor={"pointer"}>
+                {cartItemCount && (
+                  <Box
+                    pos={"absolute"}
+                    top={-1}
+                    right={-2}
+                    bg={"primary.500"}
+                    w={4}
+                    h={4}
+                    p={2}
+                    borderRadius={"50%"}
+                    color={"white"}
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    zIndex={0}
+                  >
+                    <Text fontSize={"sm"}>{cartItemCount}</Text>
+                  </Box>
+                )}
+                <ShoppingCart boxSize={{ base: 5, sm: 6 }} />
+              </Box>
             )}
           </HStack>
         </Flex>
-        <CartDrawer isOpen={isOpen} onClose={onClose} />
+        <CartDrawer
+          isOpen={isOpen}
+          onClose={onClose}
+          setCartItemCount={setCartItemCount}
+        />
       </Container>
     </Flex>
   );

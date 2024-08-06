@@ -8,6 +8,7 @@ import Thumbnail from "@/assets/images/Thumbnail.jpg";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import RadioBox from "@/components/Form/RadioBox";
 import TokenService from "@/services/service-token";
+import { discount } from "@/utils/discount";
 import Magnifier from "@/utils/ImageMagnify";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
@@ -34,11 +35,17 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import { HeartIcon, MoveLeft, MoveRight, PlayIcon } from "lucide-react";
+import {
+  CreditCard,
+  HeartIcon,
+  MoveLeft,
+  MoveRight,
+  PlayIcon,
+} from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactPlayer from "react-player";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ModalLogin from "../Auth/ModalLogin";
 import DetailTab from "./DetailTab";
 import ProductFAQ from "./ProductFAQ";
@@ -101,7 +108,11 @@ function ProductDetail() {
       containerRef.current.scrollBy({ left: -150, behavior: "smooth" }); // Adjust the scroll value as needed
     }
   };
+
+  const navigate = useNavigate();
+
   const { id } = useParams<{ id: string }>();
+
   const { data, isPending } = useFetchProductById(id!);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -115,10 +126,11 @@ function ProductDetail() {
   const [colorOptions, setColorOptions] = useState<any[]>([]);
   const [sizeOptions, setSizeOptions] = useState<any[]>([]);
   const [colorId, setColorId] = useState<number>(
-    data?.product_properties[0]?.color?.id
+    data?.product_properties?.[0]?.color?.id
   );
+
   const [sizeId, setSizeId] = useState<number>(
-    data?.product_properties[0]?.sizes[0]?.size?.id
+    data?.product_properties?.[0]?.sizes?.[0]?.size?.id
   );
   const [price, setPrice] = useState<number | null>(null);
 
@@ -166,9 +178,9 @@ function ProductDetail() {
       if (colors) {
         setColorOptions(colors);
       }
-      const selectedColor = data.product_properties.find((property: any) => {
-        return property.color?.id === colorId;
-      });
+      const selectedColor = data.product_properties.find(
+        (property: any) => property.color?.id === colorId
+      );
       if (selectedColor) {
         const sizes = selectedColor.sizes.map((size: any) => ({
           label: size.size?.name,
@@ -188,7 +200,6 @@ function ProductDetail() {
         const images = selectedColor.images;
         if (images && images.length > 0) {
           setColorImages(images);
-          setDisplayImage(images[0].image);
         } else if (data?.product_images && data.product_images.length > 0) {
           setColorImages(data?.product_images);
           setDisplayImage(data?.product_images[0].image);
@@ -226,6 +237,10 @@ function ProductDetail() {
   }, [data?.product_properties, colorId]);
 
   useEffect(() => {
+    setColorId(data?.product_properties?.[0]?.color?.id);
+  }, [data?.product_properties]);
+
+  useEffect(() => {
     // Ensure reset is called only when sizeOptions and colorOptions are available and not empty
     if (sizeOptions?.length > 0 && colorOptions?.length > 0) {
       const selectedSize = sizeOptions?.find(
@@ -234,8 +249,6 @@ function ProductDetail() {
       if (selectedSize) {
         setPrice(selectedSize.price);
       }
-    } else {
-      setColorId(data?.product_images);
     }
   }, [sizeId]);
 
@@ -260,30 +273,83 @@ function ProductDetail() {
     }
   };
 
-  // const handleBuy = async (data: any) => {
-  //   console.log(data);
-  //   sessionStorage.setItem(
-  //     "cartItems",
-  //     JSON.stringify([
-  //       {
-  //         discountedPrice:
-  //           data.discount && data.product_properties.size?.price
-  //             ? discount(data.product_properties.size?.price, data.discount)
-  //             : discount(data.price, data.discount),
-  //         totalPrice: data.product_properties.size?.price ?? data.price,
-  //         discount: data.discount,
-  //         quantity: count,
-  //         product: {
-  //           id: data.id,
-  //           name: data.name,
-  //           image: data.image,
-  //           price: data.price,
-  //           discount: data.discount,
-  //         },
-  //       },
-  //     ])
-  //   );
-  // };
+  const handleBuy = async (data: any, sizeId: number, colorId: number) => {
+    let color = null;
+    let size = null;
+    if (colorId) {
+      color = colorOptions.find((color: any) => color.value === colorId);
+    }
+    if (sizeId) {
+      size = sizeOptions.find((size: any) => size.value === sizeId);
+    }
+
+    // console.log([
+    //   {
+    //     id: data.id,
+    //     color: color
+    //       ? {
+    //           id: color.value,
+    //           name: color.label,
+    //           code: color.color,
+    //         }
+    //       : null,
+    //     size: size
+    //       ? { id: size.value, name: size.label, price: size.price }
+    //       : null,
+    //     product: {
+    //       id: data.id,
+    //       name: data.name,
+    //       image: data.image,
+    //       price: data.price,
+    //       discount: data.discount,
+    //     },
+    //     discountedPrice: discount(
+    //       (size && size.price) ?? data.price,
+    //       data.discount
+    //     ),
+
+    //     quantity: count,
+    //     totalPrice: size?.price ?? data.price,
+    //   },
+    // ]);
+
+    sessionStorage.setItem(
+      "buyItems",
+      JSON.stringify([
+        {
+          id: data.id,
+          color: colorId
+            ? {
+                id: color.value,
+                name: color.label,
+                code: color.color,
+              }
+            : null,
+          size: sizeId
+            ? { id: size.value, name: size.label, price: size.price }
+            : null,
+          product: {
+            id: data.id,
+            name: data.name,
+            image: data.image,
+            price: data.price,
+            discount: data.discount,
+          },
+          discountedPrice:
+            size && size.price
+              ? discount(size.price, data.discount)
+              : discount(data.price, data.discount),
+          quantity: count,
+          totalPrice: size?.price ?? data.price,
+        },
+      ])
+    );
+    navigate("/checkout", {
+      state: { fromProduct: true },
+      replace: true,
+    });
+    window.location.reload();
+  };
 
   return (
     <Flex flexDir={"column"}>
@@ -646,57 +712,66 @@ function ProductDetail() {
                             Rs. {price?.toFixed(2)}
                           </Text>
                         </HStack>
-                        <Stack gap={4}>
-                          {/* <Button
-                            onClick={() => handleBuy(data)}
-                            w={"fit-content"}
-                          >
-                            Buy Now
-                          </Button> */}
-                          <Wrap gap={4}>
-                            <WrapItem>
-                              <Button
-                                colorScheme="primary"
-                                w={"fit-content"}
-                                borderRadius={0}
-                                fontWeight={400}
-                                fontSize={{
-                                  base: "12px",
-                                  md: "14px",
-                                  lg: "16px",
-                                }}
-                                size={"sm"}
-                                rightIcon={
-                                  <ShoppingCart stroke={"white"} boxSize={5} />
-                                }
-                                isLoading={addToCart.isPending}
-                                type={"submit"}
-                              >
-                                Add to Cart
-                              </Button>
-                            </WrapItem>
-                            <WrapItem>
-                              <Button
-                                colorScheme="gray"
-                                w={"fit-content"}
-                                borderRadius={0}
-                                fontWeight={400}
-                                fontSize={{
-                                  base: "12px",
-                                  md: "14px",
-                                  lg: "16px",
-                                }}
-                                size={"sm"}
-                                rightIcon={<HeartIcon />}
-                                variant={"outline"}
-                                isLoading={addToWishList.isPending}
-                                onClick={handleWishList}
-                              >
-                                Add to WishList
-                              </Button>
-                            </WrapItem>
-                          </Wrap>
-                        </Stack>
+
+                        <Wrap gap={4}>
+                          <WrapItem>
+                            <Button
+                              onClick={() => handleBuy(data, sizeId, colorId)}
+                              w={"fit-content"}
+                              fontWeight={400}
+                              borderRadius={2}
+                              fontSize={{
+                                base: "12px",
+                                md: "14px",
+                                lg: "16px",
+                              }}
+                              size={"sm"}
+                              rightIcon={<Icon as={CreditCard} boxSize={4} />}
+                            >
+                              Buy Now
+                            </Button>
+                          </WrapItem>
+                          <WrapItem>
+                            <Button
+                              colorScheme="primary"
+                              w={"fit-content"}
+                              fontWeight={400}
+                              borderRadius={2}
+                              fontSize={{
+                                base: "12px",
+                                md: "14px",
+                                lg: "16px",
+                              }}
+                              size={"sm"}
+                              rightIcon={
+                                <ShoppingCart stroke={"white"} boxSize={4} />
+                              }
+                              isLoading={addToCart.isPending}
+                              type={"submit"}
+                            >
+                              Add to Cart
+                            </Button>
+                          </WrapItem>
+                          <WrapItem>
+                            <IconButton
+                              aria-label="Add to Wishlist"
+                              colorScheme="gray"
+                              w={"fit-content"}
+                              borderRadius={0}
+                              fontWeight={400}
+                              fontSize={{
+                                base: "12px",
+                                md: "14px",
+                                lg: "16px",
+                              }}
+                              size={"sm"}
+                              icon={<HeartIcon />}
+                              variant={"outline"}
+                              isLoading={addToWishList.isPending}
+                              onClick={handleWishList}
+                            />
+                          </WrapItem>
+                        </Wrap>
                       </Stack>
                     </form>
                   </Flex>

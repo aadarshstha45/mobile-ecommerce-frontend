@@ -30,15 +30,16 @@ import { calculateTotalPrice } from "@/utils/calculateTotalPrice";
 import { discount } from "@/utils/discount";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeleteAlert from "../Form/DeleteAlert";
 interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  setCartItemCount: Dispatch<SetStateAction<number | null>>;
 }
 
-const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
+const CartDrawer = ({ isOpen, onClose, setCartItemCount }: CartDrawerProps) => {
   const isAuthenticated = TokenService.isAuthenticated();
   const { data, isPending, isRefetching } = useFetchCart({
     enabled: isAuthenticated,
@@ -50,7 +51,9 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const deleteCartItem = useDeleteCartItem();
   const deleteCartItems = useDeleteCartItems();
-
+  useEffect(() => {
+    setCartItemCount(data?.length > 0 ? data.length : null);
+  }, [data]);
   const updateCartQuantity = useUpdateCartQuantity();
   const {
     isOpen: isDeleteModalOpen,
@@ -154,7 +157,10 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     setDeletedItems([]);
     setItems([]);
     onClose();
-    navigate("/checkout", { replace: true });
+    navigate("/checkout", {
+      state: { fromCart: true },
+      replace: true,
+    });
     window.location.reload();
   };
 

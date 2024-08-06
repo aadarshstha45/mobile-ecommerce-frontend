@@ -14,6 +14,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { Coins, CreditCard } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiLogoPaypal } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
@@ -42,9 +43,19 @@ const paymentOptions = [
 ];
 
 const PaymentOption = ({ stepProps }: IStepProps) => {
-  const data = JSON.parse(sessionStorage.getItem("cartItems")!);
   const addOrder = usePostOrder();
   const { stepData, setStepData } = useOrderStore();
+  const [data, setData] = useState<any[]>([]);
+  useEffect(() => {
+    if (stepData?.from === "cart") {
+      const items = JSON.parse(sessionStorage.getItem("cartItems")!);
+      setData(items);
+    } else {
+      const items = JSON.parse(sessionStorage.getItem("buyItems")!);
+      setData(items);
+    }
+  }, []);
+
   const { control, handleSubmit } = useForm({
     defaultValues: {
       payment: "cod",
@@ -57,11 +68,13 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
       ...stepData,
       payment: data.payment,
     });
-    console.log(response);
     if (response.status === 201) {
       setStepData({});
-      sessionStorage.removeItem("cartItems");
-
+      if (stepData?.from === "cart") {
+        sessionStorage.removeItem("cartItems");
+      } else {
+        sessionStorage.removeItem("buyItems");
+      }
       navigate("/thank-you", {
         replace: true,
         state: response.data ?? {},

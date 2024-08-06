@@ -23,6 +23,7 @@ import { useLocation } from "react-router-dom";
 
 const ShoppingBag = ({ stepProps }: IStepProps) => {
   const location = useLocation();
+  const state = location.state;
   const [items, setItems] = useState<any[]>([]);
   const [isLessThan469] = useMediaQuery("(max-width: 469px)");
   const [totalPrice, setTotalPrice] = useState(0);
@@ -42,26 +43,52 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   const { setStepData } = useOrderStore();
 
   useEffect(() => {
-    const cartItems = sessionStorage.getItem("cartItems");
-    if (cartItems) {
-      const items = JSON.parse(cartItems);
-      setItems(items);
-      let totalPrice = 0;
-      items.forEach((item: any) => {
-        totalPrice += item.totalPrice * item.quantity;
-      });
-      let discountedPrice = 0;
-      items.forEach((item: any) => {
-        discountedPrice +=
-          item.discountedPrice > 0
-            ? item.discountedPrice * item.quantity
-            : item.totalPrice * item.quantity;
-      });
-      setTotalPrice(totalPrice);
-      setDiscountedPrice(discountedPrice);
-      setTotalAfterDiscount(discountedPrice);
+    if (state) {
+      if (state?.fromCart) {
+        const cartItems = sessionStorage.getItem("cartItems");
+        if (cartItems) {
+          const items = JSON.parse(cartItems);
+          setItems(items);
+          let totalPrice = 0;
+          items.forEach((item: any) => {
+            totalPrice += item.totalPrice * item.quantity;
+          });
+          let discountedPrice = 0;
+          items.forEach((item: any) => {
+            discountedPrice +=
+              item.discountedPrice > 0
+                ? item.discountedPrice * item.quantity
+                : item.totalPrice * item.quantity;
+          });
+          setTotalPrice(totalPrice);
+          setDiscountedPrice(discountedPrice);
+          setTotalAfterDiscount(discountedPrice);
+        }
+      } else if (state?.fromProduct) {
+        const buyItems = sessionStorage.getItem("buyItems");
+        if (buyItems) {
+          const items = JSON.parse(buyItems);
+          setItems(items);
+          let totalPrice = 0;
+          items.forEach((item: any) => {
+            totalPrice += item.totalPrice * item.quantity;
+          });
+          let discountedPrice = 0;
+          items.forEach((item: any) => {
+            discountedPrice +=
+              item.discountedPrice > 0
+                ? item.discountedPrice * item.quantity
+                : item.totalPrice * item.quantity;
+          });
+          setTotalPrice(totalPrice);
+          setDiscountedPrice(discountedPrice);
+          setTotalAfterDiscount(discountedPrice);
+        }
+      }
+    } else {
+      setItems([]);
     }
-  }, [location.pathname, sessionStorage.getItem("cartItems")]);
+  }, [location.pathname, state?.data]);
 
   const promoSubmit = async (data: any) => {
     try {
@@ -121,13 +148,10 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
   };
 
   const handleNextPage = () => {
-    const cartItems = sessionStorage.getItem("cartItems");
-    if (cartItems && cartItems.length > 0) {
-      const items = JSON.parse(cartItems);
-
+    if (items && items.length > 0) {
       setStepData({
         order_items: items.map((item: any) => ({
-          cart_id: item?.id,
+          cart_id: item?.id ?? null,
           product_id: item?.product?.id,
           quantity: item?.quantity,
           discount: item.discountedPrice
@@ -141,6 +165,7 @@ const ShoppingBag = ({ stepProps }: IStepProps) => {
         promo_discount: discount,
         total_amount: discountedPrice ?? totalPrice,
         promo_code: promoCode ?? null,
+        from: state?.fromCart ? "cart" : "product",
       });
       stepProps.nextStep();
     } else {

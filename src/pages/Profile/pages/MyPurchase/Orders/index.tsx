@@ -26,7 +26,6 @@ const Orders = ({ fromDate, toDate, status }: OrderProps) => {
     toDate!
   );
 
-  console.log(data);
 
   useEffect(() => {
     setCurrentPage(pageFromUrl);
@@ -36,7 +35,7 @@ const Orders = ({ fromDate, toDate, status }: OrderProps) => {
     <Flex flexDir={"column"} gap={4}>
       <Stack gap={4}></Stack>
       {isFetching ? (
-        <LoadingSpinner />
+        <LoadingSpinner height={window.innerWidth / 4} />
       ) : (
         <OrderDisplay
           data={data ?? { data: [], message: "" }}

@@ -76,7 +76,7 @@ const MyPurchase = () => {
               _selected={{
                 borderBottomColor: "primary.500",
               }}
-              borderBottom={"5px solid"}
+              borderBottom={"6px solid"}
               borderBottomColor={"primary.50"}
               fontSize={{ base: "sm", md: "md", xl: "lg" }}
               whiteSpace={"nowrap"}
