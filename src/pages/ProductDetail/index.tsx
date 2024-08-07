@@ -7,9 +7,9 @@ import NoImage from "@/assets/images/NoImage.png";
 import Thumbnail from "@/assets/images/Thumbnail.jpg";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import RadioBox from "@/components/Form/RadioBox";
+import Magnify from "@/components/Magnify";
 import TokenService from "@/services/service-token";
 import { discount } from "@/utils/discount";
-import Magnifier from "@/utils/ImageMagnify";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
@@ -383,7 +383,7 @@ function ProductDetail() {
                     gap={10}
                   >
                     {displayImage ? (
-                      <Magnifier
+                      <Magnify
                         src={displayImage}
                         alt={data?.name}
                         width={{ base: "250px", md: "70%" }}
@@ -467,6 +467,7 @@ function ProductDetail() {
                                 aspectRatio={1 / 1}
                                 src={Thumbnail}
                                 objectFit={"cover"}
+                                objectPosition={"top"}
                                 _hover={{
                                   border: "1px",
                                   borderColor: "primary.500",
@@ -494,6 +495,7 @@ function ProductDetail() {
                               onClick={() => setDisplayImage(data?.image)}
                               src={`${data?.image}`}
                               objectFit={"cover"}
+                              objectPosition={"top"}
                               border={
                                 displayImage === data?.image ? "1px" : "0"
                               }
@@ -516,6 +518,7 @@ function ProductDetail() {
                               onClick={() => {
                                 setDisplayImage(image.image);
                               }}
+                              objectPosition={"top"}
                               src={`${image.image}`}
                               border={
                                 displayImage === image.image ? "1px" : "0"

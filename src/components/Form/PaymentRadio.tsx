@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Control, Controller } from "react-hook-form";
+
 type RadioBoxProps = {
   name: string;
   control?: Control<any>;
@@ -22,7 +23,13 @@ const PaymentRadio = ({ name, control, options }: RadioBoxProps) => {
         name={name}
         control={control}
         render={({ field: { onChange, value } }) => (
-          <RadioGroup value={value} onChange={onChange}>
+          <RadioGroup
+            value={value}
+            onChange={(value) => {
+              console.log("RadioGroup onChange:", value);
+              onChange(value);
+            }}
+          >
             {options.map((option: any, index: number) => (
               <React.Fragment key={index}>
                 <Flex
@@ -45,9 +52,9 @@ const PaymentRadio = ({ name, control, options }: RadioBoxProps) => {
                   pos={"absolute"}
                   hidden
                   id={option.value}
-                  name={option.value}
+                  name={name}
                   value={option.value}
-                ></Radio>
+                />
               </React.Fragment>
             ))}
           </RadioGroup>

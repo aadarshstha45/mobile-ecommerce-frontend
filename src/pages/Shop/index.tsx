@@ -2,6 +2,7 @@ import { useFetchAllProducts } from "@/api/functions/Product";
 import { LoadingSvg } from "@/assets/LoadingIcon";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { CategoryFilter, ColorSizeFilter } from "@/components/Filter";
+import FilterDrawer from "@/components/Filter/FilterDrawer";
 import { SelectInput } from "@/components/Form";
 import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
@@ -11,10 +12,13 @@ import {
   Flex,
   HStack,
   Icon,
+  IconButton,
   Stack,
   Text,
+  useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { Settings2 } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
@@ -87,6 +91,8 @@ const Shop = () => {
     window.scroll({ top: 0, behavior: "smooth" });
   };
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Container
       as={"section"}
@@ -119,7 +125,24 @@ const Shop = () => {
           options={sortOptions}
         />
       </Flex>
-      <Flex py={10} gap={4}>
+      <FilterDrawer isOpen={isOpen} onClose={onClose}>
+        <CategoryFilter />
+        <ColorSizeFilter
+          handleSizeSelect={handleSizeSelect}
+          handleColorSelect={handleColorSelect}
+        />
+      </FilterDrawer>
+      <IconButton
+        aria-label="Filter"
+        as={Settings2}
+        cursor={"pointer"}
+        size={"xs"}
+        p={1}
+        colorScheme="gray"
+        display={{ base: "block", sm: "none" }}
+        onClick={onOpen}
+      />
+      <Flex py={4} gap={4}>
         <Flex
           w={{ sm: "200px", md: "250px" }}
           display={{ base: "none", sm: "flex" }}

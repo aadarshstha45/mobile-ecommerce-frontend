@@ -52,7 +52,7 @@ const LazyLoadImage = ({
         w={w ?? "full"}
         // h={h}
         aspectRatio={1 / 1}
-        objectPosition={"center"}
+        objectPosition={"top"}
         {...rest}
       />
     </>

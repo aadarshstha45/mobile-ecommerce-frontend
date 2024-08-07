@@ -16,20 +16,13 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { CheckCheck } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 
 const ThankYou = () => {
   const data = useLocation().state;
 
-
   if (!data) {
-    return (
-      <Flex justify={"center"} align={"center"} minH={window.innerHeight / 1.5}>
-        <Text fontSize={{ base: "20px", md: "22px", xl: "24px" }}>
-          No order found!
-        </Text>
-      </Flex>
-    );
+    return <Navigate to={"/shop"} replace={true} />;
   }
 
   return (

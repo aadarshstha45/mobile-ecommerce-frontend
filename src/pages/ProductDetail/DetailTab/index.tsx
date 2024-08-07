@@ -1,7 +1,6 @@
 import {
   Flex,
   Tab,
-  TabIndicator,
   Table,
   TableContainer,
   TabList,
@@ -53,17 +52,20 @@ const DetailTab = ({ description, specification }: DetailTabProps) => {
         justifySelf={"center"}
       >
         {tabList.map((tab) => (
-          <Tab key={tab.id} fontSize={{ base: "16px", md: "18px" }}>
+          <Tab
+            borderBottom={"5px solid"}
+            borderBottomColor={"primary.50"}
+            _selected={{
+              borderBottomColor: "primary.500",
+            }}
+            key={tab.id}
+            fontSize={{ base: "16px", md: "18px" }}
+          >
             {tab.title}
           </Tab>
         ))}
       </TabList>
-      <TabIndicator
-        mt="-1.5px"
-        height="5px"
-        bg="primary.500"
-        borderRadius="1px"
-      />
+
       <TabPanels textAlign={"center"}>
         <TabPanel>
           <Flex justify={"center"}>

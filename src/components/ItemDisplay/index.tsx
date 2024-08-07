@@ -192,9 +192,10 @@ const ItemDisplay = ({
                 {data?.is_new && (
                   <Box
                     w={"fit-content"}
-                    px={1}
+                    px={2}
+                    py={0.5}
                     bg={"primary.500"}
-                    fontSize={"12px"}
+                    fontSize={"14px"}
                   >
                     New
                   </Box>
@@ -202,10 +203,10 @@ const ItemDisplay = ({
                 {discountPercent! > 0 && (
                   <Box
                     w={"fit-content"}
-                    px={1}
+                    px={2}
                     py={0.5}
                     bg={"red.400"}
-                    fontSize={"12px"}
+                    fontSize={"14px"}
                   >
                     {discountPercent} %
                   </Box>

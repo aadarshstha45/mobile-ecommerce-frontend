@@ -1,7 +1,6 @@
 import { useFetchSliders } from "@/api/functions/Hero";
-import { Box, Button, Flex, Image, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import { lazy, useState } from "react";
-import { Link } from "react-router-dom";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
@@ -50,14 +49,9 @@ const Home = () => {
               w={"full"}
               aspectRatio={16 / 9}
             />
-            <Box
-              w={{ base: "50%", md: "30%" }}
-              position={"absolute"}
-              top={"20%"}
-              right={5}
-            >
-              <Stack gap={2}>
-                <Text
+            {/* <Box position={"absolute"} right={{ base: 2, md: 20 }} bottom={10}> */}
+            {/* <Stack gap={2}> */}
+            {/* <Text
                   fontSize={{
                     base: "xs",
                     sm: "sm",
@@ -82,18 +76,22 @@ const Home = () => {
                   color={"white"}
                 >
                   {data.subtitle}
-                </Text>
-                <Button
-                  alignSelf={"center  "}
-                  w={"fit-content"}
-                  as={Link}
-                  to={data.url}
-                  size={{ base: "xs", md: "md" }}
-                >
-                  Shop Now
-                </Button>
-              </Stack>
-            </Box>
+                </Text> */}
+            {/* <Button
+                alignSelf={"center  "}
+                w={"fit-content"}
+                as={Link}
+                to={data.url}
+                bg={"white"}
+                borderRadius={0}
+                color={"gray.800"}
+                _hover={{ bg: "gray.100" }}
+                size={{ base: "xs", md: "lg" }}
+              >
+                Shop Now
+              </Button> */}
+            {/* </Stack> */}
+            {/* </Box> */}
           </SwiperSlide>
         ))}
       </Swiper>

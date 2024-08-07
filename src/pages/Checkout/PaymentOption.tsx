@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiLogoPaypal } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { EsewaForm } from "./Payment/EsewaForm";
 
 const paymentOptions = [
   {
@@ -42,6 +43,10 @@ const paymentOptions = [
   },
 ];
 
+const defaultValues = {
+  payment_mode: "",
+};
+
 const PaymentOption = ({ stepProps }: IStepProps) => {
   const addOrder = usePostOrder();
   const { stepData, setStepData } = useOrderStore();
@@ -57,32 +62,39 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
   }, []);
 
   const { control, handleSubmit } = useForm({
-    defaultValues: {
-      payment: "cod",
-    },
+    defaultValues: defaultValues,
   });
-  const navigate = useNavigate();
 
-  const onSubmit = async (data: any) => {
+  const navigate = useNavigate();
+  const onSubmit = async (data: typeof defaultValues) => {
+    console.log({
+      ...stepData,
+      payment_mode: data.payment_mode,
+    });
     const response = await addOrder.mutateAsync({
       ...stepData,
-      payment: data.payment,
+      payment_mode: "esewa",
     });
-    if (response.status === 201) {
+    console.log(response);
+    if (response.status === 200) {
       setStepData({});
       if (stepData?.from === "cart") {
         sessionStorage.removeItem("cartItems");
       } else {
         sessionStorage.removeItem("buyItems");
       }
-      navigate("/thank-you", {
-        replace: true,
-        state: response.data ?? {},
-        preventScrollReset: true,
-      });
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
+      if ((data.payment_mode = "esewa")) {
+        EsewaForm(response.data);
+      } else {
+        navigate("/thank-you", {
+          replace: true,
+          state: response.data ?? {},
+          preventScrollReset: true,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }
     }
   };
 
@@ -96,7 +108,7 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
             </Heading>
             <PaymentRadio
               control={control}
-              name={"payment"}
+              name={"payment_mode"}
               options={paymentOptions}
             />
           </Flex>
@@ -188,12 +200,7 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
           Previous
         </Button>
         <Button
-          type={"button"}
-          onClick={(e) => {
-            onSubmit({ payment: "cod" });
-            e.preventDefault();
-            onSubmit;
-          }}
+          type={"submit"}
           colorScheme={"primary"}
           w={"fit-content"}
           size={"sm"}

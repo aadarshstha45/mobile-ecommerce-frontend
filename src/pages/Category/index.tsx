@@ -1,12 +1,22 @@
 import { useFetchProductsByCategory } from "@/api/functions/Category";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { CategoryFilter, ColorSizeFilter } from "@/components/Filter";
+import FilterDrawer from "@/components/Filter/FilterDrawer";
 import PriceRange from "@/components/Filter/PriceRange";
 import SelectInput from "@/components/Form/SelectInput";
 import ItemDisplay, { columnBreakpoints } from "@/components/ItemDisplay";
 import { PaginationButton } from "@/components/Pagination";
 import { LoadingSpinner } from "@/utils/LoadingSpinner";
-import { Container, Flex, Stack, Text, useMediaQuery } from "@chakra-ui/react";
+import {
+  Container,
+  Flex,
+  IconButton,
+  Stack,
+  Text,
+  useDisclosure,
+  useMediaQuery,
+} from "@chakra-ui/react";
+import { Settings2 } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -101,6 +111,8 @@ function Category() {
     }
   }, [selectedSizes]);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Container
       as={"section"}
@@ -133,8 +145,24 @@ function Category() {
           options={sortOptions}
         />
       </Flex>
-
-      <Flex py={10} gap={4}>
+      <FilterDrawer isOpen={isOpen} onClose={onClose}>
+        <CategoryFilter />
+        <ColorSizeFilter
+          handleSizeSelect={handleSizeSelect}
+          handleColorSelect={handleColorSelect}
+        />
+      </FilterDrawer>
+      <IconButton
+        aria-label="Filter"
+        as={Settings2}
+        cursor={"pointer"}
+        size={"xs"}
+        p={1}
+        colorScheme="gray"
+        display={{ base: "block", sm: "none" }}
+        onClick={onOpen}
+      />
+      <Flex py={5} gap={4}>
         <Flex
           w={{ sm: "200px", md: "250px" }}
           display={{ base: "none", sm: "flex" }}

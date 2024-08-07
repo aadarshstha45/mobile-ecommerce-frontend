@@ -122,7 +122,7 @@ export const getAppRoutes = (isAuthenticated: boolean) => {
             },
           ],
         },
-        { path: "e-sewa", element: <Esewa /> },
+        { path: "checkout/e-sewa", element: <Esewa /> },
         {
           path: "/login",
           element: isAuthenticated ? <Navigate to={"/"} /> : <LoginPage />,

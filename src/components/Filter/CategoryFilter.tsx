@@ -64,6 +64,7 @@ const CategoryFilter = () => {
               category.subcategories &&
               category.subcategories.length > 0 && (
                 <PopoverContent
+                  display={{ base: "none", md: "flex" }}
                   onMouseLeave={() => {
                     setHoveredCategory(null);
                   }}

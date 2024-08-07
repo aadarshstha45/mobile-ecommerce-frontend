@@ -18,7 +18,7 @@ const Esewa = () => {
       amount: "200",
       transaction_uuid,
       failure_url: "https://www.facebook.com",
-      success_url: "https://www.facebook.com",
+      success_url: "https://www.youtube.com",
       product_delivery_charge: "0",
       product_service_charge: "0",
       product_code,
