@@ -18,7 +18,7 @@ type RadioBoxProps = {
 
 const PaymentRadio = ({ name, control, options }: RadioBoxProps) => {
   return (
-    <FormControl w={"400px"}>
+    <FormControl w={{ lg: "400px" }}>
       <Controller
         name={name}
         control={control}

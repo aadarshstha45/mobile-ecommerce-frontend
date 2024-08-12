@@ -17,6 +17,8 @@ import {
   Link,
   Menu,
   MenuButton,
+  MenuDivider,
+  MenuGroup,
   MenuItem,
   MenuList,
   Text,
@@ -180,31 +182,34 @@ function NavBar({ data }: any) {
                   maxW={"fit-content"}
                   borderColor={"primary.500"}
                   overflow={"hidden"}
-                  py={0}
+                  p={0}
+                  px={1}
                 >
-                  {profileMenuItems.map((item, index) => (
-                    <Link
-                      key={index}
-                      as={NavLink}
-                      _hover={{ textDecor: "none" }}
-                      to={item.to}
-                    >
-                      <MenuItem
-                        borderBottom={"1px solid"}
-                        borderColor={"primary.500"}
-                        _hover={{ bg: "primary.500", color: "white" }}
-                        py={2}
-                        icon={<Icon as={item.icon} boxSize={4} />}
-                        fontSize={{ base: "12px", md: "14px" }}
+                  <MenuGroup px={0} title="My Account">
+                    <MenuDivider borderColor={"gray"} />
+                    {profileMenuItems.map((item, index) => (
+                      <Link
+                        key={index}
+                        as={NavLink}
+                        _hover={{ textDecor: "none" }}
+                        to={item.to}
                       >
-                        {item.label}
-                      </MenuItem>
-                    </Link>
-                  ))}
+                        <MenuItem
+                          borderRadius={5}
+                          _hover={{ bg: "primary.500", color: "white" }}
+                          icon={<Icon as={item.icon} boxSize={4} />}
+                          fontSize={{ base: "12px", md: "14px" }}
+                        >
+                          {item.label}
+                        </MenuItem>
+                      </Link>
+                    ))}
+                  </MenuGroup>
+                  <MenuDivider borderColor={"gray"} />
                   <MenuItem
-                    borderColor={"primary.500"}
+                    mb={1}
                     _hover={{ bg: "primary.500", color: "white" }}
-                    py={2}
+                    borderRadius={5}
                     icon={
                       <Icon
                         transform={"rotate(180deg)"}

@@ -43,7 +43,7 @@ const Magnify = ({ src, alt, width }: MagnifierProps) => {
             src={src}
             alt={alt}
             objectFit={"cover"}
-            objectPosition={"center"}
+            objectPosition={"top"}
             w={"full"}
             aspectRatio={1}
             onMouseMove={handleImageMagnify}
@@ -51,9 +51,11 @@ const Magnify = ({ src, alt, width }: MagnifierProps) => {
         </Box>
       </PopoverTrigger>
       <PopoverContent
+        display={{ base: "none", sm: "block" }}
         borderRadius={0}
-        w={{ sm: "300px", md: "400px", lg: "500px" }}
-        h={{ sm: "300px", md: "400px", lg: "500px" }} // Ensures height is set to match the width
+        w={{ sm: "300px", md: "430px", xl: "500px" }}
+        h={{ sm: "300px", md: "430px", xl: "500px" }}
+        aspectRatio={1}
         overflow="hidden"
       >
         <Box position="relative" width="100%" height="100%" overflow="hidden">

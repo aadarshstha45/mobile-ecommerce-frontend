@@ -1,8 +1,7 @@
-import { useUpdateImage } from "@/api/auth";
+import { useFetchAvatars } from "@/api/functions/Avatars";
 import { CameraIcon } from "@/assets/icons/CameraIcon";
 import AvatarIcon from "@/assets/icons/UserIcon/user.png";
-import { SingleDropzone } from "@/components/Form/Dropzone";
-import { ModalForm } from "@/components/Form/ModalForm";
+import { ProfileImage } from "@/components/Form/ProfileImage";
 import {
   Avatar,
   Box,
@@ -13,8 +12,6 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { NavLink, useLocation } from "react-router-dom";
 
 export const sidebarLinks = [
@@ -56,67 +53,10 @@ interface SidebarProps {
 
 const Sidebar = ({ data }: SidebarProps) => {
   const path = useLocation().pathname.split("/")[2];
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [image, setImage] = useState<File | null>(data?.image ?? null);
-  const { mutateAsync, isPending } = useUpdateImage();
-  const [imageError, setImageError] = useState<string>("");
-  const [isImageUpdated, setIsImageUpdated] = useState<boolean>(false);
-
-  const openImageModal = () => {
-    onOpen();
-    setImage(data?.image ?? null);
-
-    setIsImageUpdated(false);
-  };
-
-  const handleClose = () => {
-    onClose();
-    setIsImageUpdated(false);
-  };
-
-  const { control, handleSubmit } = useForm({
-    defaultValues: {
-      image: null,
-    },
-  });
-
-  useEffect(() => {
-    if (data) {
-      setImage(data.image);
-    }
-  }, [data]);
-
-  const handleSingleDrop = (acceptedFiles: File[]) => {
-    const validFile = acceptedFiles[0].type.startsWith("image/");
-    const size = acceptedFiles[0].size;
-    if (size > 2 * 1048576) {
-      setImageError("Image size should be less than 2MB");
-      setIsImageUpdated(false);
-      return;
-    } else if (!validFile) {
-      setIsImageUpdated(false);
-      setImageError("Invalid file type. Please upload an image file.");
-      return;
-    } else {
-      setImageError("");
-      setImage(acceptedFiles[0]);
-      setIsImageUpdated(true);
-    }
-  };
-
-  const onSubmit = async () => {
-    const formData = new FormData();
-    if (image) {
-      if (image instanceof File) {
-        formData.append("image", image);
-      } else {
-        formData.append("image", "");
-      }
-    }
-    await mutateAsync(formData);
-    setImage(null);
-    onClose();
-  };
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  console.log({ data });
+  const { data: avatars } = useFetchAvatars();
+  console.log({ avatars });
 
   return (
     <Flex
@@ -140,7 +80,7 @@ const Sidebar = ({ data }: SidebarProps) => {
             aria-label="Change Profile Picture"
             icon={<CameraIcon />}
             pos={"absolute"}
-            onClick={openImageModal}
+            onClick={onOpen}
             bottom={-2}
             right={-2}
           />
@@ -149,28 +89,9 @@ const Sidebar = ({ data }: SidebarProps) => {
           Hi, {data?.name?.split(" ")[0]}
         </Text>
       </Stack>
-      <ModalForm
-        form="profile-change-image"
-        onSubmit={handleSubmit(onSubmit)}
-        heading="Change Profile Picture"
-        isOpen={isOpen}
-        height="fit-content"
-        onClose={handleClose}
-        isLoading={isPending}
-        isDisabled={!isImageUpdated}
-      >
-        <SingleDropzone
-          control={control}
-          name="image"
-          file={image}
-          onDrop={handleSingleDrop}
-          message={imageError}
-          onDelete={() => {
-            setImage(null);
-            setIsImageUpdated(true);
-          }}
-        />
-      </ModalForm>
+
+      <ProfileImage data={data} isOpen={isOpen} onClose={onClose} />
+
       <Stack spacing={4}>
         {sidebarLinks.map((link) => (
           <Link

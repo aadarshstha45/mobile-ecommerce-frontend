@@ -16,14 +16,18 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { CheckCheck } from "lucide-react";
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const ThankYou = () => {
   const data = useLocation().state;
 
-  if (!data) {
-    return <Navigate to={"/shop"} replace={true} />;
-  }
+  const urlParams = new URLSearchParams(window.location.search);
+
+  useEffect(() => {
+    const transaction_id = urlParams.get("transaction_code");
+    console.log(transaction_id);
+  }, [urlParams]);
 
   return (
     <Container maxW={{ base: "98vw", md: "90vw", xl: "80vw" }} py={10}>
@@ -58,7 +62,7 @@ const ThankYou = () => {
                 px={0}
                 color={"#000"}
               >
-                Order Number: #{data.data.order_number}
+                Order Number: #{data && data.data.order_number}
               </TableCaption>
               <Thead>
                 <Tr bg={"gray.50"}>
@@ -71,31 +75,34 @@ const ThankYou = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {data.products.map((product: any, index: number) => (
-                  <Tr key={index}>
-                    <Td>{index + 1}</Td>
+                {data &&
+                  data.products &&
+                  data.products.length > 0 &&
+                  data.products.map((product: any, index: number) => (
+                    <Tr key={index}>
+                      <Td>{index + 1}</Td>
 
-                    <Td>{product.product_name}</Td>
+                      <Td>{product.product_name}</Td>
 
-                    <Td>{product.quantity}</Td>
-                    <Td>Rs. {product.price}</Td>
-                    <Td>Rs. {product.discount ?? 0}</Td>
-                    <Td>Rs. {product.total}</Td>
-                  </Tr>
-                ))}
+                      <Td>{product.quantity}</Td>
+                      <Td>Rs. {product.price}</Td>
+                      <Td>Rs. {product.discount ?? 0}</Td>
+                      <Td>Rs. {product.total}</Td>
+                    </Tr>
+                  ))}
               </Tbody>
               <Tfoot>
                 <Tr>
                   <Td colSpan={3}></Td>
                   <Td>Discount</Td>
-                  <Td>Rs. {data.data.discount_amount ?? 0}</Td>
+                  <Td>Rs. {(data && data.data.discount_amount) ?? 0}</Td>
                   <Td></Td>
                 </Tr>
                 <Tr>
                   <Td colSpan={3}></Td>
                   <Td>Grand Total</Td>
                   <Td></Td>
-                  <Td>Rs. {data.data.total_amount}</Td>
+                  <Td>Rs. {data && data.data.total_amount}</Td>
                 </Tr>
               </Tfoot>
             </Table>

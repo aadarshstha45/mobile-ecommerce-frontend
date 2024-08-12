@@ -84,6 +84,7 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
         sessionStorage.removeItem("buyItems");
       }
       if ((data.payment_mode = "esewa")) {
+        console.log(response.data);
         EsewaForm(response.data);
       } else {
         navigate("/thank-you", {
@@ -113,7 +114,7 @@ const PaymentOption = ({ stepProps }: IStepProps) => {
             />
           </Flex>
         </GridItem>
-        <GridItem w={"full"} colSpan={1} justifyContent={{ md: "end" }}>
+        <GridItem colSpan={1}>
           <Flex
             width={{ base: "full", sm: "95%", md: "80%" }}
             flexDir={"column"}

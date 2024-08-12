@@ -282,73 +282,46 @@ function ProductDetail() {
     if (sizeId) {
       size = sizeOptions.find((size: any) => size.value === sizeId);
     }
-
-    // console.log([
-    //   {
-    //     id: data.id,
-    //     color: color
-    //       ? {
-    //           id: color.value,
-    //           name: color.label,
-    //           code: color.color,
-    //         }
-    //       : null,
-    //     size: size
-    //       ? { id: size.value, name: size.label, price: size.price }
-    //       : null,
-    //     product: {
-    //       id: data.id,
-    //       name: data.name,
-    //       image: data.image,
-    //       price: data.price,
-    //       discount: data.discount,
-    //     },
-    //     discountedPrice: discount(
-    //       (size && size.price) ?? data.price,
-    //       data.discount
-    //     ),
-
-    //     quantity: count,
-    //     totalPrice: size?.price ?? data.price,
-    //   },
-    // ]);
-
-    sessionStorage.setItem(
-      "buyItems",
-      JSON.stringify([
-        {
-          id: data.id,
-          color: colorId
-            ? {
-                id: color.value,
-                name: color.label,
-                code: color.color,
-              }
-            : null,
-          size: sizeId
-            ? { id: size.value, name: size.label, price: size.price }
-            : null,
-          product: {
+    if (TokenService.isAuthenticated()) {
+      sessionStorage.setItem(
+        "buyItems",
+        JSON.stringify([
+          {
             id: data.id,
-            name: data.name,
-            image: data.image,
-            price: data.price,
-            discount: data.discount,
+            color: colorId
+              ? {
+                  id: color.value,
+                  name: color.label,
+                  code: color.color,
+                }
+              : null,
+            size: sizeId
+              ? { id: size.value, name: size.label, price: size.price }
+              : null,
+            product: {
+              id: data.id,
+              name: data.name,
+              image: data.image,
+              price: data.price,
+              discount: data.discount,
+            },
+            discountedPrice:
+              size && size.price
+                ? discount(size.price, data.discount)
+                : discount(data.price, data.discount),
+            quantity: count,
+            totalPrice: size?.price ?? data.price,
           },
-          discountedPrice:
-            size && size.price
-              ? discount(size.price, data.discount)
-              : discount(data.price, data.discount),
-          quantity: count,
-          totalPrice: size?.price ?? data.price,
-        },
-      ])
-    );
-    navigate("/checkout", {
-      state: { fromProduct: true },
-      replace: true,
-    });
-    window.location.reload();
+        ])
+      );
+      navigate("/checkout", {
+        state: { fromProduct: true },
+        replace: true,
+      });
+      window.location.reload();
+    } else {
+      onOpen();
+    }
   };
 
   return (
