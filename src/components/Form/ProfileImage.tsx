@@ -33,8 +33,9 @@ export const TabLabels = [
 ];
 
 export const ProfileImage = ({ isOpen, onClose, data }: ModalProps) => {
+  console.log({ data });
   const [image, setImage] = useState<File | null>(data?.image ?? null);
-  const { mutateAsync, isPending } = useUpdateImage();
+  const profileImage = useUpdateImage();
   const [imageError, setImageError] = useState<string>("");
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const { data: avatars } = useFetchAvatars();
@@ -75,20 +76,22 @@ export const ProfileImage = ({ isOpen, onClose, data }: ModalProps) => {
         formData.append("image", "");
       }
     }
-    await mutateAsync(formData);
+    await profileImage.mutateAsync(formData);
     setImage(null);
     handleClose();
   };
 
   const handleClose = () => {
     onClose();
-    setImage(null);
+    if (!data.image) {
+      setImage(null);
+    }
     setSelectedAvatar(null);
   };
 
   const handleAvatarSubmit = async (avatar: string | null) => {
     if (avatar) {
-      await mutateAsync({ image: avatar });
+      await profileImage.mutateAsync({ image: avatar });
       setSelectedAvatar(null);
       handleClose();
       setImage(null);
@@ -124,7 +127,7 @@ export const ProfileImage = ({ isOpen, onClose, data }: ModalProps) => {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <form id={"profile"} onSubmit={handleSubmit(onImageSubmit)}>
+                <form onSubmit={handleSubmit(onImageSubmit)}>
                   <SingleDropzone
                     control={control}
                     name="image"
@@ -142,7 +145,7 @@ export const ProfileImage = ({ isOpen, onClose, data }: ModalProps) => {
                       border={"1px solid #000"}
                       borderRadius={3}
                       size={"sm"}
-                      isLoading={isPending}
+                      isLoading={profileImage.isPending}
                     >
                       {"Save"}
                     </Button>
@@ -169,7 +172,8 @@ export const ProfileImage = ({ isOpen, onClose, data }: ModalProps) => {
                       borderRadius={50}
                       border={"2px solid"}
                       borderColor={
-                        (data?.image.includes(avatar) &&
+                        (data?.image &&
+                          data?.image.includes(avatar) &&
                           selectedAvatar === null) ||
                         selectedAvatar === avatar
                           ? "primary.500"
@@ -187,7 +191,7 @@ export const ProfileImage = ({ isOpen, onClose, data }: ModalProps) => {
                     border={"1px solid #000"}
                     borderRadius={3}
                     size={"sm"}
-                    isLoading={isPending}
+                    isLoading={profileImage.isPending}
                   >
                     {"Save"}
                   </Button>

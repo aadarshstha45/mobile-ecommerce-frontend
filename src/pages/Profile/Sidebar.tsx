@@ -1,4 +1,3 @@
-import { useFetchAvatars } from "@/api/functions/Avatars";
 import { CameraIcon } from "@/assets/icons/CameraIcon";
 import AvatarIcon from "@/assets/icons/UserIcon/user.png";
 import { ProfileImage } from "@/components/Form/ProfileImage";
@@ -54,9 +53,6 @@ interface SidebarProps {
 const Sidebar = ({ data }: SidebarProps) => {
   const path = useLocation().pathname.split("/")[2];
   const { onOpen, isOpen, onClose } = useDisclosure();
-  console.log({ data });
-  const { data: avatars } = useFetchAvatars();
-  console.log({ avatars });
 
   return (
     <Flex

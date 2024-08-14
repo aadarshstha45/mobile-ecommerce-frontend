@@ -131,7 +131,7 @@ export const TextInput = ({
   return (
     <FormControl
       isReadOnly={isReadOnly}
-      mb={4}
+      mb={2}
       isRequired={isRequired}
       {...rest}
     >

@@ -2,7 +2,7 @@ import { HeartIcon, PackageCheck, StarIcon, UserIcon } from "lucide-react";
 
 export const profileMenuItems = [
   {
-    label: "Manage My Account",
+    label: "My Account",
     to: "/profile/",
     icon: UserIcon,
   },

@@ -1,22 +1,30 @@
 import { useUpdateUser } from "@/api/auth";
+import AvatarIcon from "@/assets/icons/UserIcon/user.png";
 import {
   PhoneInput,
   ReactDatePicker,
   SelectInput,
   TextInput,
 } from "@/components/Form";
+import { ProfileImage } from "@/components/Form/ProfileImage";
 import { countryOptions } from "@/components/Form/SelectInput";
 import { convertDate } from "@/utils/convertDate";
 import { ProfileSchema } from "@/utils/validation/profile";
+
 import {
+  Avatar,
+  Box,
   Button,
   Flex,
   GridItem,
   HStack,
+  IconButton,
   SimpleGrid,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CameraIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useOutletContext } from "react-router-dom";
@@ -25,6 +33,7 @@ const ProfileDetails = () => {
   const data: any = useOutletContext();
   const [readOnly, setReadOnly] = useState(true);
   const { mutateAsync, isPending, error, isError } = useUpdateUser();
+  const { onOpen, isOpen, onClose } = useDisclosure();
 
   const {
     control,
@@ -95,8 +104,32 @@ const ProfileDetails = () => {
       gap={8}
       noValidate
     >
+      <ProfileImage data={data} isOpen={isOpen} onClose={onClose} />
+
       <Flex flexDir={"column"} gap={4}>
         <Text fontSize={"xl"}>Profile Details</Text>
+        <Box
+          display={{ base: "flex", md: "none" }}
+          pos={"relative"}
+          w={"fit-content"}
+          borderRadius={50}
+        >
+          <Avatar
+            src={data?.image ? `${data?.image}` : AvatarIcon}
+            size={"xl"}
+            loading="lazy"
+          />
+          <IconButton
+            colorScheme="primary"
+            borderRadius={50}
+            aria-label="Change Profile Picture"
+            icon={<CameraIcon />}
+            pos={"absolute"}
+            onClick={onOpen}
+            bottom={-2}
+            right={-2}
+          />
+        </Box>
         <SimpleGrid
           w={"full"}
           columns={{ base: 1, md: 2 }}
