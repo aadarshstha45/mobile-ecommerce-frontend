@@ -54,8 +54,7 @@ function RegisterPage() {
 
   const onSubmit = async (data: any) => {
     await mutateAsync(data);
-    navigate("/");
-    window.location.reload();
+    navigate("/login");
   };
 
   return (

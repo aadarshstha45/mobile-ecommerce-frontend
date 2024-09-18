@@ -50,7 +50,9 @@ const ItemDisplay = ({
   imageWidth,
 }: ItemDisplayProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data: wishData } = useFetchWishlist();
+  const { data: wishData } = useFetchWishlist({
+    enabled: TokenService.isAuthenticated(),
+  });
   const [isInWishList, setIsInWishList] = useState(false);
   const wishlist = useSaveWishlist();
   const removeWishlist = useDeleteWishlist();

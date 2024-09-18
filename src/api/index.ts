@@ -1,10 +1,16 @@
-import { useMutate } from "./methods";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { BaseURL } from "./axiosSetup";
 
-const useEsewa = () => {
-  return useMutate({
-    apiEndPoint: "https://rc-epay.esewa.com.np/api/epay/main/v2/form",
-    message: "Esewa Payment",
+const googleLogin = () => {
+  return axios.get(`${BaseURL}/auth/google`);
+};
+
+const useGoogleLogin = () => {
+  return useQuery({
+    queryKey: ["googleLogin"],
+    queryFn: googleLogin,
   });
 };
 
-export { useEsewa };
+export { useGoogleLogin };

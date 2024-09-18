@@ -52,10 +52,20 @@ const useFetchProductFaqs = (id: string) => {
   return useFetch({ apiEndPoint: ProductApi.getFaqs(id) });
 };
 
+const useFetchProductByQuery = (query: string) => {
+  return useFetch({ apiEndPoint: ProductApi.getProductsBySearch(query) });
+};
+
+const useFetchProductsSearchSuggestions = (query: string, enabled: boolean) => {
+  return useFetch({ apiEndPoint: ProductApi.getSuggestions(query), enabled });
+};
+
 export {
   useAddViewAction,
   useFetchAllProducts,
   useFetchProductById,
+  useFetchProductByQuery,
   useFetchProductFaqs,
+  useFetchProductsSearchSuggestions,
   useFetchRelatedProducts,
 };

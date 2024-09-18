@@ -17,7 +17,8 @@ export const ProductApi = {
   getProductById: (id: string) => `get-product-details/${id}`,
   getRelatedProducts: (id: string) => `get-related-products/${id}`,
   getProductsByCategory: (id: number) => `get-products-by-category/${id}`,
-  // getProductsBySearch: (query: string) => `get-products-by-search/${query}`,
+  getProductsBySearch: (search: string) => `search?search=${search}`,
+  getSuggestions: (search: string) => `search-suggestions?query=${search}`,
   // getProductsByFilter: (query: string) => `get-products-by-filter/${query}`,
   // getProductsByPrice: (min: number, max: number) =>
   //   `/get-products-by-price/${min}/${max}`,

@@ -10,11 +10,17 @@ const useSaveWishlist = () => {
   });
 };
 
-const useFetchWishlist = (perPage?: number) => {
+const useFetchWishlist = ({
+  perPage,
+  enabled,
+}: {
+  perPage?: number;
+  enabled?: boolean;
+}) => {
   if (perPage) {
-    return usePaginatedFetch(WishlistAPI.get(perPage));
+    return usePaginatedFetch(WishlistAPI.get(perPage), undefined, enabled);
   } else {
-    return usePaginatedFetch(WishlistAPI.get());
+    return usePaginatedFetch(WishlistAPI.get(), undefined, enabled);
   }
 };
 

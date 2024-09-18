@@ -20,7 +20,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 const WishList = () => {
   const [perPage, setPerPage] = useState(5);
-  const { data, isPending, isFetching } = useFetchWishlist(perPage);
+  const { data, isPending, isFetching } = useFetchWishlist({ perPage });
   const [id, setId] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const deleteWishlist = useDeleteWishlist();

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useLogin } from "@/api/auth";
+import { BaseURL } from "@/api/axiosSetup";
 import { FacebookIcon } from "@/assets/icons/FooterIcons";
 import GoogleIcon from "@/assets/icons/GoogleIcon";
 import LoginBanner from "@/assets/images/Auth/LoginImage.png";
@@ -183,6 +184,8 @@ function LoginPage() {
                       w={isLessThan340 ? "100%" : ""}
                       size={{ base: "sm", md: "md" }}
                       leftIcon={<GoogleIcon boxSize={6} />}
+                      as={ChakraLink}
+                      href={`${BaseURL}/auth/google`}
                     >
                       Google
                     </Button>

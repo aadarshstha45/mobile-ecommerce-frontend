@@ -177,7 +177,6 @@ const Shop = () => {
                     ))}
                   </Masonry>
                 </ResponsiveMasonry>
-                )
               </Box>
             ))}
             <Box ref={ref} h={"1px"} />

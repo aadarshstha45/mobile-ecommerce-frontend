@@ -4,9 +4,14 @@ import NavBar from "@/components/Navbar";
 import TokenService from "@/services/service-token";
 import { Box, Flex, Spinner } from "@chakra-ui/react";
 import { Suspense } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 
 function LayoutWrapper() {
+  const { token } = useParams();
+  if (token) {
+    TokenService.setToken({ token });
+  }
+  console.log({ token });
   const isAuthenticated = TokenService.isAuthenticated();
   const { data: user } = useFetchUser({ enabled: isAuthenticated });
   return (

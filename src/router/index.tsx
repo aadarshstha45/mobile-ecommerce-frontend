@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
 import LayoutWrapper from "@/layouts";
-import Esewa from "@/pages/Checkout/Payment/Esewa";
 import {
   AccountSettings,
   MyPurchase,
@@ -29,6 +28,7 @@ const VerifyOTP = lazy(() => import("@/pages/Auth/VerifyOTP"));
 const MyReview = lazy(() => import("@/pages/Profile/pages/MyReview"));
 const Shop = lazy(() => import("@/pages/Shop"));
 const ThankYou = lazy(() => import("@/pages/Checkout/ThankYou"));
+const Search = lazy(() => import("@/pages/Search"));
 
 export const getAppRoutes = (isAuthenticated: boolean) => {
   return [
@@ -73,6 +73,10 @@ export const getAppRoutes = (isAuthenticated: boolean) => {
           element: <Shop />,
         },
         {
+          path: "search/:query",
+          element: <Search />,
+        },
+        {
           path: "checkout",
           element: isAuthenticated ? (
             <Checkout />
@@ -80,6 +84,7 @@ export const getAppRoutes = (isAuthenticated: boolean) => {
             <Navigate to={`/login?redirect=${window.location.pathname}`} />
           ),
         },
+
         {
           path: "thank-you",
           element: <ThankYou />,
@@ -122,7 +127,6 @@ export const getAppRoutes = (isAuthenticated: boolean) => {
             },
           ],
         },
-        { path: "checkout/e-sewa", element: <Esewa /> },
         {
           path: "/login",
           element: isAuthenticated ? <Navigate to={"/"} /> : <LoginPage />,

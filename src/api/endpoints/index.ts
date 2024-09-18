@@ -4,6 +4,7 @@ export const user = {
   logout: "logout",
   me: "user-details",
   changePassword: "change-password",
+  googleLogin: "auth/google",
   update: "profile-update",
   updateImage: "change-profile-picture",
   emailCheck: (email: string) => `/check-unique-email?email=${email}`,

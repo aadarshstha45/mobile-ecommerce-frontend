@@ -21,6 +21,10 @@ import {
   MenuGroup,
   MenuItem,
   MenuList,
+  Modal,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -28,12 +32,15 @@ import { LogOutIcon, Menu as MenuIcon } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import CartDrawer from "../CartDrawer";
+import SearchInput from "../Form/SearchInput";
 import MobileNav from "./MobileNav";
 import { profileMenuItems } from "./MobileNav/profileMenuItems";
 
 function NavBar({ data }: any) {
   const isAuthenticated = TokenService.isAuthenticated();
   const [cartItemCount, setCartItemCount] = useState<number | null>(null);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const path = useLocation().pathname.split("/")[1];
   const { data: menus } = useFetchMenuItems();
 
@@ -46,6 +53,11 @@ function NavBar({ data }: any) {
   const navigate = useNavigate();
   const { mutateAsync } = useLogoutUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isSearchOpen,
+    onOpen: onSearchOpen,
+    onClose: onSearchClose,
+  } = useDisclosure();
   const handleSignOut = async () => {
     await mutateAsync();
     sessionStorage.clear();
@@ -118,10 +130,59 @@ function NavBar({ data }: any) {
             <NavCart boxSize={{ base: 6 }} />
           </Link>
 
+          <Modal isOpen={isSearchOpen} onClose={onSearchClose}>
+            <ModalOverlay />
+            <ModalCloseButton />
+            <ModalContent maxW={{ base: "80%", sm: "70%", md: "50%" }}>
+              <Flex flexDir={"column"} gap={0}>
+                <Box p={2}>
+                  <SearchInput
+                    onSearch={setSearchValue}
+                    to={`/search/${searchValue}`}
+                    onClose={onSearchClose}
+                    setSuggestions={setSuggestions}
+                    variant="flushed"
+                    position={"sticky"}
+                  />
+                </Box>
+                <Flex
+                  maxH={"400px"}
+                  overflowY={"auto"}
+                  flexDir={"column"}
+                  gap={2}
+                  pt={0}
+                  p={4}
+                >
+                  {suggestions.length > 0 &&
+                    suggestions.map((suggestion: string, index: number) => (
+                      <Link
+                        key={index}
+                        as={NavLink}
+                        to={`/search/${suggestion.toLowerCase()}`}
+                        onClick={onSearchClose}
+                        transition={"all 0.3s ease"}
+                        _hover={{
+                          bg: "primary.500",
+                          color: "white",
+                          textDecor: "none",
+                        }}
+                        p={2}
+                        bg={"gray.100"}
+                        borderRadius={5}
+                      >
+                        {suggestion}
+                      </Link>
+                    ))}
+                </Flex>
+              </Flex>
+            </ModalContent>
+          </Modal>
+
           <HStack gap={"30px"}>
             <SearchIcon
-              display={{ base: "none", md: "flex" }}
-              boxSize={{ base: 5, md: 6 }}
+              onClick={onSearchOpen}
+              cursor={"pointer"}
+              boxSize={{ base: 4, md: 6 }}
             />
             {!isAuthenticated ? (
               <>
